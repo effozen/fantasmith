@@ -1,0 +1,19 @@
+{
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "https://app.example.com",
+      "permanent": true
+    },
+    {
+      "source": "/app/:path*",
+      "destination": "https://app.example.com/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/admin/:path*",
+      "destination": "https://admin.example.com/:path*",
+      "permanent": true
+    }
+  ]
+}
