@@ -1,4 +1,13 @@
 {
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    },
+    "jsx": "react-jsx",
+    "types": ["vite-plugin-mdx"]
+  },
+  "include": ["src", "**/*.mdx", "src/types/*"],
   "files": [],
   "references": [
     { "path": "./tsconfig.app.json" },
