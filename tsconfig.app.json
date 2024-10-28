@@ -7,13 +7,14 @@
     "skipLibCheck": true,
     "outDir": "dist",
     "types": ["vitest", "@testing-library/jest-dom"],
+    "composite": true,
 
     /* Bundler mode */
     "moduleResolution": "Bundler",
     "allowImportingTsExtensions": true,
     "isolatedModules": true,
     "moduleDetection": "force",
-    "noEmit": true,
+    "noEmit": false,
     "jsx": "react-jsx",
 
     /* Linting */
