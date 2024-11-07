@@ -1,0 +1,28 @@
+{
+  "permalink": "/blog/2024-puddingcamp-conference",
+  "editUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/blog/2024-10-14-puddingcamp-conference/index.mdx",
+  "source": "@site/blog/2024-10-14-puddingcamp-conference/index.mdx",
+  "title": "🍮 생에 첫 컨퍼런스 :: 2024 푸딩캠프 컨퍼런스 후기",
+  "description": "🍮 개요",
+  "date": "2024-10-14T00:00:00.000Z",
+  "tags": [
+    {
+      "inline": false,
+      "label": "Conference",
+      "permalink": "/blog/tags/conference",
+      "description": "컨퍼런스 참여와 관련된 글 입니다."
+    }
+  ],
+  "readingTime": 20.845,
+  "hasTruncateMarker": true,
+  "authors": [],
+  "frontMatter": {
+    "slug": "2024-puddingcamp-conference",
+    "title": "🍮 생에 첫 컨퍼런스 :: 2024 푸딩캠프 컨퍼런스 후기",
+    "sidebar_title": "🍮 2024 푸딩캠프 컨퍼런스 후기",
+    "tags": [
+      "conference"
+    ]
+  },
+  "unlisted": false
+}

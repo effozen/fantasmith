@@ -82,7 +82,7 @@ const config: Config = {
         },
         {
           type: 'docSidebar',
-          sidebarId: 'tutorialSidebar',
+          sidebarId: 'boostcampSidebar',
           position: 'left',
           label: '🧑‍💻 네부캠 프로젝트',
         },
@@ -137,7 +137,22 @@ const config: Config = {
       theme: prismThemes.github,
       darkTheme: prismThemes.dracula,
     },
+    liveCodeBlock: {
+      /**
+       * The position of the live playground, above or under the editor
+       * Possible values: "top" | "bottom"
+       */
+      playgroundPosition: 'bottom',
+    },
   } satisfies Preset.ThemeConfig,
+
+  themes: ['@docusaurus/theme-mermaid'],
+  // In order for Mermaid code blocks in Markdown to work,
+  // you also need to enable the Remark plugin with this option
+  markdown: {
+    mermaid: true,
+  },
+  plugins: ['@docusaurus/theme-live-codeblock'],
 };
 
 export default config;

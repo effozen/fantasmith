@@ -15,7 +15,7 @@
   "frontMatter": {
     "sidebar_position": 1
   },
-  "sidebar": "tutorialSidebar",
+  "sidebar": "boostcampSidebar",
   "previous": {
     "title": "Tutorial - Basics",
     "permalink": "/docs/category/tutorial---basics"

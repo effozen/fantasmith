@@ -1,0 +1,23 @@
+{
+  "id": "intro",
+  "title": "🏃 따라따라 - 선따라길따라",
+  "description": "",
+  "source": "@site/docs/intro.mdx",
+  "sourceDirName": ".",
+  "slug": "/intro",
+  "permalink": "/docs/intro",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/docs/intro.mdx",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 1,
+  "frontMatter": {
+    "sidebar_position": 1
+  },
+  "sidebar": "boostcampSidebar",
+  "next": {
+    "title": "Tutorial - Basics",
+    "permalink": "/docs/category/tutorial---basics"
+  }
+}

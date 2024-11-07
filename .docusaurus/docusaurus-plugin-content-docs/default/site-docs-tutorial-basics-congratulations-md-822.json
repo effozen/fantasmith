@@ -15,7 +15,7 @@
   "frontMatter": {
     "sidebar_position": 6
   },
-  "sidebar": "tutorialSidebar",
+  "sidebar": "boostcampSidebar",
   "previous": {
     "title": "Deploy your site",
     "permalink": "/docs/tutorial-basics/deploy-your-site"

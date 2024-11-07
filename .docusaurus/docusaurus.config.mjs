@@ -71,7 +71,7 @@ export default {
         },
         {
           "type": "docSidebar",
-          "sidebarId": "tutorialSidebar",
+          "sidebarId": "boostcampSidebar",
           "position": "left",
           "label": "🧑‍💻 네부캠 프로젝트"
         }
@@ -327,6 +327,9 @@ export default {
         }
       ]
     },
+    "liveCodeBlock": {
+      "playgroundPosition": "bottom"
+    },
     "colorMode": {
       "defaultMode": "light",
       "disableSwitch": false,
@@ -348,8 +351,33 @@ export default {
     "tableOfContents": {
       "minHeadingLevel": 2,
       "maxHeadingLevel": 3
+    },
+    "mermaid": {
+      "theme": {
+        "dark": "dark",
+        "light": "default"
+      },
+      "options": {}
     }
   },
+  "themes": [
+    "@docusaurus/theme-mermaid"
+  ],
+  "markdown": {
+    "mermaid": true,
+    "format": "mdx",
+    "mdx1Compat": {
+      "comments": true,
+      "admonitions": true,
+      "headingIds": true
+    },
+    "anchors": {
+      "maintainCase": false
+    }
+  },
+  "plugins": [
+    "@docusaurus/theme-live-codeblock"
+  ],
   "baseUrlIssueBanner": true,
   "future": {
     "experimental_faster": {
@@ -372,24 +400,10 @@ export default {
     "static"
   ],
   "customFields": {},
-  "plugins": [],
-  "themes": [],
   "scripts": [],
   "headTags": [],
   "stylesheets": [],
   "clientModules": [],
   "titleDelimiter": "|",
-  "noIndex": false,
-  "markdown": {
-    "format": "mdx",
-    "mermaid": false,
-    "mdx1Compat": {
-      "comments": true,
-      "admonitions": true,
-      "headingIds": true
-    },
-    "anchors": {
-      "maintainCase": false
-    }
-  }
+  "noIndex": false
 };

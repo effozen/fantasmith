@@ -15,7 +15,7 @@
   "frontMatter": {
     "sidebar_position": 4
   },
-  "sidebar": "tutorialSidebar",
+  "sidebar": "boostcampSidebar",
   "previous": {
     "title": "Create a Blog Post",
     "permalink": "/docs/tutorial-basics/create-a-blog-post"

@@ -15,7 +15,7 @@
   "frontMatter": {
     "sidebar_position": 1
   },
-  "sidebar": "tutorialSidebar",
+  "sidebar": "boostcampSidebar",
   "previous": {
     "title": "Tutorial - Extras",
     "permalink": "/docs/category/tutorial---extras"

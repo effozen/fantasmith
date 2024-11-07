@@ -15,7 +15,7 @@
   "frontMatter": {
     "sidebar_position": 2
   },
-  "sidebar": "tutorialSidebar",
+  "sidebar": "boostcampSidebar",
   "previous": {
     "title": "Manage Docs Versions",
     "permalink": "/docs/tutorial-extras/manage-docs-versions"

@@ -26,6 +26,16 @@
       "type": "package",
       "name": "@docusaurus/theme-classic",
       "version": "3.6.0"
+    },
+    "docusaurus-theme-live-codeblock": {
+      "type": "package",
+      "name": "@docusaurus/theme-live-codeblock",
+      "version": "3.6.0"
+    },
+    "docusaurus-theme-mermaid": {
+      "type": "package",
+      "name": "@docusaurus/theme-mermaid",
+      "version": "3.6.0"
     }
   }
 }

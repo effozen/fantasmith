@@ -76,5 +76,7 @@
   "theme.navbar.mobileVersionsDropdown.label": "버전",
   "theme.tags.tagsListLabel": "태그:",
   "theme.tags.tagsPageLink": "모든 태그 보기",
-  "theme.tags.tagsPageTitle": "태그"
+  "theme.tags.tagsPageTitle": "태그",
+  "theme.Playground.liveEditor": "라이브 에디터",
+  "theme.Playground.result": "결과"
 }

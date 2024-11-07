@@ -13,62 +13,62 @@
             {
               "id": "intro",
               "path": "/docs/intro",
-              "sidebar": "tutorialSidebar"
+              "sidebar": "boostcampSidebar"
             },
             {
               "id": "tutorial-basics/congratulations",
               "path": "/docs/tutorial-basics/congratulations",
-              "sidebar": "tutorialSidebar"
+              "sidebar": "boostcampSidebar"
             },
             {
               "id": "tutorial-basics/create-a-blog-post",
               "path": "/docs/tutorial-basics/create-a-blog-post",
-              "sidebar": "tutorialSidebar"
+              "sidebar": "boostcampSidebar"
             },
             {
               "id": "tutorial-basics/create-a-document",
               "path": "/docs/tutorial-basics/create-a-document",
-              "sidebar": "tutorialSidebar"
+              "sidebar": "boostcampSidebar"
             },
             {
               "id": "tutorial-basics/create-a-page",
               "path": "/docs/tutorial-basics/create-a-page",
-              "sidebar": "tutorialSidebar"
+              "sidebar": "boostcampSidebar"
             },
             {
               "id": "tutorial-basics/deploy-your-site",
               "path": "/docs/tutorial-basics/deploy-your-site",
-              "sidebar": "tutorialSidebar"
+              "sidebar": "boostcampSidebar"
             },
             {
               "id": "tutorial-basics/markdown-features",
               "path": "/docs/tutorial-basics/markdown-features",
-              "sidebar": "tutorialSidebar"
+              "sidebar": "boostcampSidebar"
             },
             {
               "id": "tutorial-extras/manage-docs-versions",
               "path": "/docs/tutorial-extras/manage-docs-versions",
-              "sidebar": "tutorialSidebar"
+              "sidebar": "boostcampSidebar"
             },
             {
               "id": "tutorial-extras/translate-your-site",
               "path": "/docs/tutorial-extras/translate-your-site",
-              "sidebar": "tutorialSidebar"
+              "sidebar": "boostcampSidebar"
             },
             {
               "id": "/category/tutorial---basics",
               "path": "/docs/category/tutorial---basics",
-              "sidebar": "tutorialSidebar"
+              "sidebar": "boostcampSidebar"
             },
             {
               "id": "/category/tutorial---extras",
               "path": "/docs/category/tutorial---extras",
-              "sidebar": "tutorialSidebar"
+              "sidebar": "boostcampSidebar"
             }
           ],
           "draftIds": [],
           "sidebars": {
-            "tutorialSidebar": {
+            "boostcampSidebar": {
               "link": {
                 "path": "/docs/intro",
                 "label": "intro"

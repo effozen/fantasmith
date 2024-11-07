@@ -15,7 +15,7 @@
   "frontMatter": {
     "sidebar_position": 3
   },
-  "sidebar": "tutorialSidebar",
+  "sidebar": "boostcampSidebar",
   "previous": {
     "title": "Create a Document",
     "permalink": "/docs/tutorial-basics/create-a-document"

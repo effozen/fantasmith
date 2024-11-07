@@ -15,7 +15,7 @@
   "frontMatter": {
     "sidebar_position": 5
   },
-  "sidebar": "tutorialSidebar",
+  "sidebar": "boostcampSidebar",
   "previous": {
     "title": "Markdown Features",
     "permalink": "/docs/tutorial-basics/markdown-features"
