@@ -14,8 +14,9 @@ export default {
   "onBrokenLinks": "throw",
   "onBrokenMarkdownLinks": "warn",
   "i18n": {
-    "defaultLocale": "en",
+    "defaultLocale": "ko",
     "locales": [
+      "ko",
       "en"
     ],
     "path": "i18n",
@@ -110,7 +111,7 @@ export default {
           "title": "More",
           "items": [
             {
-              "label": "Blog",
+              "label": "🚀 성장이야기",
               "to": "/blog"
             },
             {

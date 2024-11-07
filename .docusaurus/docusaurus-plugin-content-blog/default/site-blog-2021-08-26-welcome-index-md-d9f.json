@@ -73,6 +73,10 @@
     ]
   },
   "unlisted": false,
+  "prevItem": {
+    "title": "🍮 생에 첫 컨퍼런스 - 2024 푸딩캠프 :: 컨퍼런스, 언컨퍼런스 후기",
+    "permalink": "/blog/2024-puddingcamp-conference"
+  },
   "nextItem": {
     "title": "MDX Blog Post",
     "permalink": "/blog/mdx-blog-post"

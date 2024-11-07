@@ -39,7 +39,12 @@ export default [
   },
   {
     path: '/blog',
-    component: ComponentCreator('/blog', 'b2f'),
+    component: ComponentCreator('/blog', '2ee'),
+    exact: true
+  },
+  {
+    path: '/blog/2024-puddingcamp-conference',
+    component: ComponentCreator('/blog/2024-puddingcamp-conference', '3f5'),
     exact: true
   },
   {
@@ -54,7 +59,7 @@ export default [
   },
   {
     path: '/blog/authors/all-sebastien-lorber-articles',
-    component: ComponentCreator('/blog/authors/all-sebastien-lorber-articles', '4a1'),
+    component: ComponentCreator('/blog/authors/all-sebastien-lorber-articles', 'd5d'),
     exact: true
   },
   {
@@ -84,7 +89,7 @@ export default [
   },
   {
     path: '/blog/tags/docusaurus',
-    component: ComponentCreator('/blog/tags/docusaurus', '704'),
+    component: ComponentCreator('/blog/tags/docusaurus', '906'),
     exact: true
   },
   {
