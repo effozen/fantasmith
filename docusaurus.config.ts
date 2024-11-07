@@ -121,7 +121,7 @@ const config: Config = {
           title: 'More',
           items: [
             {
-              label: 'Blog',
+              label: '🚀 성장이야기',
               to: '/blog',
             },
             {
