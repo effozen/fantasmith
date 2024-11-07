@@ -115,6 +115,10 @@ header {
   border-bottom: 1px solid #ccc;
 }
 
+header h1 {
+  font-size: 2.2rem !important;
+}
+
 /* 부모 요소에 Flexbox와 gap 적용 */
 .blog-list-page main {
   display: flex;

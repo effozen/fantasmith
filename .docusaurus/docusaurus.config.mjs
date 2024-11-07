@@ -27,8 +27,10 @@ export default {
       "classic",
       {
         "docs": {
+          "routeBasePath": "docs",
           "sidebarPath": "./sidebars.ts",
-          "editUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/"
+          "editUrl": "https://github.com/effozen/fantasmith/tree/main/",
+          "showLastUpdateTime": true
         },
         "blog": {
           "showReadingTime": true,

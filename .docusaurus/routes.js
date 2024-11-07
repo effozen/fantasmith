@@ -74,15 +74,25 @@ export default [
   },
   {
     path: '/docs',
-    component: ComponentCreator('/docs', 'bae'),
+    component: ComponentCreator('/docs', 'fa2'),
     routes: [
       {
         path: '/docs',
-        component: ComponentCreator('/docs', '641'),
+        component: ComponentCreator('/docs', '411'),
         routes: [
           {
+            path: '/docs/tags',
+            component: ComponentCreator('/docs/tags', 'fce'),
+            exact: true
+          },
+          {
+            path: '/docs/tags/test',
+            component: ComponentCreator('/docs/tags/test', 'e13'),
+            exact: true
+          },
+          {
             path: '/docs',
-            component: ComponentCreator('/docs', '23b'),
+            component: ComponentCreator('/docs', 'ed5'),
             routes: [
               {
                 path: '/docs/category/tutorial---basics',
@@ -98,55 +108,55 @@ export default [
               },
               {
                 path: '/docs/intro',
-                component: ComponentCreator('/docs/intro', 'b39'),
+                component: ComponentCreator('/docs/intro', '029'),
                 exact: true,
                 sidebar: "boostcampSidebar"
               },
               {
                 path: '/docs/tutorial-basics/congratulations',
-                component: ComponentCreator('/docs/tutorial-basics/congratulations', 'dc6'),
+                component: ComponentCreator('/docs/tutorial-basics/congratulations', '324'),
                 exact: true,
                 sidebar: "boostcampSidebar"
               },
               {
                 path: '/docs/tutorial-basics/create-a-blog-post',
-                component: ComponentCreator('/docs/tutorial-basics/create-a-blog-post', '6fa'),
+                component: ComponentCreator('/docs/tutorial-basics/create-a-blog-post', 'e6a'),
                 exact: true,
                 sidebar: "boostcampSidebar"
               },
               {
                 path: '/docs/tutorial-basics/create-a-document',
-                component: ComponentCreator('/docs/tutorial-basics/create-a-document', 'd5e'),
+                component: ComponentCreator('/docs/tutorial-basics/create-a-document', 'eab'),
                 exact: true,
                 sidebar: "boostcampSidebar"
               },
               {
                 path: '/docs/tutorial-basics/create-a-page',
-                component: ComponentCreator('/docs/tutorial-basics/create-a-page', 'e28'),
+                component: ComponentCreator('/docs/tutorial-basics/create-a-page', '217'),
                 exact: true,
                 sidebar: "boostcampSidebar"
               },
               {
                 path: '/docs/tutorial-basics/deploy-your-site',
-                component: ComponentCreator('/docs/tutorial-basics/deploy-your-site', '6e5'),
+                component: ComponentCreator('/docs/tutorial-basics/deploy-your-site', 'b2b'),
                 exact: true,
                 sidebar: "boostcampSidebar"
               },
               {
                 path: '/docs/tutorial-basics/markdown-features',
-                component: ComponentCreator('/docs/tutorial-basics/markdown-features', '594'),
+                component: ComponentCreator('/docs/tutorial-basics/markdown-features', '33c'),
                 exact: true,
                 sidebar: "boostcampSidebar"
               },
               {
                 path: '/docs/tutorial-extras/manage-docs-versions',
-                component: ComponentCreator('/docs/tutorial-extras/manage-docs-versions', 'b2f'),
+                component: ComponentCreator('/docs/tutorial-extras/manage-docs-versions', '1cf'),
                 exact: true,
                 sidebar: "boostcampSidebar"
               },
               {
                 path: '/docs/tutorial-extras/translate-your-site',
-                component: ComponentCreator('/docs/tutorial-extras/translate-your-site', '5a0'),
+                component: ComponentCreator('/docs/tutorial-extras/translate-your-site', 'c7a'),
                 exact: true,
                 sidebar: "boostcampSidebar"
               }

@@ -8,9 +8,10 @@
   "permalink": "/docs/tutorial-basics/markdown-features",
   "draft": false,
   "unlisted": false,
-  "editUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/docs/tutorial-basics/markdown-features.mdx",
+  "editUrl": "https://github.com/effozen/fantasmith/tree/main/docs/tutorial-basics/markdown-features.mdx",
   "tags": [],
   "version": "current",
+  "lastUpdatedAt": 1539502055000,
   "sidebarPosition": 4,
   "frontMatter": {
     "sidebar_position": 4
