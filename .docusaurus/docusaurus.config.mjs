@@ -39,10 +39,12 @@ export default {
             ],
             "xslt": true
           },
-          "editUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/",
+          "editUrl": "https://github.com/effozen/fantasmith/tree/main/",
           "onInlineTags": "warn",
           "onInlineAuthors": "warn",
-          "onUntruncatedBlogPosts": "warn"
+          "onUntruncatedBlogPosts": "warn",
+          "blogSidebarTitle": "📝 목차",
+          "routeBasePath": "blog"
         },
         "theme": {
           "customCss": "./src/css/custom.css"
@@ -94,16 +96,12 @@ export default {
           "title": "Community",
           "items": [
             {
-              "label": "Stack Overflow",
-              "href": "https://stackoverflow.com/questions/tagged/docusaurus"
-            },
-            {
-              "label": "Discord",
-              "href": "https://discordapp.com/invite/docusaurus"
+              "label": "linkedin",
+              "href": "https://www.linkedin.com/in/effozen/"
             },
             {
               "label": "X",
-              "href": "https://x.com/docusaurus"
+              "href": "https://x.com/effozen"
             }
           ]
         },

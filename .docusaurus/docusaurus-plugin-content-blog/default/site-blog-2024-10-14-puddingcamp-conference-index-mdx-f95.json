@@ -1,6 +1,6 @@
 {
   "permalink": "/blog/2024-puddingcamp-conference",
-  "editUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/blog/2024-10-14-puddingcamp-conference/index.mdx",
+  "editUrl": "https://github.com/effozen/fantasmith/tree/main/blog/2024-10-14-puddingcamp-conference/index.mdx",
   "source": "@site/blog/2024-10-14-puddingcamp-conference/index.mdx",
   "title": "🍮 생에 첫 컨퍼런스 :: 2024 푸딩캠프 컨퍼런스 후기",
   "description": "🍮 개요",
@@ -19,7 +19,7 @@
   "frontMatter": {
     "slug": "2024-puddingcamp-conference",
     "title": "🍮 생에 첫 컨퍼런스 :: 2024 푸딩캠프 컨퍼런스 후기",
-    "sidebar_title": "🍮 2024 푸딩캠프 컨퍼런스 후기",
+    "image": "2024_puddingcamp_conference_home.png",
     "tags": [
       "conference"
     ]
