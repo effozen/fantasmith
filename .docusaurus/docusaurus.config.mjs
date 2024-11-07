@@ -4,13 +4,13 @@
  * Modify the docusaurus.config.js file at your site's root instead.
  */
 export default {
-  "title": "My Site",
-  "tagline": "Dinosaurs are cool",
+  "title": "Zen's Atelier",
+  "tagline": "동기화를 중요하게 생각하는 프론트앤드 개발자",
   "favicon": "img/favicon.ico",
-  "url": "https://your-docusaurus-site.example.com",
+  "url": "https://fantasmith.com",
   "baseUrl": "/",
-  "organizationName": "facebook",
-  "projectName": "docusaurus",
+  "organizationName": "effozen",
+  "projectName": "FantaSmith",
   "onBrokenLinks": "throw",
   "onBrokenMarkdownLinks": "warn",
   "i18n": {
@@ -52,27 +52,27 @@ export default {
   "themeConfig": {
     "image": "img/docusaurus-social-card.jpg",
     "navbar": {
-      "title": "My Site",
+      "title": "Zen's Atelier",
       "logo": {
         "alt": "My Site Logo",
-        "src": "img/logo.svg"
+        "src": "img/logo.webp"
       },
       "items": [
+        {
+          "to": "/blog",
+          "label": "🚀 성장 이야기",
+          "position": "left"
+        },
+        {
+          "href": "https://github.com/effozen",
+          "label": "GitHub",
+          "position": "right"
+        },
         {
           "type": "docSidebar",
           "sidebarId": "tutorialSidebar",
           "position": "left",
-          "label": "Tutorial"
-        },
-        {
-          "to": "/blog",
-          "label": "Blog",
-          "position": "left"
-        },
-        {
-          "href": "https://github.com/facebook/docusaurus",
-          "label": "GitHub",
-          "position": "right"
+          "label": "🧑‍💻 네부캠 프로젝트"
         }
       ],
       "hideOnScroll": false
@@ -84,7 +84,7 @@ export default {
           "title": "Docs",
           "items": [
             {
-              "label": "Tutorial",
+              "label": "🧑‍💻 네부캠 프로젝트",
               "to": "/docs/intro"
             }
           ]
@@ -115,7 +115,7 @@ export default {
             },
             {
               "label": "GitHub",
-              "href": "https://github.com/facebook/docusaurus"
+              "href": "https://github.com/effozen"
             }
           ]
         }
