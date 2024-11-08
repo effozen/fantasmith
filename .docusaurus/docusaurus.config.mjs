@@ -50,6 +50,10 @@ export default {
         },
         "theme": {
           "customCss": "./src/css/custom.css"
+        },
+        "gtag": {
+          "trackingID": "G-TNMDGQWQYM",
+          "anonymizeIP": true
         }
       }
     ]
@@ -59,7 +63,7 @@ export default {
     "navbar": {
       "title": "Zen's Atelier",
       "logo": {
-        "alt": "My Site Logo",
+        "alt": "사이트 로고",
         "src": "img/logo.webp"
       },
       "items": [
@@ -121,7 +125,7 @@ export default {
           ]
         }
       ],
-      "copyright": "Copyright © 2024 My Project, Inc. Built with Docusaurus."
+      "copyright": "Copyright © 2024 Zen's Atelier. Built with Docusaurus."
     },
     "prism": {
       "theme": {
@@ -330,6 +334,60 @@ export default {
     "liveCodeBlock": {
       "playgroundPosition": "bottom"
     },
+    "metadata": [
+      {
+        "name": "keywords",
+        "content": "프론트엔드 개발, 동기화, Zen, 블로그, 프로그래밍"
+      },
+      {
+        "name": "author",
+        "content": "Zen"
+      },
+      {
+        "name": "description",
+        "content": "Zen's Atelier - 동기화를 중요하게 생각하는 프론트앤드 개발자"
+      },
+      {
+        "name": "twitter:card",
+        "content": "summary_large_image"
+      },
+      {
+        "name": "twitter:title",
+        "content": "Zen's Atelier"
+      },
+      {
+        "name": "twitter:description",
+        "content": "동기화를 중요하게 생각하는 프론트앤드 개발자"
+      },
+      {
+        "name": "twitter:url",
+        "content": "https://fantasmith.com"
+      },
+      {
+        "name": "twitter:image",
+        "content": "https://fantasmith.com/img/logo.webp"
+      },
+      {
+        "property": "og:title",
+        "content": "Zen's Atelier"
+      },
+      {
+        "property": "og:description",
+        "content": "동기화를 중요하게 생각하는 프론트앤드 개발자"
+      },
+      {
+        "property": "og:type",
+        "content": "website"
+      },
+      {
+        "property": "og:url",
+        "content": "https://fantasmith.com"
+      },
+      {
+        "property": "og:image",
+        "content": "https://fantasmith.com/img/logo.webp"
+      }
+    ],
     "colorMode": {
       "defaultMode": "light",
       "disableSwitch": false,
@@ -347,7 +405,6 @@ export default {
         "groupByYear": true
       }
     },
-    "metadata": [],
     "tableOfContents": {
       "minHeadingLevel": 2,
       "maxHeadingLevel": 3
@@ -378,6 +435,24 @@ export default {
   "plugins": [
     "@docusaurus/theme-live-codeblock"
   ],
+  "headTags": [
+    {
+      "tagName": "link",
+      "attributes": {
+        "rel": "sitemap",
+        "type": "application/xml",
+        "title": "Sitemap",
+        "href": "https://fantasmith.com/sitemap.xml"
+      }
+    },
+    {
+      "tagName": "script",
+      "attributes": {
+        "type": "application/ld+json"
+      },
+      "innerHTML": "{\"@context\":\"https://schema.org\",\"@type\":\"Person\",\"name\":\"Zen\",\"url\":\"https://fantasmith.com\",\"sameAs\":[\"https://github.com/effozen\",\"https://www.linkedin.com/in/effozen/\",\"https://x.com/effozen\"],\"jobTitle\":\"프론트엔드 개발자\",\"description\":\"동기화를 중요하게 생각하는 프론트앤드 개발자\"}"
+    }
+  ],
   "baseUrlIssueBanner": true,
   "future": {
     "experimental_faster": {
@@ -401,7 +476,6 @@ export default {
   ],
   "customFields": {},
   "scripts": [],
-  "headTags": [],
   "stylesheets": [],
   "clientModules": [],
   "titleDelimiter": "|",
