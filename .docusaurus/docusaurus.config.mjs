@@ -59,7 +59,7 @@ export default {
     ]
   ],
   "themeConfig": {
-    "image": "img/docusaurus-social-card.jpg",
+    "image": "img/social-card.jpg",
     "navbar": {
       "title": "Zen's Atelier",
       "logo": {
@@ -365,7 +365,7 @@ export default {
       },
       {
         "name": "twitter:image",
-        "content": "https://fantasmith.com/img/logo.webp"
+        "content": "https://fantasmith.com/img/social-card.jpg"
       },
       {
         "property": "og:title",
@@ -385,7 +385,7 @@ export default {
       },
       {
         "property": "og:image",
-        "content": "https://fantasmith.com/img/logo.webp"
+        "content": "https://fantasmith.com/img/social-card.jpg"
       }
     ],
     "colorMode": {

@@ -3,7 +3,7 @@
   "editUrl": "https://github.com/effozen/fantasmith/tree/main/blog/2024-08-11-boostcamp-challenge/index.mdx",
   "source": "@site/blog/2024-08-11-boostcamp-challenge/index.mdx",
   "title": "🌏 네이버 부스트캠프 9기 챌린지 후기 :: 문화를 만들어가는 경험",
-  "description": "🌏 챌린지 과정의 끝에서... 🌏",
+  "description": "네이버 부스트캠프 9기 챌린지과정 참여 후기",
   "date": "2024-08-11T00:00:00.000Z",
   "tags": [
     {
@@ -19,6 +19,8 @@
   "frontMatter": {
     "slug": "2024-boostcamp-challenge",
     "title": "🌏 네이버 부스트캠프 9기 챌린지 후기 :: 문화를 만들어가는 경험",
+    "imgs": "./imgs/img1_수료증.png",
+    "description": "네이버 부스트캠프 9기 챌린지과정 참여 후기",
     "tags": [
       "boostcamp"
     ]
