@@ -194,3 +194,10 @@ header h1 {
 .blog-list-page main article .markdown h2 {
   margin-top: 3rem !important;
 }
+
+.blog-tags-post-list-page main article {
+  border: 1px solid #ccc;
+  padding: 2.5rem;
+  margin-bottom: 3rem !important;
+  border-radius: 5px;
+}
