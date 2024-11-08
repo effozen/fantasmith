@@ -11,6 +11,12 @@ importers:
       '@docusaurus/core':
         specifier: 3.6.0
         version: 3.6.0(@docusaurus/types@3.6.0(acorn@6.4.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mdx-js/react@3.1.0(@types/react@18.3.12)(react@18.3.1))(acorn@6.4.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)
+      '@docusaurus/plugin-google-gtag':
+        specifier: ^3.6.0
+        version: 3.6.0(@mdx-js/react@3.1.0(@types/react@18.3.12)(react@18.3.1))(acorn@6.4.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)
+      '@docusaurus/plugin-sitemap':
+        specifier: ^3.6.0
+        version: 3.6.0(@mdx-js/react@3.1.0(@types/react@18.3.12)(react@18.3.1))(acorn@6.4.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)
       '@docusaurus/preset-classic':
         specifier: 3.6.0
         version: 3.6.0(@algolia/client-search@5.13.0)(@mdx-js/react@3.1.0(@types/react@18.3.12)(react@18.3.1))(@types/react@18.3.12)(acorn@6.4.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(search-insights@2.17.2)(typescript@5.6.3)
@@ -7486,7 +7492,7 @@ snapshots:
 
   '@types/sax@1.2.7':
     dependencies:
-      '@types/node': 17.0.45
+      '@types/node': 22.9.0
 
   '@types/send@0.17.4':
     dependencies:
