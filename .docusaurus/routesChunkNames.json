@@ -42,7 +42,7 @@
       "plugin": "plugin---docusaurus-debugb-38-ad3"
     }
   },
-  "/blog-6bb": {
+  "/blog-74f": {
     "__comp": "__comp---theme-blog-list-pagea-6-a-7ba",
     "__context": {
       "plugin": "plugin---blog-369-22e"
@@ -51,15 +51,29 @@
     "items": [
       {
         "content": "content---blogf-20-339"
+      },
+      {
+        "content": "content---blogaf-1-856"
       }
     ],
     "__props": "__props---blogc-15-573"
+  },
+  "/blog/2024-boostcamp-challenge-486": {
+    "__comp": "__comp---theme-blog-post-pageccc-cab",
+    "__context": {
+      "data": {
+        "blogMetadata": "blogMetadata---blog-2024-boostcamp-challengeace-104"
+      },
+      "plugin": "plugin---blog-369-22e"
+    },
+    "sidebar": "sidebar---blog-814-8ac",
+    "content": "content---blog-2024-boostcamp-challengefe-0-9be"
   },
   "/blog/2024-puddingcamp-conference-3f5": {
     "__comp": "__comp---theme-blog-post-pageccc-cab",
     "__context": {
       "data": {
-        "blogMetadata": "blogMetadata---blog-2024-puddingcamp-conferenceace-61f"
+        "blogMetadata": "blogMetadata---blog-2024-boostcamp-challengeace-104"
       },
       "plugin": "plugin---blog-369-22e"
     },
@@ -77,7 +91,7 @@
     "__comp": "__comp---theme-blog-pages-blog-authors-list-page-621-70c",
     "__context": {
       "data": {
-        "blogMetadata": "blogMetadata---blog-2024-puddingcamp-conferenceace-61f"
+        "blogMetadata": "blogMetadata---blog-2024-boostcamp-challengeace-104"
       },
       "plugin": "plugin---blog-369-22e"
     },
@@ -91,6 +105,19 @@
     },
     "sidebar": "sidebar---blog-814-8ac",
     "__props": "__props---blog-tags-3-a-2-fa2"
+  },
+  "/blog/tags/boostcamp-dcc": {
+    "__comp": "__comp---theme-blog-tags-posts-page-687-b6c",
+    "__context": {
+      "plugin": "plugin---blog-369-22e"
+    },
+    "sidebar": "sidebar---blog-814-8ac",
+    "items": [
+      {
+        "content": "content---blogaf-1-856"
+      }
+    ],
+    "__props": "__props---blog-tags-boostcampcbc-5bd"
   },
   "/blog/tags/conference-c34": {
     "__comp": "__comp---theme-blog-tags-posts-page-687-b6c",

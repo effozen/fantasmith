@@ -2,3 +2,8 @@ conference:
   label: Conference
   permalink: /conference
   description: 컨퍼런스 참여와 관련된 글 입니다.
+
+boostcamp:
+  label: Boostcamp
+  permalink: /boostcamp
+  description: 네이버 부스트캠프 9기 웹⋅모바일 과정과 관련된 내용입니다.

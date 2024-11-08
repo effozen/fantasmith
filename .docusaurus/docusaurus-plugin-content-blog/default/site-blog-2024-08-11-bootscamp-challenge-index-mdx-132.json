@@ -1,0 +1,32 @@
+{
+  "permalink": "/blog/2024-boostcamp-challenge",
+  "editUrl": "https://github.com/effozen/fantasmith/tree/main/blog/2024-08-11-bootscamp-challenge/index.mdx",
+  "source": "@site/blog/2024-08-11-bootscamp-challenge/index.mdx",
+  "title": "🌏 네이버 부스트캠프 9기 챌린지 후기 :: 문화를 만들어가는 경험",
+  "description": "🌏 챌린지 과정의 끝에서... 🌏",
+  "date": "2024-08-11T00:00:00.000Z",
+  "tags": [
+    {
+      "inline": false,
+      "label": "Boostcamp",
+      "permalink": "/blog/tags/boostcamp",
+      "description": "네이버 부스트캠프 9기 웹⋅모바일 과정과 관련된 내용입니다."
+    }
+  ],
+  "readingTime": 36.63,
+  "hasTruncateMarker": true,
+  "authors": [],
+  "frontMatter": {
+    "slug": "2024-boostcamp-challenge",
+    "title": "🌏 네이버 부스트캠프 9기 챌린지 후기 :: 문화를 만들어가는 경험",
+    "image": "2024_puddingcamp_conference_home.png",
+    "tags": [
+      "boostcamp"
+    ]
+  },
+  "unlisted": false,
+  "prevItem": {
+    "title": "🍮 생에 첫 컨퍼런스 :: 2024 푸딩캠프 컨퍼런스 후기",
+    "permalink": "/blog/2024-puddingcamp-conference"
+  }
+}

@@ -24,5 +24,9 @@
       "conference"
     ]
   },
-  "unlisted": false
+  "unlisted": false,
+  "nextItem": {
+    "title": "🌏 네이버 부스트캠프 9기 챌린지 후기 :: 문화를 만들어가는 경험",
+    "permalink": "/blog/2024-boostcamp-challenge"
+  }
 }

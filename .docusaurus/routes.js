@@ -39,7 +39,12 @@ export default [
   },
   {
     path: '/blog',
-    component: ComponentCreator('/blog', '6bb'),
+    component: ComponentCreator('/blog', '74f'),
+    exact: true
+  },
+  {
+    path: '/blog/2024-boostcamp-challenge',
+    component: ComponentCreator('/blog/2024-boostcamp-challenge', '486'),
     exact: true
   },
   {
@@ -60,6 +65,11 @@ export default [
   {
     path: '/blog/tags',
     component: ComponentCreator('/blog/tags', '287'),
+    exact: true
+  },
+  {
+    path: '/blog/tags/boostcamp',
+    component: ComponentCreator('/blog/tags/boostcamp', 'dcc'),
     exact: true
   },
   {
