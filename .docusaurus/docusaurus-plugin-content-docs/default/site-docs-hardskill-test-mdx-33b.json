@@ -1,14 +1,14 @@
 {
-  "id": "intro",
+  "id": "hardskill/test",
   "title": "🏃 따라따라 - 선따라길따라",
-  "description": "📝 개요",
-  "source": "@site/docs/intro.mdx",
-  "sourceDirName": ".",
-  "slug": "/intro",
-  "permalink": "/docs/intro",
+  "description": "",
+  "source": "@site/docs/hardskill/test.mdx",
+  "sourceDirName": "hardskill",
+  "slug": "/hardskill/intro",
+  "permalink": "/docs/hardskill/intro",
   "draft": false,
   "unlisted": false,
-  "editUrl": "https://github.com/effozen/fantasmith/tree/main/docs/intro.mdx",
+  "editUrl": "https://github.com/effozen/fantasmith/tree/main/docs/hardskill/test.mdx",
   "tags": [
     {
       "inline": true,
@@ -30,8 +30,12 @@
     "sidebar_label": "🚀 개요"
   },
   "sidebar": "boostcampSidebar",
+  "previous": {
+    "title": "⚙️ Hard Skill ⚙️",
+    "permalink": "/docs/category/️-hard-skill-️"
+  },
   "next": {
-    "title": "⚙️ DocsTest ⚙️",
-    "permalink": "/docs/category/️-docstest-️"
+    "title": "😆 Soft Skill 😆",
+    "permalink": "/docs/category/-soft-skill-"
   }
 }

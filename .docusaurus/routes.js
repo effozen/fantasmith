@@ -84,11 +84,11 @@ export default [
   },
   {
     path: '/docs',
-    component: ComponentCreator('/docs', 'fa2'),
+    component: ComponentCreator('/docs', '40b'),
     routes: [
       {
         path: '/docs',
-        component: ComponentCreator('/docs', '411'),
+        component: ComponentCreator('/docs', '741'),
         routes: [
           {
             path: '/docs/tags',
@@ -102,17 +102,35 @@ export default [
           },
           {
             path: '/docs',
-            component: ComponentCreator('/docs', 'ed5'),
+            component: ComponentCreator('/docs', '45c'),
             routes: [
               {
-                path: '/docs/category/tutorial---basics',
-                component: ComponentCreator('/docs/category/tutorial---basics', 'f2f'),
+                path: '/docs/category/️-docstest-️',
+                component: ComponentCreator('/docs/category/️-docstest-️', 'ea5'),
                 exact: true,
                 sidebar: "boostcampSidebar"
               },
               {
-                path: '/docs/category/tutorial---extras',
-                component: ComponentCreator('/docs/category/tutorial---extras', 'ecd'),
+                path: '/docs/category/️-hard-skill-️',
+                component: ComponentCreator('/docs/category/️-hard-skill-️', '23d'),
+                exact: true,
+                sidebar: "boostcampSidebar"
+              },
+              {
+                path: '/docs/category/-soft-skill-',
+                component: ComponentCreator('/docs/category/-soft-skill-', '0d3'),
+                exact: true,
+                sidebar: "boostcampSidebar"
+              },
+              {
+                path: '/docs/docsTest/프로젝트 요약 130b1b2b6491806985bdd4e4ddcd2baa',
+                component: ComponentCreator('/docs/docsTest/프로젝트 요약 130b1b2b6491806985bdd4e4ddcd2baa', '4cc'),
+                exact: true,
+                sidebar: "boostcampSidebar"
+              },
+              {
+                path: '/docs/hardskill/intro',
+                component: ComponentCreator('/docs/hardskill/intro', '53c'),
                 exact: true,
                 sidebar: "boostcampSidebar"
               },
@@ -123,50 +141,8 @@ export default [
                 sidebar: "boostcampSidebar"
               },
               {
-                path: '/docs/tutorial-basics/congratulations',
-                component: ComponentCreator('/docs/tutorial-basics/congratulations', '324'),
-                exact: true,
-                sidebar: "boostcampSidebar"
-              },
-              {
-                path: '/docs/tutorial-basics/create-a-blog-post',
-                component: ComponentCreator('/docs/tutorial-basics/create-a-blog-post', 'e6a'),
-                exact: true,
-                sidebar: "boostcampSidebar"
-              },
-              {
-                path: '/docs/tutorial-basics/create-a-document',
-                component: ComponentCreator('/docs/tutorial-basics/create-a-document', 'eab'),
-                exact: true,
-                sidebar: "boostcampSidebar"
-              },
-              {
-                path: '/docs/tutorial-basics/create-a-page',
-                component: ComponentCreator('/docs/tutorial-basics/create-a-page', '217'),
-                exact: true,
-                sidebar: "boostcampSidebar"
-              },
-              {
-                path: '/docs/tutorial-basics/deploy-your-site',
-                component: ComponentCreator('/docs/tutorial-basics/deploy-your-site', 'b2b'),
-                exact: true,
-                sidebar: "boostcampSidebar"
-              },
-              {
-                path: '/docs/tutorial-basics/markdown-features',
-                component: ComponentCreator('/docs/tutorial-basics/markdown-features', '33c'),
-                exact: true,
-                sidebar: "boostcampSidebar"
-              },
-              {
-                path: '/docs/tutorial-extras/manage-docs-versions',
-                component: ComponentCreator('/docs/tutorial-extras/manage-docs-versions', '1cf'),
-                exact: true,
-                sidebar: "boostcampSidebar"
-              },
-              {
-                path: '/docs/tutorial-extras/translate-your-site',
-                component: ComponentCreator('/docs/tutorial-extras/translate-your-site', 'c7a'),
+                path: '/docs/softskill/intro',
+                component: ComponentCreator('/docs/softskill/intro', '1c7'),
                 exact: true,
                 sidebar: "boostcampSidebar"
               }

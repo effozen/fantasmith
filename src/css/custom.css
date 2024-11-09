@@ -116,6 +116,10 @@
   font-size: 2.2rem;
 }
 
+.markdown header {
+  margin-bottom: 3rem;
+}
+
 .markdown h1 {
   font-size: 2.2rem;
 }
@@ -196,6 +200,26 @@ header h1 {
 }
 
 .blog-tags-post-list-page main article {
+  border: 1px solid #ccc;
+  padding: 2.5rem;
+  margin-bottom: 3rem !important;
+  border-radius: 5px;
+}
+
+.theme-doc-footer {
+  margin-top: 10rem !important;
+}
+
+blockquote {
+  border-left: 5px solid var(--ifm-color-primary-light);
+  padding-left: 1rem;
+  margin-left: 0;
+  margin-top: 2rem !important;
+  margin-bottom: 2rem;
+}
+
+/* docs tag 갤러리에 테두리 입히기 */
+#__docusaurus_skipToContent_fallback > .container > .row > main > section > article {
   border: 1px solid #ccc;
   padding: 2.5rem;
   margin-bottom: 3rem !important;

@@ -1,0 +1,25 @@
+{
+  "id": "docsTest/프로젝트 요약 130b1b2b6491806985bdd4e4ddcd2baa",
+  "title": "프로젝트 요약",
+  "description": "분류: 정규 회의 정리",
+  "source": "@site/docs/docsTest/프로젝트 요약 130b1b2b6491806985bdd4e4ddcd2baa.md",
+  "sourceDirName": "docsTest",
+  "slug": "/docsTest/프로젝트 요약 130b1b2b6491806985bdd4e4ddcd2baa",
+  "permalink": "/docs/docsTest/프로젝트 요약 130b1b2b6491806985bdd4e4ddcd2baa",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/effozen/fantasmith/tree/main/docs/docsTest/프로젝트 요약 130b1b2b6491806985bdd4e4ddcd2baa.md",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedAt": 1539502055000,
+  "frontMatter": {},
+  "sidebar": "boostcampSidebar",
+  "previous": {
+    "title": "⚙️ DocsTest ⚙️",
+    "permalink": "/docs/category/️-docstest-️"
+  },
+  "next": {
+    "title": "⚙️ Hard Skill ⚙️",
+    "permalink": "/docs/category/️-hard-skill-️"
+  }
+}

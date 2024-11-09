@@ -30,7 +30,8 @@ export default {
           "routeBasePath": "docs",
           "sidebarPath": "./sidebars.ts",
           "editUrl": "https://github.com/effozen/fantasmith/tree/main/",
-          "showLastUpdateTime": true
+          "showLastUpdateTime": true,
+          "sidebarCollapsible": false
         },
         "blog": {
           "showReadingTime": true,
@@ -60,6 +61,10 @@ export default {
   ],
   "themeConfig": {
     "image": "img/social-card.jpg",
+    "sidebar": {
+      "hideable": true,
+      "autoCollapseCategories": false
+    },
     "navbar": {
       "title": "Zen's Atelier",
       "logo": {
@@ -365,7 +370,7 @@ export default {
       },
       {
         "name": "twitter:image",
-        "content": "https://fantasmith.com/img/social-card.jpg"
+        "content": "https://fantasmith.com/img/zen-social-card.jpeg"
       },
       {
         "property": "og:title",
@@ -385,7 +390,7 @@ export default {
       },
       {
         "property": "og:image",
-        "content": "https://fantasmith.com/img/social-card.jpg"
+        "content": "https://fantasmith.com/img/zen-social-card.jpeg"
       }
     ],
     "colorMode": {

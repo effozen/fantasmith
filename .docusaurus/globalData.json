@@ -11,58 +11,38 @@
           "mainDocId": "intro",
           "docs": [
             {
+              "id": "docsTest/프로젝트 요약 130b1b2b6491806985bdd4e4ddcd2baa",
+              "path": "/docs/docsTest/프로젝트 요약 130b1b2b6491806985bdd4e4ddcd2baa",
+              "sidebar": "boostcampSidebar"
+            },
+            {
+              "id": "hardskill/test",
+              "path": "/docs/hardskill/intro",
+              "sidebar": "boostcampSidebar"
+            },
+            {
               "id": "intro",
               "path": "/docs/intro",
               "sidebar": "boostcampSidebar"
             },
             {
-              "id": "tutorial-basics/congratulations",
-              "path": "/docs/tutorial-basics/congratulations",
+              "id": "softskill/test",
+              "path": "/docs/softskill/intro",
               "sidebar": "boostcampSidebar"
             },
             {
-              "id": "tutorial-basics/create-a-blog-post",
-              "path": "/docs/tutorial-basics/create-a-blog-post",
+              "id": "/category/️-docstest-️",
+              "path": "/docs/category/️-docstest-️",
               "sidebar": "boostcampSidebar"
             },
             {
-              "id": "tutorial-basics/create-a-document",
-              "path": "/docs/tutorial-basics/create-a-document",
+              "id": "/category/️-hard-skill-️",
+              "path": "/docs/category/️-hard-skill-️",
               "sidebar": "boostcampSidebar"
             },
             {
-              "id": "tutorial-basics/create-a-page",
-              "path": "/docs/tutorial-basics/create-a-page",
-              "sidebar": "boostcampSidebar"
-            },
-            {
-              "id": "tutorial-basics/deploy-your-site",
-              "path": "/docs/tutorial-basics/deploy-your-site",
-              "sidebar": "boostcampSidebar"
-            },
-            {
-              "id": "tutorial-basics/markdown-features",
-              "path": "/docs/tutorial-basics/markdown-features",
-              "sidebar": "boostcampSidebar"
-            },
-            {
-              "id": "tutorial-extras/manage-docs-versions",
-              "path": "/docs/tutorial-extras/manage-docs-versions",
-              "sidebar": "boostcampSidebar"
-            },
-            {
-              "id": "tutorial-extras/translate-your-site",
-              "path": "/docs/tutorial-extras/translate-your-site",
-              "sidebar": "boostcampSidebar"
-            },
-            {
-              "id": "/category/tutorial---basics",
-              "path": "/docs/category/tutorial---basics",
-              "sidebar": "boostcampSidebar"
-            },
-            {
-              "id": "/category/tutorial---extras",
-              "path": "/docs/category/tutorial---extras",
+              "id": "/category/-soft-skill-",
+              "path": "/docs/category/-soft-skill-",
               "sidebar": "boostcampSidebar"
             }
           ],

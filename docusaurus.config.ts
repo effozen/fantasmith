@@ -1,5 +1,5 @@
-import { themes as prismThemes } from 'prism-react-renderer';
-import type { Config } from '@docusaurus/types';
+import {themes as prismThemes} from 'prism-react-renderer';
+import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
 // 이 파일은 Node.js에서 실행됩니다 - 여기에서는 클라이언트 사이드 코드(브라우저 API, JSX 등)를 사용하지 마세요.
@@ -44,6 +44,7 @@ const config: Config = {
           // "이 페이지를 편집하세요" 링크를 제거하려면 이 부분을 삭제하세요.
           editUrl: 'https://github.com/effozen/fantasmith/tree/main/',
           showLastUpdateTime: true,
+          sidebarCollapsible: false,
         },
         blog: {
           showReadingTime: true,
@@ -77,6 +78,10 @@ const config: Config = {
     // 사이트의 기본 Open Graph 및 Twitter 카드 이미지를 설정합니다.
     image: 'img/social-card.jpg', // 원하는 이미지로 변경
 
+    sidebar: {
+      hideable: true, // 사용자가 숨기거나 펼칠 수 있도록 함
+      autoCollapseCategories: false, // 모든 카테고리가 기본적으로 펼쳐지도록 설정
+    },
     navbar: {
       title: `Zen's Atelier`,
       logo: {
@@ -84,7 +89,7 @@ const config: Config = {
         src: 'img/logo.webp',
       },
       items: [
-        { to: '/blog', label: '🚀 성장 이야기', position: 'left' },
+        {to: '/blog', label: '🚀 성장 이야기', position: 'left'},
         {
           href: 'https://github.com/effozen',
           label: 'GitHub',
@@ -152,19 +157,19 @@ const config: Config = {
     },
     // SEO 및 링크 미리보기를 위한 메타데이터 설정
     metadata: [
-      { name: 'keywords', content: '프론트엔드 개발, 동기화, Zen, 블로그, 프로그래밍' },
-      { name: 'author', content: 'Zen' },
-      { name: 'description', content: `Zen's Atelier - 동기화를 중요하게 생각하는 프론트앤드 개발자` },
-      { name: 'twitter:card', content: 'summary_large_image' },
-      { name: 'twitter:title', content: `Zen's Atelier` },
-      { name: 'twitter:description', content: '동기화를 중요하게 생각하는 프론트앤드 개발자' },
-      { name: 'twitter:url', content: 'https://fantasmith.com' },
-      { name: 'twitter:image', content: 'https://fantasmith.com/img/zen-social-card.jpg' }, // 수정된 부분
-      { property: 'og:title', content: `Zen's Atelier` },
-      { property: 'og:description', content: '동기화를 중요하게 생각하는 프론트앤드 개발자' },
-      { property: 'og:type', content: 'website' },
-      { property: 'og:url', content: 'https://fantasmith.com' },
-      { property: 'og:image', content: 'https://fantasmith.com/img/zen-social-card.jpg' }, // 수정된 부분
+      {name: 'keywords', content: '프론트엔드 개발, 동기화, Zen, 블로그, 프로그래밍'},
+      {name: 'author', content: 'Zen'},
+      {name: 'description', content: `Zen's Atelier - 동기화를 중요하게 생각하는 프론트앤드 개발자`},
+      {name: 'twitter:card', content: 'summary_large_image'},
+      {name: 'twitter:title', content: `Zen's Atelier`},
+      {name: 'twitter:description', content: '동기화를 중요하게 생각하는 프론트앤드 개발자'},
+      {name: 'twitter:url', content: 'https://fantasmith.com'},
+      {name: 'twitter:image', content: 'https://fantasmith.com/img/zen-social-card.jpeg'}, // 수정된 부분
+      {property: 'og:title', content: `Zen's Atelier`},
+      {property: 'og:description', content: '동기화를 중요하게 생각하는 프론트앤드 개발자'},
+      {property: 'og:type', content: 'website'},
+      {property: 'og:url', content: 'https://fantasmith.com'},
+      {property: 'og:image', content: 'https://fantasmith.com/img/zen-social-card.jpeg'}, // 수정된 부분
     ],
   } satisfies Preset.ThemeConfig,
 
