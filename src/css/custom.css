@@ -101,6 +101,7 @@
   --ifm-color-quinary-lightest: #C4FADF; /* 가장 밝은 녹색 */
 
   --docusaurus-highlighted-code-line-bg: rgba(255, 255, 255, 0.15);
+
 }
 
 /* Reduce title size in blog list */
@@ -224,4 +225,11 @@ blockquote {
   padding: 2.5rem;
   margin-bottom: 3rem !important;
   border-radius: 5px;
+}
+
+.footer--dark {
+  /* footer 설정 */
+  --ifm-footer-color: white !important;
+  --ifm-footer-link-color: white !important;
+  --ifm-footer-title-color:#FF8C70  !important;
 }

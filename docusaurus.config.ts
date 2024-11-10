@@ -7,6 +7,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 const config: Config = {
   // 사이트 제목 설정
   title: `Zen's Atelier`,
+  staticDirectories: ['public', 'static'],
   // 사이트 태그라인 설정
   tagline: '동기화를 중요하게 생각하는 프론트앤드 개발자',
   // 파비콘 설정
@@ -77,10 +78,11 @@ const config: Config = {
   themeConfig: {
     // 사이트의 기본 Open Graph 및 Twitter 카드 이미지를 설정합니다.
     image: 'img/social-card.jpg', // 원하는 이미지로 변경
-
-    sidebar: {
-      hideable: true, // 사용자가 숨기거나 펼칠 수 있도록 함
-      autoCollapseCategories: false, // 모든 카테고리가 기본적으로 펼쳐지도록 설정
+    docs: {
+      sidebar: {
+        hideable: true, // 사용자가 숨기거나 펼칠 수 있도록 함
+        autoCollapseCategories: false, // 모든 카테고리가 기본적으로 펼쳐지도록 설정
+      },
     },
     navbar: {
       title: `Zen's Atelier`,
