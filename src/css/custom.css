@@ -5,6 +5,10 @@
  */
 
 /* You can override the default Infima variables here. */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
   --ifm-color-primary: #0052CC; /* Atlassian 파란색 */
   --ifm-color-primary-dark: #0041a8; /* 더 어두운 Atlassian 파란색 */
@@ -232,4 +236,8 @@ blockquote {
   --ifm-footer-color: white !important;
   --ifm-footer-link-color: white !important;
   --ifm-footer-title-color:#FF8C70  !important;
+}
+
+.markdown code {
+ color: var(--ifm-color-quinary);
 }

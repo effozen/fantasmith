@@ -1,6 +1,8 @@
 import {themes as prismThemes} from 'prism-react-renderer';
 import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
+import tailwindPlugin from './plugins/tailwind.config.cjs'; // add this
+
 
 // 이 파일은 Node.js에서 실행됩니다 - 여기에서는 클라이언트 사이드 코드(브라우저 API, JSX 등)를 사용하지 마세요.
 
@@ -39,7 +41,8 @@ const config: Config = {
       'classic',
       {
         docs: {
-          routeBasePath: 'docs',
+          path: './docs/boostcamp', // 문서가 위치한 디렉토리
+          routeBasePath: './boostcamp',
           sidebarPath: './sidebars.ts',
           // 리포지토리를 변경하세요.
           // "이 페이지를 편집하세요" 링크를 제거하려면 이 부분을 삭제하세요.
@@ -73,6 +76,19 @@ const config: Config = {
       } satisfies Preset.Options,
     ],
   ],
+  // 플러그인 설정
+  plugins: [[
+    '@docusaurus/plugin-content-docs',
+    {
+      id: 'fe_lab', // 문서의 ID
+      path: './docs/fe_lab', // 문서가 위치한 디렉토리
+      routeBasePath: 'fe_lab', // 라우트의 기본 경로
+      sidebarPath: require.resolve('./sidebars.ts'), // 사이드바 구성 파일
+      editUrl: 'https://github.com/effozen/fantasmith/tree/main/', // 문서 편집 링크
+      showLastUpdateTime: true, // 마지막 업데이트 시간 표시
+      sidebarCollapsible: true, // 사이드바 접기/펼치기
+    },
+  ], '@docusaurus/theme-live-codeblock', 'tailwindPlugin'],
 
   // 테마 구성
   themeConfig: {
@@ -103,6 +119,14 @@ const config: Config = {
           position: 'left',
           label: '🧑‍💻 네부캠 프로젝트',
         },
+        {
+          type: 'doc',
+          sidebarId: 'generalSidebar',
+          position: 'left',
+          label: '🔬 FE-Lab ',
+          docsPluginId: 'fe_lab',
+          docId: 'intro',
+        },
       ],
     },
     footer: {
@@ -113,7 +137,11 @@ const config: Config = {
           items: [
             {
               label: '🧑‍💻 네부캠 프로젝트',
-              to: '/docs/intro',
+              to: '/boostcamp/intro',
+            },
+            {
+              label: '🔬 FE-Lab',
+              to: '/fe_lab/intro',
             },
           ],
         },
@@ -182,8 +210,6 @@ const config: Config = {
   markdown: {
     mermaid: true,
   },
-  // 플러그인 설정
-  plugins: ['@docusaurus/theme-live-codeblock'],
 
   // head 태그 설정
   headTags: [
