@@ -1,8 +1,6 @@
 import {themes as prismThemes} from 'prism-react-renderer';
 import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
-import tailwindPlugin from './plugins/tailwind.config.cjs'; // add this
-
 
 // 이 파일은 Node.js에서 실행됩니다 - 여기에서는 클라이언트 사이드 코드(브라우저 API, JSX 등)를 사용하지 마세요.
 
@@ -42,7 +40,7 @@ const config: Config = {
       {
         docs: {
           path: './docs/boostcamp', // 문서가 위치한 디렉토리
-          routeBasePath: './boostcamp',
+          routeBasePath: 'boostcamp',
           sidebarPath: './sidebars.ts',
           // 리포지토리를 변경하세요.
           // "이 페이지를 편집하세요" 링크를 제거하려면 이 부분을 삭제하세요.
@@ -88,7 +86,7 @@ const config: Config = {
       showLastUpdateTime: true, // 마지막 업데이트 시간 표시
       sidebarCollapsible: true, // 사이드바 접기/펼치기
     },
-  ], '@docusaurus/theme-live-codeblock', 'tailwindPlugin'],
+  ], '@docusaurus/theme-live-codeblock'],
 
   // 테마 구성
   themeConfig: {
@@ -202,6 +200,9 @@ const config: Config = {
       {property: 'og:image', content: 'https://fantasmith.com/img/zen-social-card.jpeg'}, // 수정된 부분
     ],
   } satisfies Preset.ThemeConfig,
+  stylesheets: [
+    'src/css/custom.css', // Tailwind CSS가 포함된 CSS 파일 경로
+  ],
 
   // 추가 테마 설정
   themes: ['@docusaurus/theme-mermaid'],
