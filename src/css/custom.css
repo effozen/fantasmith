@@ -258,9 +258,17 @@
   --ifm-color-alert-danger-border: var(--ifm-color-danger);
 }
 
-a {
+header h1 {
+  font-weight: bold;
+}
+
+a.footer__link-item {
   display: flex;
   align-items: center;
+}
+
+a.card {
+  font-weight: bold;
 }
 
 a.navbar__item.navbar__link{
@@ -278,7 +286,8 @@ a.navbar__item.navbar__link{
 /* Reduce title size in blog page */
 .blog-post-page h1[class*="title"]
 {
-  font-size: 2.2rem;
+  font-size: 2rem !important;
+  font-weight: bold;
 }
 
 .markdown header {
@@ -325,7 +334,7 @@ a.navbar__item.navbar__link{
   margin-top: 2rem;
   margin-left: auto;
   margin-right: auto;
-  width: 25vw;
+  width: 30vw;
 }
 
 .markdown figcaption {
@@ -403,6 +412,20 @@ header h1 {
   border-radius: 5px;
 }
 
+.container .row nav div.sidebarItemTitle_Sqs_ {
+  font-weight: 900;
+}
+
+main article header h2 a {
+  font-size: 1.85rem;
+  font-weight: bold !important;
+}
+
+/* 블로그 사이드바 2024 */
+.container .row aside div h3 {
+  font-weight: bolder;
+}
+
 .theme-doc-footer {
   margin-top: 10rem !important;
 }
@@ -415,7 +438,15 @@ blockquote {
   margin-bottom: 2rem;
 }
 
-/* docs tag 갤러리에 테두리 입히기 */
+.theme-doc-sidebar-container {
+  font-size: 0.9rem;
+}
+
+.theme-doc-sidebar-container .menu__link--sublist {
+  font-weight: 900;
+}
+
+  /* docs tag 갤러리에 테두리 입히기 */
 #__docusaurus_skipToContent_fallback > .container > .row > main > section > article {
   border: 1px solid #ccc;
   padding: 2.5rem;
