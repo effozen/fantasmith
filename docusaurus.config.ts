@@ -75,18 +75,33 @@ const config: Config = {
     ],
   ],
   // 플러그인 설정
-  plugins: [[
-    '@docusaurus/plugin-content-docs',
-    {
-      id: 'fe_lab', // 문서의 ID
-      path: './docs/fe_lab', // 문서가 위치한 디렉토리
-      routeBasePath: 'fe_lab', // 라우트의 기본 경로
-      sidebarPath: require.resolve('./sidebars.ts'), // 사이드바 구성 파일
-      editUrl: 'https://github.com/effozen/fantasmith/tree/main/', // 문서 편집 링크
-      showLastUpdateTime: true, // 마지막 업데이트 시간 표시
-      sidebarCollapsible: true, // 사이드바 접기/펼치기
-    },
-  ], '@docusaurus/theme-live-codeblock'],
+  plugins: [
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'fe_lab', // 문서의 ID
+        path: './docs/fe_lab', // 문서가 위치한 디렉토리
+        routeBasePath: 'fe_lab', // 라우트의 기본 경로
+        sidebarPath: require.resolve('./sidebars.ts'), // 사이드바 구성 파일
+        editUrl: 'https://github.com/effozen/fantasmith/tree/main/', // 문서 편집 링크
+        showLastUpdateTime: true, // 마지막 업데이트 시간 표시
+        sidebarCollapsible: true, // 사이드바 접기/펼치기
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'react_lab', // 문서의 ID
+        path: './docs/react_lab', // 문서가 위치한 디렉토리
+        routeBasePath: 'react_lab', // 라우트의 기본 경로
+        sidebarPath: require.resolve('./sidebars.ts'), // 사이드바 구성 파일
+        editUrl: 'https://github.com/effozen/fantasmith/tree/main/', // 문서 편집 링크
+        showLastUpdateTime: true, // 마지막 업데이트 시간 표시
+        sidebarCollapsible: true, // 사이드바 접기/펼치기
+      },
+    ],
+    '@docusaurus/theme-live-codeblock',
+  ],
 
   // 테마 구성
   themeConfig: {
@@ -125,6 +140,14 @@ const config: Config = {
           docsPluginId: 'fe_lab',
           docId: 'intro',
         },
+        {
+          type: 'doc',
+          sidebarId: 'generalSidebar',
+          position: 'left',
+          label: ' 🧪 React-Lab ',
+          docsPluginId: 'react_lab',
+          docId: 'intro',
+        },
       ],
     },
     footer: {
@@ -140,6 +163,10 @@ const config: Config = {
             {
               label: '🔬 FE-Lab',
               to: '/fe_lab/intro',
+            },
+            {
+              label: '🧪 React-Lab',
+              to: '/react_lab/intro',
             },
           ],
         },

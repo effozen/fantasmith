@@ -1,41 +1,12 @@
-# Website
+# 🧑‍💻FantaSmith Zen's Atelier 🧑‍💻
 
-This website is built using [Docusaurus](https://docusaurus.io/), a modern static website generator.
+## 📚 개요
 
-### Installation
+Zen의 개인 블로그 및 포트폴리오 사이트 개발 레포입니다. <br/>
 
-```
-$ yarn
-```
+## ⚙️ 업데이트 로그
 
-### Local Development
-
-```
-$ yarn start
-```
-
-This command starts a local development server and opens up a browser window. Most changes are reflected live without having to restart the server.
-
-### Build
-
-```
-$ yarn build
-```
-
-This command generates static content into the `build` directory and can be served using any static contents hosting service.
-
-### Deployment
-
-Using SSH:
-
-```
-$ USE_SSH=true yarn deploy
-```
-
-Not using SSH:
-
-```
-$ GIT_USER=<Your GitHub username> yarn deploy
-```
-
-If you are using GitHub pages for hosting, this command is a convenient way to build the website and push to the `gh-pages` branch.
+| 날짜          | 내용                                |
+|-------------|-----------------------------------|
+| 2024.11.07. | ▸ Docusaurus 이용한 블로그로 마이그레이션      |
+| 2024.10.29. | ▸ Vercel과 Nextra의 Docs 이용해서 블로그 개발 |
