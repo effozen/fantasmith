@@ -1,0 +1,14 @@
+boostcamp:
+  label: BoostCamp
+  permalink: /boostcamp
+  description: 네이버 부스트캠프 웹⋅모바일 9기의 그룹 프로젝트에서 겪은 경험을 모은 공간입니다.
+
+softskill:
+  label: SoftSkill
+  permalink: /softskill
+  description: 네이버 부스트캠프 웹⋅모바일 9기의 그룹 프로젝트에서의 소프트스킬적인 도전을 담은 공간입니다.
+
+hardskill:
+  label: HardSkill
+  permalink: /hardskill
+  description: 네이버 부스트캠프 웹⋅모바일 9기의 그룹 프로젝트에서의 기술적인 도전을 담은 공간입니다.
