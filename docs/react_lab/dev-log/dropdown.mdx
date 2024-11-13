@@ -1,11 +1,11 @@
 ---
-slug: how_to_apply_event_when_unmount
-title: '🖥️React에서 Unmount 시에 어떻게 이벤트를 적용할 수 있을까?'
+slug: dropdown
+title: '🖥️React, TypeScript, Tailwind로 Dropdown 구현하기'
 image: '/img/zen-social-card.jpeg'
-tags: [frontend, react, component]
+tags: [usingReact]
 sidebar_position: 1
-sidebar_label: '🖥️ React에서 Unmount 시에 어떻게 이벤트를 적용할 수 있을까?'
-keywords: [Frontend, intro]
+sidebar_label: '🖥️ 좌충우돌 Dropdown 구현기'
+keywords: [Frontend, intro, react, typescript, dropdown, component, design]
 last_update:
   date: 2024-11-12
 ---
@@ -24,7 +24,7 @@ last_update:
 
 ## 🎯 구현의 목표
 
-import img1 from './img/unmountEvent_img1.webp';
+import img1 from './img/dropdown_img1.webp';
 
 <figure>
   <img src={img1} alt="missing" width='60%'/>
@@ -33,7 +33,7 @@ import img1 from './img/unmountEvent_img1.webp';
 
 내가 구현해야 했던 페이지는 위와 같았다. <br/>
 
-import img2 from './img/unmountEvent_img2.webp';
+import img2 from './img/dropdown_img2.webp';
 
 <figure>
   <img src={img2} alt="missing" width='60%'/>
@@ -61,7 +61,7 @@ import img2 from './img/unmountEvent_img2.webp';
 ## 🤔 내가 고민했던 구조
 
 
-import img3 from './img/unmountEvent_img3.webp';
+import img3 from './img/dropdown_img3.webp';
 
 <figure>
   <img src={img3} alt="missing" width='60%' />
@@ -71,7 +71,7 @@ import img3 from './img/unmountEvent_img3.webp';
 내가 고민했던 구조는 위와 같았다. <br/>
 
 
-import img4 from './img/unmountEvent_img4.webp';
+import img4 from './img/dropdown_img4.webp';
 
 <figure>
   <img src={img4} alt="missing" width='60%'/>
@@ -96,7 +96,7 @@ import img4 from './img/unmountEvent_img4.webp';
 하지만, 프로젝트에서는 이렇게까지 큰 범용성이 필요하지 않았다. 그래서 실제로 기획서 `Figma`를 살펴보았고, 사용되는 부분을 확인할 수 있었다. <br/>
 
 
-import img5 from './img/unmountEvent_img5.webp';
+import img5 from './img/dropdown_img5.webp';
 
 <div style={{display: "flex", justifyContent: "center"}}>
   <figure>
@@ -152,11 +152,11 @@ import img5 from './img/unmountEvent_img5.webp';
 
 이에 따라, 처음 만들어보게 되는 것이었고.. 호기롭게 시작은 했지만.. 재사용성이 높게 만드는 것이 생각보다 쉽지 않음을 깨달았다. <br/>
 
-import img6 from './img/unmountEvent_img6.webp'
-import img7 from './img/unmountEvent_img7.webp'
-import img8 from './img/unmountEvent_img8.webp'
-import img9 from './img/unmountEvent_img9.webp'
-import img10 from './img/unmountEvent_img10.webp'
+import img6 from './img/dropdown_img6.webp'
+import img7 from './img/dropdown_img7.webp'
+import img8 from './img/dropdown_img8.webp'
+import img9 from './img/dropdown_img9.webp'
+import img10 from './img/dropdown_img10.webp'
 
 <div style={{display: "flex", justifyContent: "center"}}>
   <figure>
