@@ -216,16 +216,14 @@ const config: Config = {
       {name: 'author', content: 'Zen'},
       {name: 'description', content: `Zen's Atelier - 동기화를 중요하게 생각하는 프론트앤드 개발자`},
       {name: 'twitter:card', content: 'summary_large_image'},
-      {name: 'twitter:title', content: `Zen's Atelier`},
-      {name: 'twitter:description', content: '동기화를 중요하게 생각하는 프론트앤드 개발자'},
+      // 전역 타이틀 및 설명을 설정하되, 개별 페이지에서 덮어쓸 수 있도록 합니다.
       {name: 'twitter:url', content: 'https://fantasmith.com'},
-      {name: 'twitter:image', content: 'https://fantasmith.com/img/zen-social-card.jpeg'}, // 수정된 부분
-      {property: 'og:title', content: `Zen's Atelier`},
-      {property: 'og:description', content: '동기화를 중요하게 생각하는 프론트앤드 개발자'},
+      {name: 'twitter:image', content: 'https://fantasmith.com/img/zen-social-card.jpeg'}, // 전역 이미지
       {property: 'og:type', content: 'website'},
       {property: 'og:url', content: 'https://fantasmith.com'},
-      {property: 'og:image', content: 'https://fantasmith.com/img/zen-social-card.jpeg'}, // 수정된 부분
+      {property: 'og:image', content: 'https://fantasmith.com/img/zen-social-card.jpeg'}, // 전역 이미지
     ],
+
   } satisfies Preset.ThemeConfig,
   stylesheets: [
     'src/css/custom.css', // Tailwind CSS가 포함된 CSS 파일 경로
