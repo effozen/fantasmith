@@ -212,9 +212,7 @@ const config: Config = {
     },
     // SEO 및 링크 미리보기를 위한 메타데이터 설정
     metadata: [
-      {name: 'keywords', content: '프론트엔드 개발, 동기화, Zen, 블로그, 프로그래밍'},
       {name: 'author', content: 'Zen'},
-      {name: 'description', content: `Zen's Atelier - 동기화를 중요하게 생각하는 프론트앤드 개발자`},
       {name: 'twitter:card', content: 'summary_large_image'},
       // 전역 타이틀 및 설명을 설정하되, 개별 페이지에서 덮어쓸 수 있도록 합니다.
       {name: 'twitter:url', content: 'https://fantasmith.com'},
