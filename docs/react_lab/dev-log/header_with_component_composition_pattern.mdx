@@ -1,0 +1,226 @@
+---
+slug: header
+title: 'Component Composition Pattern으로 Header 구현하기'
+image: '/img/zen-social-card.jpeg'
+tags: [usingReact]
+sidebar_position: 2
+sidebar_label: 'Component Composition Pattern 활용해보기'
+keywords: [Frontend, intro, component, design]
+last_update:
+  date: 2024-11-13
+---
+
+## 📚 정리
+
+완전 범용적인 컴포넌트와, 도메인이 반영된 컴포넌트는 애초에 목적 자체가 다르다고 생각한다.<br/>
+
+범용적일수도 좋겠지만, 당연하게도 사용성은 떨어지기 마련이다. 특히 껍데기만 만들고 모든 의존성을 주입해야하는 경우라면 더더욱. <br/>
+
+이번에는 도메인 종속적이면서, 도메인 곳곳에서 사용되는 컴포넌트를 내가 어떻게 개발하고 있는지 서술하고자 한다.<br/><br/>
+
+## 🔬 개요
+
+네이버 부스트캠프의 그룹 프로젝트를 진행하면서, `Header` 컴포넌트를 구현하게 되었다. <br/>
+
+사실 헤더 구현에는 별 게 없긴 한데 프론트앤드 관점에서 요구사항을 내가 어떻게 분석하고 있으며, 어떻게 이를 코드로 바꾸는지 기록하고자 적게 되었다. <br/><br/>
+
+## 🤔 요구사항
+
+import img1 from './img/header_img1.webp';
+import img2 from './img/header_img2.webp';
+import img3 from './img/header_img3.webp';
+import img8 from './img/header_img8.webp';
+
+<table style={{marginLeft: 'auto', marginRight:'auto'}}>
+  <tbody>
+    <tr>
+      <td><img src={img1} alt="missing" width='60%' style={{marginLeft: 'auto', marginRight:'auto'}}/></td>
+      <td><img src={img2} alt="missing" width='60%' style={{marginLeft: 'auto', marginRight:'auto'}}/></td>
+      <td><img src={img3} alt="missing" width='60%' style={{marginLeft: 'auto', marginRight:'auto'}}/></td>
+      <td><img src={img8} alt="missing" width='60%' style={{marginLeft: 'auto', marginRight:'auto'}}/></td>
+    </tr>
+  </tbody>
+  <tfoot>
+  <tr>
+    <th>페이지 1</th>
+    <th>페이지 2</th>
+    <th>페이지 3</th>
+    <th>페이지 4</th>
+  </tr>
+  </tfoot>
+</table>
+
+<br/>
+
+위의 4개의 페이지에서 `Header` 컴포넌트가 사용되고 있음을 파악할 수 있었다. <br/><br/>
+
+## 🤔 공통 요소 분석
+
+먼저 다음과 같은 요소를 추려내었다.<br/>
+
+import img4 from './img/header_img4.webp';
+import img5 from './img/header_img5.webp';
+import img9 from './img/header_img9.webp';
+
+<table style={{marginLeft: 'auto', marginRight:'auto'}}>
+  <tbody>
+  <tr>
+    <td><img src={img4} alt="missing" width='60%' style={{marginLeft: 'auto', marginRight:'auto'}}/></td>
+    <td><img src={img5} alt="missing" width='60%' style={{marginLeft: 'auto', marginRight:'auto'}}/></td>
+    <td><img src={img9} alt="missing" width='60%' style={{marginLeft: 'auto', marginRight:'auto'}}/></td>
+  </tr>
+  </tbody>
+  <tfoot>
+  <tr>
+    <th>헤더 1</th>
+    <th>헤더 2</th>
+    <th>헤더 3</th>
+  </tr>
+  </tfoot>
+</table>
+
+<br/>
+
+그리고 이를 분석한 내용은 다음과 같다. <br/>
+
+import img6 from './img/header_img6.webp';
+
+<figure>
+  <img src={img6}/>
+  <figcaption>분석한 내용 사진</figcaption>
+</figure>
+
+5개의 컴포넌트가 `Header`라는 `Layout` 요소에 필요함을 알게 되었다.<br/>
+
+잘 보면 배치는 일정하다. 그에 따라서, 미리 배치를 해두고 값이 들어올 때는 보여주고, 들어오지 않을때는 보여주지 않는 상태를 유지하면 된다는 것을 확인하였다.<br/>
+
+## 🤔 초기 구현 방식
+
+위의 요구사항을 참고해서 어떻게 접근할 수 있을 지 고민을 해보았다.<br/>
+
+우선 처음에는 헤더를 껍데기로 두고, 관련 요소를 자식으로 받아서 사용할 수 있게 끔 무턱대고 한번 구현을 해보았다. <br/>
+
+```tsx title='Header.tsx'
+import { ReactNode } from 'react';
+import { HeaderDropdown } from '@/component/Layout/header/HeaderDropdown.tsx';
+import { useNavigate } from 'react-router-dom';
+import { BackButton } from '@/component/Layout/header/BackButton.tsx';
+import { MdArrowBackIos } from 'react-icons/md';
+interface IHeaderProps {
+  title?: ReactNode;
+  subTitle?: ReactNode;
+}
+export const Header = (props: IHeaderProps) => {
+  const navigate = useNavigate();
+  const handleButtonClick = () => {
+    navigate(-1);
+  };
+  return (
+    <header className="flex flex-col gap-2.5 p-4">
+      <div className="flex justify-between">
+        <div className="flex gap-1">
+          <BackButton onClick={handleButtonClick}>
+            <MdArrowBackIos className="h-6 w-6" />
+          </BackButton>
+          {props.title}
+        </div>
+        <HeaderDropdown />
+      </div>
+      <div>{props.subTitle}</div>
+    </header>
+  );
+};
+```
+
+아래의 코드가 표현부의 핵심 코드였다. <br/>
+
+```tsx title='Header.tsx'
+  return (
+    <header className="flex flex-col gap-2.5 p-4">
+      <div className="flex justify-between">
+        <div className="flex gap-1">
+          <BackButton onClick={handleButtonClick}>
+            <MdArrowBackIos className="h-6 w-6" />
+          </BackButton>
+          {props.title}
+        </div>
+        <HeaderDropdown />
+      </div>
+      <div>{props.subTitle}</div>
+    </header>
+  );
+```
+
+위 코드가 표현부의 핵심 코드였다.<br/>
+
+```tsx title='Header.tsx'
+    <header className="flex flex-col gap-2.5 p-4"></header>
+```
+
+이는 시멘틱 태그 `header`를 기반으로 한 껍데기로, 각 자리에 `Layout`을 미리 잡아두고, 그 안에 컨텐츠를 배치해서 나머지 요소에 대해 `props`로 받는 구조를 채택했다.<br/>
+
+## ❗ 발생한 문제점
+
+이렇게 하고 보니, 다음과 같은 문제점이 발생했다.<br/>
+
+|문제|설명|
+|---|---|
+|1. 재사용이 어렵다.|혹시라도 다른 페이지에서 유사하지만 아이콘이 달라지거나, 메세지 내용이 달라지거나, 추가적인 요소가 생기면 코드 자체를 뜯어고쳐야 했다.|
+|2. 수정이 어렵다.|1의 이유로 무언가 수정이 필요할 때, 관련되어 있는 모든 코드를 다 수정해야하는 문제가 있었다.<br/>대표적으로 `props.tilte`이 있는 부분에 아이콘이 이미 배치되어 있는데, 이를 수정하게 되면 다른 코드도 전부 수정을 해야 했다.|
+|3. 확장이 어렵다.|여기에 어떤 기능을 붙이게 되면 이 코드가 사용되는 모든 장소의 레이아웃이 깨지는 문제가 발생했다.|
+
+이런 이유로 이 코드로 `Header`가 정착 되면 이후 큰 문제가 발생할 것이 자명했다. <br/>
+또한, 우리팀의 목표 중 하나는 이를 네이버 부스트캠프가 끝나고도 계속 개발을 이어나가는 것이었다.<br/>
+자유롭게 확장하고, 기능에 대해서 모듈화도 하고, 라이브러리로도 만들어보면서 정말 이걸로 할 수 있는 다양한 요소를 마음껏 즐기자가 있었다.<br/>
+이에, 팀은 테스트 코드 및 문서화를 중요시하면서 진행을 하고 있었기에 이런 부분은 팀적으로도 굉장히 중요한 가치라는 생각이 들었다. <br/>
+
+## 🧑‍💻 최근의 트렌드
+
+문제의 해결을 위해서 리액트의 컴포넌트 구현 트렌드를 살펴보았다.<br/>
+
+최근의 리액트에서의 구현 방식은 보통 2가지를 따르는 듯 했다.<br/>
+
+> ▸ `Component Composition Pattern`<br/>
+> ▸ `Atomic Design`<br/>
+
+위 두가지인데, 둘의 핵심은 같다. 최대학 작은 단위의 컴포넌트를 만들고, 레고처럼 부품을 하나씩 조립해서 완성체를 만드는 것.<br/>
+이에 대해서는 추후 정리할 생각이지만, 우선은 짧게나마 알아보자. <br/>
+
+## 🚀 Atomic Design
+
+작은 것에서 시작해서 점점 큰 요소를 만드는 건데, 일반적인 패턴은 다음과 같다.<br/>
+
+import img7 from './img/header_img7.webp';
+
+<figure>
+  <img src={img7}/>
+  <figcaption>Atomic Design Pattern 사진</figcaption>
+</figure>
+
+위의 도식도처럼 제일 작은 단위로 쪼개고, 이를 합쳐서 최종적으로 페이지를 만든다는 의미의 패턴이다.<br/>
+
+완벽하게 해당 구조를 따라가면 좋겠지만, 이는 쉽지 않기도 하고, 보통 이렇게 까지 필요 없는 경우도 많아서 몇 가지 과정을 스킵하고 사용하는 경우도 있는 것 같다. <br/>
+
+[→ 참고자료 : 카카오 FE 블로그 - 아토믹 디자인을 활용한 디자인 시스템 도입기](https://fe-developers.kakaoent.com/2022/220505-how-page-part-use-atomic-design-system/)
+
+재밌는건, 나는 리액트를 처음 배울 때 해당 패턴이 이미 널리 자리잡은 상태에서 배웠다는 것이다. 그에 따라서 어느정도는 자연스럽게 이런 사고가 머리에 잡히게 되었다.<br/>
+
+[→ 참고자료 : React 공식 문서 - 리액트로 사고하기](https://ko.react.dev/learn/thinking-in-react)
+
+다만, 이를 완벽하게 도입하기 위해서는 아키텍쳐적으로 접근할 필요가 있었다.<br/>
+
+작게 쪼개서 이를 합치는 건 리액트적인 사고이긴 해서 컴포넌트 구현때 적용은 쉬웠는데, 사진에 나온 것처럼 완벽하게 아키텍쳐로 접근하기에는 많은 어려움이 있었다.<br/>
+
+팀 내에서 `Components` -> `Layout` -> `Pages`이라는 3단 구조로 접근을 했고, 여기에 각 범주 내에서 자율적으로 `Colocation` 방식을 결합해서 사용하고 있었기 때문이다.<br/>
+
+결과적으로 `Header`라는 컴포넌트 디렉토리 안에서 모든 것을 해결해야할 필요가 있었다.<br/>
+
+## 🚀 Component Composition Pattern
+
+사실, 원래의 문제는 아키텍쳐적인 접근 보다는 `Header`라는 컴포넌트 자체에 집중해서 바라봐야할 필요성이 있었다.<br/>
+
+이러니 저러니해도 팀의 방식으로도 충분히 지금 프로젝트를 개발하는데 문제는 없었기 때문이다.<br/>
+
+그러면 컴포넌트 자체를 어떻게 구현할까? 하는 의문이 들었고, 이에 대해서 접근하기로 하였다<br/>
+
+
