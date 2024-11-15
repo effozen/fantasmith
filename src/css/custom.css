@@ -291,7 +291,7 @@ a.navbar__item.navbar__link{
 }
 
 .markdown header {
-  margin-bottom: 3rem;
+  margin-bottom: 2.5rem;
 }
 
 .markdown h1 {
@@ -300,8 +300,8 @@ a.navbar__item.navbar__link{
 }
 
 .markdown h2 {
-  margin-top: 8rem;
-  margin-bottom: 2rem;
+  margin-top: 6.5rem;
+  margin-bottom: 1.5rem;
   font-size: 1.7rem; /* 원하는 크기로 조정 */
   color: var(--ifm-color-secondary-dark); /* 원하는 색상으로 조정 */
   font-weight: bolder;
@@ -309,7 +309,7 @@ a.navbar__item.navbar__link{
 
 .markdown h3 {
   margin-top: 1.8rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   font-size: 1.5rem; /* 원하는 크기로 조정 */
   color: var(--ifm-color-tertiary-dark); /* 원하는 색상으로 조정 */
   font-weight: bold;
@@ -317,7 +317,7 @@ a.navbar__item.navbar__link{
 
 .markdown h4 {
   margin-top: 1.6rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   font-size: 1.5rem; /* 원하는 크기로 조정 */
   color: var(--ifm-color-quinary); /* 원하는 색상으로 조정 */
   font-weight: bold;
@@ -331,7 +331,7 @@ a.navbar__item.navbar__link{
 }
 
 .markdown img {
-  margin-top: 2rem;
+  margin-top: 1.7rem;
   margin-left: auto;
   margin-right: auto;
   width: 30vw;
@@ -339,7 +339,7 @@ a.navbar__item.navbar__link{
 
 .markdown figcaption {
   margin-top: 0.8rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1.7rem;
   color: var(--ifm-color-primary-light); /* 원하는 색상으로 조정 */
   font-weight: bold;
 }
@@ -351,8 +351,8 @@ a.navbar__item.navbar__link{
 .markdown table {
   margin-left: auto;
   margin-right: auto;
-  margin-top: 2rem;
-  margin-bottom: 2rem;
+  margin-top: 1.7rem;
+  margin-bottom: 1.7rem;
 }
 
 .markdown tfoot {
@@ -382,12 +382,12 @@ a.navbar__item.navbar__link{
 }
 
 .markdown p {
-  margin-bottom: 0.55rem;
+  margin-bottom: 0.5rem;
   line-height: 1.7rem;
 }
 
 header {
-  padding-bottom: 2rem;
+  padding-bottom: 1.7rem;
   border-bottom: 1px solid #ccc;
 }
 
@@ -464,8 +464,6 @@ blockquote {
   margin-bottom: 2rem;
 }
 
-
-
 .theme-doc-sidebar-container {
   font-size: 0.9rem;
 }
@@ -494,6 +492,9 @@ blockquote {
 }
 
 .theme-code-block {
-  margin-top: 3rem;
-  margin-bottom: 3rem !important;
+  margin-top: 2rem;
+  margin-bottom: 2rem !important;
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
 }
