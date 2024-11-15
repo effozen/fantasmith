@@ -262,6 +262,18 @@ header h1 {
   font-weight: bold;
 }
 
+.markdown a {
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  color: var(--ifm-color-link);
+}
+
+.markdown a:hover {
+  font-weight: bold;
+  color: var(--ifm-color-link-hover)
+}
+
 a.footer__link-item {
   display: flex;
   align-items: center;
@@ -295,11 +307,15 @@ a.navbar__item.navbar__link{
 }
 
 .markdown h1 {
+  display: flex;
+  align-items: center;
   font-size: 2.2rem;
   font-weight: bold;
 }
 
 .markdown h2 {
+  display: flex;
+  align-items: center;
   margin-top: 6.5rem;
   margin-bottom: 1.5rem;
   font-size: 1.7rem; /* 원하는 크기로 조정 */
@@ -308,6 +324,8 @@ a.navbar__item.navbar__link{
 }
 
 .markdown h3 {
+  display: flex;
+  align-items: center;
   margin-top: 1.8rem;
   margin-bottom: 1.5rem;
   font-size: 1.5rem; /* 원하는 크기로 조정 */
@@ -316,6 +334,8 @@ a.navbar__item.navbar__link{
 }
 
 .markdown h4 {
+  display: flex;
+  align-items: center;
   margin-top: 1.6rem;
   margin-bottom: 1.5rem;
   font-size: 1.5rem; /* 원하는 크기로 조정 */
