@@ -366,8 +366,8 @@ a.navbar__item.navbar__link{
   padding-left: 3em; /* 마커 공간 확보 */
   /* padding-top: 1rem; */
   /* padding-bottom: 1rem; */
-  margin-top: 2rem;
-  margin-bottom: 3rem;
+  /* margin-top: 2rem; */
+  /* margin-bottom: 3rem; */
   /* border: 1px solid black; */
   /* border-radius: 10px; */
 }
@@ -376,9 +376,14 @@ a.navbar__item.navbar__link{
 .markdown ul li::before {
   content: '▸';
   color: #007acc; /* 마커 색상 (원하는 색상으로 변경 가능) */
-  display: inline-block;
+  /* display: inline-block; */
   width: 1em; /* 마커와 텍스트 간의 간격 조정 */
   margin-left: -1.5em; /* 마커 위치 조정 */
+}
+
+.markdown p {
+  margin-bottom: 0.55rem;
+  line-height: 1.7rem;
 }
 
 header {
@@ -486,4 +491,9 @@ blockquote {
 
 .markdown code {
  color: var( --ifm-color-danger);
+}
+
+.theme-code-block {
+  margin-top: 3rem;
+  margin-bottom: 3rem !important;
 }
