@@ -299,6 +299,11 @@ a.navbar__item.navbar__link{
   font-size: 2.2em;
 }
 
+footer a {
+  display: flex;
+  /* justify-content: center; */
+  align-items: center;
+}
 
 /* Reduce title size in blog page */
 .blog-post-page h1[class*="title"]
@@ -359,7 +364,7 @@ a.navbar__item.navbar__link{
   margin-top: 1.7rem;
   margin-left: auto;
   margin-right: auto;
-  width: 30vw;
+  width: 40vw;
 }
 
 .markdown figcaption {
