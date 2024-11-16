@@ -274,6 +274,11 @@ header h1 {
   color: var(--ifm-color-link-hover)
 }
 
+.markdown a::after {
+  content: "→";
+  padding-left:0.3rem;
+}
+
 a.footer__link-item {
   display: flex;
   align-items: center;
@@ -380,25 +385,80 @@ a.navbar__item.navbar__link{
   font-weight: bold;
 }
 
+/* 1단계 목록: 숫자 */
+ol {
+  padding-left: 1.5rem; /* 마커 공간 확보 */
+  margin-top: 1.7rem;
+  margin-bottom: 1.7rem;
+  list-style-type: decimal;
+}
+
+/* 2단계 목록: 소문자 */
+ol ol {
+  list-style-type: lower-alpha;
+  padding-left: 1.5rem; /* 마커 공간 확보 */
+}
+
+/* 3단계 목록: 소문자 로마 숫자 */
+ol ol ol {
+  list-style-type: lower-roman;
+  padding-left: 1.5rem; /* 마커 공간 확보 */
+}
+
 /* 기본 리스트 스타일 제거 */
 .markdown ul {
-  list-style: none;
-  padding-left: 3em; /* 마커 공간 확보 */
+  /* content: '▸'; */
+  /* list-style: circle; */
+  padding-left: 1.5rem; /* 마커 공간 확보 */
   /* padding-top: 1rem; */
   /* padding-bottom: 1rem; */
-  /* margin-top: 2rem; */
-  /* margin-bottom: 3rem; */
+  margin-top: 1.7rem;
+  margin-bottom: 1.7rem;
   /* border: 1px solid black; */
   /* border-radius: 10px; */
 }
 
-/* 각 리스트 항목 앞에 ▸ 마커 추가 */
+/* !* 각 리스트 항목 앞에 ▸ 마커 추가 *! */
 .markdown ul li::before {
+  content: '❄︎';
+  color: #007acc; /* 마커 색상 (원하는 색상으로 변경 가능) */
+  display: inline-block;
+  width:1rem; /* 마커와 텍스트 간의 간격 조정 */
+  margin-left: -0.5rem; /* 마커 위치 조정 */
+  margin-top: 0.15rem;
+  margin-bottom: 0.15rem;
+}
+
+/* 기본 리스트 스타일 제거 */
+.markdown ul ul {
+  /* content: '▸'; */
+  /* list-style: circle; */
+  padding-left: 1.5rem; /* 마커 공간 확보 */
+  /* padding-top: 1rem; */
+  /* padding-bottom: 1rem; */
+  margin-top: 0.2rem;
+  margin-bottom: 0.2rem;
+  /* border: 1px solid black; */
+  /* border-radius: 10px; */
+}
+
+/* !* 각 리스트 항목 앞에 ▸ 마커 추가 *! */
+.markdown ul ul li::before {
+  content: '✏︎';
+  color: #007acc; /* 마커 색상 (원하는 색상으로 변경 가능) */
+  display: inline-block;
+  width:1.5rem; /* 마커와 텍스트 간의 간격 조정 */
+  margin-left: -0.5rem; /* 마커 위치 조정 */
+}
+
+
+/* !* 각 리스트 항목 앞에 ▸ 마커 추가 *! */
+.markdown ul ul ul li::before {
   content: '▸';
   color: #007acc; /* 마커 색상 (원하는 색상으로 변경 가능) */
-  /* display: inline-block; */
-  width: 1em; /* 마커와 텍스트 간의 간격 조정 */
-  margin-left: -1.5em; /* 마커 위치 조정 */
+  display: inline-block;
+  width:1.5rem; /* 마커와 텍스트 간의 간격 조정 */
+  margin-left: -0.5rem; /* 마커 위치 조정 */
 }
 
 .markdown p {

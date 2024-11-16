@@ -1,19 +1,17 @@
-boostcamp:
-  label: BoostCamp
-  permalink: /boostcamp
-  description: 네이버 부스트캠프 웹⋅모바일 9기의 그룹 프로젝트에서 겪은 경험을 모은 공간입니다.
-
 frontEnd:
   label: FrontEnd
-  permalink: /FrontEnd
+  permalink: /front_end
   description: 프론트앤드 개발 과정의 내용을 모은 공간입니다.
 
-component:
-  label: Component
-  permalink: /component
-  description: 컴포넌트 개발 과정에서의 경험과 성장을 모은 공간입니다.
+principle:
+  label: 이론 탐구
+  permalink: /principle
+  description: |
+    FrontEnd와 관련된 이론들을 탐구하는 공간입니다.
+    디자인패턴, CS 등 관련 다양한 이론을 다룹니다.
 
-react:
-  label: React
-  permalink: /react
-  description: 리액트 관련 내용을 모은 공간입니다.
+designPattern:
+  label: 디자인 패턴
+  permalink: /design_pattern
+  description: |
+    FrontEnd와 관련된 디자인패턴을 탐구하는 공간입니다.
