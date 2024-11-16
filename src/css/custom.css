@@ -263,7 +263,7 @@ header h1 {
 }
 
 .markdown a {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   font-weight: bold;
   color: var(--ifm-color-link);
