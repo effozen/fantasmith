@@ -1,0 +1,8 @@
+{
+  "label": "알고리즘",
+  "position": 1,
+  "link": {
+    "type": "generated-index",
+    "description": "알고리즘의 설계와 분석에 대한 내용을 다룹니다. 다양한 알고리즘의 개념과 구현 방법을 설명합니다."
+  }
+}

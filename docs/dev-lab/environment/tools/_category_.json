@@ -1,0 +1,8 @@
+{
+  "label": "도구",
+  "position": 3,
+  "link": {
+    "type": "generated-index",
+    "description": "개발 환경 설정에 필요한 다양한 도구에 대한 내용을 다룹니다. 도구의 설치, 설정, 활용 방법을 소개합니다."
+  }
+}

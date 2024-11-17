@@ -1,0 +1,8 @@
+{
+  "label": "CI/CD",
+  "position": 1,
+  "link": {
+    "type": "generated-index",
+    "description": "지속적 통합(CI)과 지속적 배포(CD)에 대한 내용을 다룹니다. 자동화된 빌드, 테스트, 배포 파이프라인 구축 방법을 설명합니다."
+  }
+}

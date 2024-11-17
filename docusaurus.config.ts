@@ -38,16 +38,7 @@ const config: Config = {
     [
       'classic',
       {
-        docs: {
-          path: './docs/boostcamp', // 문서가 위치한 디렉토리
-          routeBasePath: 'boostcamp',
-          sidebarPath: './sidebars.ts',
-          // 리포지토리를 변경하세요.
-          // "이 페이지를 편집하세요" 링크를 제거하려면 이 부분을 삭제하세요.
-          editUrl: 'https://github.com/effozen/fantasmith/tree/main/',
-          showLastUpdateTime: true,
-          sidebarCollapsible: false,
-        },
+        docs: false,
         blog: {
           showReadingTime: true,
           feedOptions: {
@@ -79,9 +70,9 @@ const config: Config = {
     [
       '@docusaurus/plugin-content-docs',
       {
-        id: 'fe_lab', // 문서의 ID
-        path: './docs/fe_lab', // 문서가 위치한 디렉토리
-        routeBasePath: 'fe_lab', // 라우트의 기본 경로
+        id: 'dev-lab', // 문서의 ID
+        path: './docs/dev-lab', // 문서가 위치한 디렉토리
+        routeBasePath: 'dev-lab', // 라우트의 기본 경로
         sidebarPath: require.resolve('./sidebars.ts'), // 사이드바 구성 파일
         editUrl: 'https://github.com/effozen/fantasmith/tree/main/', // 문서 편집 링크
         showLastUpdateTime: true, // 마지막 업데이트 시간 표시
@@ -91,9 +82,9 @@ const config: Config = {
     [
       '@docusaurus/plugin-content-docs',
       {
-        id: 'react_lab', // 문서의 ID
-        path: './docs/react_lab', // 문서가 위치한 디렉토리
-        routeBasePath: 'react_lab', // 라우트의 기본 경로
+        id: 'react-lab', // 문서의 ID
+        path: './docs/react-lab', // 문서가 위치한 디렉토리
+        routeBasePath: 'react-lab', // 라우트의 기본 경로
         sidebarPath: require.resolve('./sidebars.ts'), // 사이드바 구성 파일
         editUrl: 'https://github.com/effozen/fantasmith/tree/main/', // 문서 편집 링크
         showLastUpdateTime: true, // 마지막 업데이트 시간 표시
@@ -127,17 +118,11 @@ const config: Config = {
           position: 'right',
         },
         {
-          type: 'docSidebar',
-          sidebarId: 'boostcampSidebar',
-          position: 'left',
-          label: '🧑‍💻 네부캠 프로젝트',
-        },
-        {
           type: 'doc',
           sidebarId: 'generalSidebar',
           position: 'left',
-          label: '🔬 FE-Lab ',
-          docsPluginId: 'fe_lab',
+          label: '🔬 Dev-Lab ',
+          docsPluginId: 'dev-lab',
           docId: 'intro',
         },
         {
@@ -145,7 +130,7 @@ const config: Config = {
           sidebarId: 'generalSidebar',
           position: 'left',
           label: ' 🧪 React-Lab ',
-          docsPluginId: 'react_lab',
+          docsPluginId: 'react-lab',
           docId: 'intro',
         },
       ],
@@ -157,16 +142,12 @@ const config: Config = {
           title: 'Docs',
           items: [
             {
-              label: '🧑‍💻 네부캠 프로젝트',
-              to: '/boostcamp/intro',
-            },
-            {
-              label: '🔬 FE-Lab',
-              to: '/fe_lab/intro',
+              label: '🔬 Dev-Lab',
+              to: '/dev-lab/intro',
             },
             {
               label: '🧪 React-Lab',
-              to: '/react_lab/intro',
+              to: '/react-lab/intro',
             },
           ],
         },

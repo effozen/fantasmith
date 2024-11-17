@@ -1,0 +1,8 @@
+{
+  "label": "모니터링",
+  "position": 3,
+  "link": {
+    "type": "generated-index",
+    "description": "애플리케이션과 인프라의 모니터링 방법에 대한 내용을 다룹니다. 모니터링 도구와 전략을 설명합니다."
+  }
+}

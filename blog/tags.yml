@@ -7,3 +7,11 @@ boostcamp:
   label: Boostcamp
   permalink: /boostcamp
   description: 네이버 부스트캠프 9기 웹⋅모바일 과정과 관련된 내용입니다.
+
+
+softskill:
+  label: SoftSkill
+  permalink: /softskill
+  description: |
+    소프트스킬과 관련된 내용을 모아놓은 공간입니다.
+    대화, 태도, 화법 등과 관련이 있을 수 있고, 때로는 교육 및 팀워크 관련된 이야기가 될 수도 있습니다.
