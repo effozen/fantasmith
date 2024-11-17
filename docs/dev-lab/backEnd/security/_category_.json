@@ -1,0 +1,8 @@
+{
+  "label": "보안",
+  "position": 5,
+  "link": {
+    "type": "generated-index",
+    "description": "백엔드 개발 시 고려해야 할 보안 사항들을 다룹니다. 보안 원칙, 취약점 분석, 방어 방법 등을 포함합니다."
+  }
+}

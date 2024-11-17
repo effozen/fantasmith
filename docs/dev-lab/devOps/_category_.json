@@ -1,0 +1,8 @@
+{
+  "label": "DevOps",
+  "position": 4,
+  "link": {
+    "type": "generated-index",
+    "description": "개발과 운영의 통합을 다루는 공간입니다. CI/CD 파이프라인, 컨테이너화, 모니터링 등 다양한 주제를 포함합니다."
+  }
+}

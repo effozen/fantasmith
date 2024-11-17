@@ -1,0 +1,8 @@
+{
+  "label": "데이터베이스",
+  "position": 3,
+  "link": {
+    "type": "generated-index",
+    "description": "데이터베이스 설계와 관리에 대한 내용을 다룹니다. 관계형 데이터베이스, NoSQL 등 다양한 데이터베이스 시스템을 소개합니다."
+  }
+}
