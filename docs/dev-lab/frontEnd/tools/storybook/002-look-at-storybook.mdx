@@ -16,7 +16,7 @@ last_update:
 - 스토리북에서 말하는 `스토리`가 무엇인지 안다.<br/>
 - `스토리`의 구조를 안다. <br/>
 
-## 🤔 가이드 문서와는 조금 다른 생각
+## 🤔 가이드 문서와는 조금 다른 접근
 
 스토리북 가이드가 정말 잘 작성되어 있는 것은 맞다.<br/>
 
@@ -327,7 +327,6 @@ import { Button } from './Button';
 
 ```js
   parameters: {
-    // Optional parameter to center the component in the Canvas. More info: https://storybook.js.org/docs/configure/story-layout
     layout: 'centered',
   },
 ```
@@ -356,7 +355,6 @@ import storybook_butotn_parameters_center from './img/storybook_butotn_parameter
 
 ```js
   parameters: {
-    // Optional parameter to center the component in the Canvas. More info: https://storybook.js.org/docs/configure/story-layout
     layout: 'left',
   },
 ```
@@ -552,25 +550,10 @@ export const Button = ({ primary, backgroundColor, size, label, ...props }) => {
 };
 
 Button.propTypes = {
-  /**
-   * Is this the principal call to action on the page?
-   */
   primary: PropTypes.bool,
-  /**
-   * What background color to use
-   */
   backgroundColor: PropTypes.string,
-  /**
-   * How large should the button be?
-   */
   size: PropTypes.oneOf(['small', 'medium', 'large']),
-  /**
-   * Button contents
-   */
   label: PropTypes.string.isRequired,
-  /**
-   * Optional click handler
-   */
   onClick: PropTypes.func,
 };
 ```
