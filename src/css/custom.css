@@ -638,3 +638,32 @@ ul.breadcrumbs li{
   display: flex;
   align-items: center;
 }
+
+/* 코드 블록 래퍼가 부모 컨테이너의 너비를 따르도록 설정 */
+.theme-code-block,
+.codeBlock {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* pre 요소 스타일 설정 */
+pre[class*="language-"] {
+  white-space: pre-wrap !important;        /* 줄바꿈 허용 */
+  overflow: hidden !important;             /* 스크롤 제거 */
+  word-break: break-word !important;       /* 긴 단어도 줄바꿈 */
+  overflow-wrap: anywhere !important;      /* 추가적인 줄바꿈 */
+  max-width: 100% !important;              /* 부모 너비 초과 방지 */
+  width: 100% !important;                  /* 전체 너비 사용 */
+  box-sizing: border-box !important;        /* 패딩과 보더 포함 */
+  padding: 1em !important;                  /* 패딩 조정 (필요 시) */
+}
+
+/* code 요소 스타일 설정 */
+code[class*="language-"] {
+  white-space: pre-wrap !important;        /* 줄바꿈 허용 */
+  word-break: break-word !important;       /* 긴 단어도 줄바꿈 */
+  overflow-wrap: anywhere !important;      /* 추가적인 줄바꿈 */
+  max-width: 100% !important;              /* 부모 너비 초과 방지 */
+  width: 100% !important;                  /* 전체 너비 사용 */
+  box-sizing: border-box !important;        /* 패딩과 보더 포함 */
+}
