@@ -23,7 +23,7 @@ last_update:
 
 나에게 있어서는 `Composition pattern`이 그런 경우였다.<br/>
 
-리액트의 `합성`이라는 개념의 핵심이고, 함수를 바탕으로 한 리액트를 통해 일상적으로 사용했으면서도 크게 와닿지 않았던 것 같다.<br/>
+리액트에서 쓰이는 `합성`이라는 개념의 핵심이기에 자주 접했고, 함수를 바탕으로 한 리액트를 통해 일상적으로 사용했으면서도 크게 와닿지 않았던 것 같다.<br/>
 
 이번에 [복합 컴포넌트 패턴으로 컴포넌트 재사용 높이기](/react-lab/dev-log/component_making/component_composition_pattern_with_header/component_composition_pattern_with_header)와 [Dropdown 컴포넌트를 구현하고 이룬 성장](/react-lab/dev-log/component_making/dropdown_and_growth/dropdown_and_growth)에 적힌 컴포넌트들을 구현하면서 이 개념의 의미가 💡! 하고 받아들여지게 되었다.<br/>
 
@@ -103,13 +103,13 @@ classDiagram
 
 핵심은 `Component` 라는 추상메서드를 정의하고, `Composition`에서 이를 구현하는 구현체들을 배열로 받아서 `재귀(Recursive)`적으로 관리하는 것이다.<br/>
 
-이게 간단한 설명인데, 좀 더 참고하고 싶으면 다음의 글을 보는 것을 추천한다.<br/>
+간단하게 정리한 글인데, 이와 관련해서 좀 더 자세하게 설명된 글이 있어서 추가적인 학습이 필요하면 아래의 글을 보면 좋을 것 같다.<br/>
 
 [💠 복합체(Composite) 패턴 - 완벽 마스터하기](https://inpa.tistory.com/entry/GOF-%F0%9F%92%A0-%EB%B3%B5%ED%95%A9%EC%B2%B4Composite-%ED%8C%A8%ED%84%B4-%EC%99%84%EB%B2%BD-%EB%A7%88%EC%8A%A4%ED%84%B0%ED%95%98%EA%B8%B0)<br/>
 
 ## 🤔 대표적인 합성 컴포넌트의 사용 예시
 
-위의 글을 통해, 합성 패턴이란 무엇인지 얼추 이해할 수 있었다.<br/>
+앞서, 합성 패턴이란 무엇인지 이해하였다.<br/>
 
 그러면 지금부터 논의를 해봐야하는 것은 과연 프론트앤드에서 어떻게 활용이 되느냐는 것이다.<br/>
 
@@ -144,11 +144,7 @@ classDiagram
 
 <br/>
 
-1번은 `class` 문법과 관련된 내용이고, 2, 3, 4번은 `function` 문법에 기반해서 이야기를 할 듯 하다.<br/>
-
-1번은 사실 `class` 문법으로 보여주기 쉬워서 클래스 문법으로 설명하지만, 당연하게도 함수형 문법에도 사용 가능하다. (2번에 해당) <br/>
-
-`JSX`를 사용하는 이상, 2, 3, 4 역시 `class` 문법에 적용될 수 있지만(특히 2번은 1번과 유사), 이들은 `function` 문법에 초점을 둬서 이야기를 하고자 한다.<br/>
+1번은 `class` 문법과 관련해서 이야기하고자 하고, 2, 3, 4번은 `function` 문법에 기반해서 이야기하고자 한다.<br/>
 
 ## 🚀 1. Render Props
 
@@ -195,7 +191,7 @@ Render Props 패턴을 사용하여 DataFetcher 컴포넌트가 데이터를 가
 
 여기에서 확인할 수 있듯이, 렌더링 방식은 부모가 정의할 수 있게 하는 방법이다. <br/>
 
-클래스 문법이 생소한 독자분들이 계실 것 같아, 말해보자면 react의 `class` 문법에서는 `render()`가 `function`의 `return`과 같은 역할이다. <br/>
+클래스 문법이 생소할 수 있겠다는 생각에, 말해보자면 react의 `class` 문법에서는 `render()`가 `function`의 `return`과 같은 역할이다. <br/>
 
 그래서 위 구조를 보면 인자로 받아서, 이를 `render()`에 넣어 랜더링하는 방식을 채택하고 있다.<br/>
 
@@ -249,7 +245,7 @@ HOC는 컴포넌트를 인자로 받아 새로운 컴포넌트를 반환하는 �
 
 고차 함수는 자바스크립트의 근본 원리이기에.. 이에 대해서는 나중에 따로 다뤄보도록 하겠다.<br/>
 
-어찌 되었든, HOC을 통해 컴포넌트의 기능을 확장하거나 공통 로직을 재사용할 수 있다.<br/>
+어쨌든, HOC을 통해 컴포넌트의 기능을 확장하거나 공통 로직을 재사용할 수 있다.<br/>
 
 ```jsx
 // HOC 정의
@@ -270,7 +266,36 @@ const ButtonWithLogging = withLogging(Button);
 
 사용 예시는 위와 같다. <br/>
 
-HOC를 사용하면 Button 컴포넌트에 로깅 기능을 추가할 수 있으며, 다른 컴포넌트에도 동일한 HOC를 적용할 수 있다. <br/>
+HOC를 사용하면 Button 컴포넌트의 기능은 유지한 채로, 로깅 기능을 추가할 수 있으며, 다른 컴포넌트에도 동일한 HOC를 적용할 수 있다. <br/>
+
+이에 대한 활용 기법의 또 다른 예로는 에러 처리가 있다.<br/>
+
+<details>
+
+  <summary> 🚀 에러 처리 HOC 예시</summary>
+
+  ```jsx
+  // HOC 정의
+  const withErrorBoundary = (WrappedComponent) => {
+    return (props) => {
+      try {
+        return <WrappedComponent {...props} />;
+      } catch (error) {
+        return <div>Error: {error.message}</div>;
+      }
+    };
+  };
+
+  // 사용 예
+  const ErrorComponent = () => {
+    throw new Error('Error occurred');
+  };
+  const ErrorComponentWithBoundary = withErrorBoundary(ErrorComponent);
+  ```
+
+  이 예시에서 ErrorComponent는 에러를 발생시키는 컴포넌트이며, ErrorComponentWithBoundary는 에러 처리 HOC를 적용한 컴포넌트이다.<br/> 에러가 발생하면 HOC에서 에러를 처리하고, 에러 메시지를 출력한다.<br/> 이를 통해 컴포넌트의 에러 처리 로직을 재사용할 수 있다.<br/>
+
+</details>
 
 ## 🚀 4. Compound Components
 
