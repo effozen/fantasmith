@@ -1,0 +1,8 @@
+{
+  "label": "\uD83D\uDE80 Basic",
+  "position": 1,
+  "link": {
+    "type": "generated-index",
+    "description": "프론트엔드 개발에 사용되는 기본기적인 요소에 대해 다룹니다.\nHTML, JS, CSS와 같은 언어는 물론, Canvas 등의 내용도 포함되어 있습니다."
+  }
+}
