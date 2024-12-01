@@ -414,7 +414,7 @@ ol ol ol {
 .markdown ul {
   /* content: '▸'; */
   /* list-style: circle; */
-  padding-left: 1.5rem; /* 마커 공간 확보 */
+  padding-left: 1rem; /* 마커 공간 확보 */
   /* padding-top: 1rem; */
   /* padding-bottom: 1rem; */
   margin-top: 1.7rem;
