@@ -1,0 +1,178 @@
+<details>
+  <summary>🚀 지도 구현 코드</summary>
+
+  ```tsx title="Map.tsx"
+  // Map.tsx
+  import {NaverMap} from '@/component/maps/NaverMap.tsx';
+  import {ReactNode, useEffect, useState} from 'react';
+  import classNames from 'classnames';
+
+  interface IMapProps {
+  lat: number;
+  lng: number;
+  className?: string;
+  type: string;
+}
+
+  const validateKindOfMap = (type: string) => ['naver'].includes(type);
+
+  export const Map = (props: IMapProps) => {
+  if (!validateKindOfMap(props.type)) throw new Error('Invalid map type');
+  const [MapComponent, setMapComponent] = useState<ReactNode>();
+
+  useEffect(() => {
+  if (props.type === 'naver') {
+  setMapComponent(<NaverMap lat={props.lat} lng={props.lng}/>);
+}
+}, []);
+
+return (
+  <article className={classNames({'h-screen': !props.className}, props.className)}>
+    {MapComponent}
+  </article>
+);
+};
+```
+
+```tsx title="NaverMap.tsx"
+// NaverMap.tsx
+import { useEffect, useRef } from 'react';
+import { INaverMapOptions, setNaverMapObj } from '@/utils/maps/naverMap/setNaverMapObj.ts';
+
+export const NaverMap = (props: INaverMapOptions) => {
+const mapRef = useRef < HTMLDivElement > (null);
+const mapOptions: INaverMapOptions = {
+  lat: props.lat,
+  lng: props.lng,
+  zoom: props.zoom,
+};
+
+useEffect(() => {
+  if (mapRef.current) {
+    setNaverMapObj(mapRef.current, mapOptions);
+  }
+}, []);
+
+return <section ref={mapRef} className="w-full h-full"/>;
+};
+```
+
+```tsx title="setNaverMapObj.ts"
+// setNaverMapObj.ts
+
+export interface INaverMapOptions {
+lat: number;
+lng: number;
+zoom ? : number;
+}
+
+export const setNaverMapOption = (mapOptions: INaverMapOptions): INaverMapOptions => {
+
+return {
+  ...mapOptions,
+  lat: mapOptions.lat ? mapOptions.lat : 37.42829747263545,
+  lng: mapOptions.lng ? mapOptions.lng : 126.76620435615891,
+  zoom: mapOptions.zoom ? mapOptions.zoom : 20,
+};
+};
+
+export const setNaverMapObj = (
+htmlElement: HTMLElement,
+mapOptions: INaverMapOptions,
+): naver.maps.Map => {
+const {lat, lng, ...restProps} = setNaverMapOption(mapOptions);
+
+return new naver.maps.Map(htmlElement, {
+  center: new naver.maps.LatLng(lat, lng),
+  ...restProps,
+});
+};
+```
+</details>
+
+
+그리고 레이어의 기본이 될 캔버스를 구현하였다. <br/>
+
+<details>
+  <summary>🚀 캔버스 구현 코드</summary>
+
+  ```tsx title="Canvas.tsx"
+  // Canvas.tsx
+  import classNames from 'classnames';
+  import { useEffect, useRef } from 'react';
+
+  interface ICanvasProps {
+  className?: string;
+  onClick?: () => void;
+  onMouseDown?: () => void;
+  onMouseUp?: () => void;
+  onMouseMove?: () => void;
+}
+
+  export const Canvas = (props: ICanvasProps) => {
+  const { className, ...rest } = props;
+  const ref = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+  const canvas = ref.current;
+  if (!canvas) return;
+  const context = canvas.getContext('2d');
+  if (!context) return;
+  canvas.width = canvas.offsetWidth;
+  canvas.height = canvas.offsetHeight;
+
+  context.fillRect(100, 100, 200, 200);
+}, []);
+
+  return (
+  <canvas
+  ref={ref}
+  className={classNames('z-1000 absolute h-full w-full bg-transparent', className)}
+  {...rest}
+/>
+);
+};
+```
+
+```tsx title="CanvasWithMap.tsx"
+// CanvasWithMap.tsx
+import { Canvas } from '@/component/canvas/Canvas.tsx';
+import { Map } from '@/component/maps/Map.tsx';
+import classNames from 'classnames';
+
+interface ICanvasWithMapProps {
+className?: string;
+lat: number;
+lng: number;
+zoom: number;
+mapType: string;
+}
+
+export const CanvasWithMap = (props: ICanvasWithMapProps) => {
+return (
+<div className={classNames('relative h-screen', props.className)}>
+  <Canvas />
+  <Map lat={props.lat} lng={props.lng} type={props.mapType} zoom={props.zoom} />
+</div>
+);
+};
+```
+
+```tsx title="GuestView.tsx"
+// GuestView.tsx
+import { HeaderContext } from '@/component/layout/header/LayoutHeaderProvider';
+import { useContext, useEffect } from 'react';
+import { CanvasWithMap } from '@/component/canvas/CanvasWithMap.tsx';
+
+export const GuestView = () => {
+const headerContext = useContext(HeaderContext);
+}, []);
+
+// TODO: geoCoding API를 이용해서 현재 위치나 시작위치를 기반으로 자동 좌표 설정 구현 (현재: 하드코딩)
+return <CanvasWithMap lat={37.3595704} lng={127.105399} zoom={14} mapType="naver" />;
+};
+```
+
+</details>
+
+// 671줄에 붙여넣기

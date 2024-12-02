@@ -49,7 +49,7 @@ import ReactPlayer from 'react-player'
 
 일단, 이 기술들이 무엇인지 알고, 어떻게 돌아가는 지에 대해서 알아야 설계를 할 수 있었기 때문이다.<br/>
 
-import canvas_and_map_search from './img/canvas_and_map_search.webp'
+import canvas_and_map_search from '../img/canvas_and_map_search.webp'
 
 <figure>
   <img style={{width: '30%'}} src={canvas_and_map_search} alt='참고 자료'/>
@@ -115,14 +115,14 @@ interface 주고받을데이터 {
 
 이에, 그림을 그려가면서 구조를 논하였고, 이에 생각이 동기화되어 명확하게 이해할 수 있었다.<br/>
 
-import map_and_canvas_interface_discussion1 from './img/map_and_cavnas_interface_discussion1.webp'
+import map_and_canvas_interface_discussion1 from '../img/map_and_cavnas_interface_discussion1.webp'
 
 <figure>
   <img src={map_and_canvas_interface_discussion1} alt='회의 내용'/>
   <figcaption> 회의 내용 1</figcaption>
 </figure>
 
-import map_and_canvas_interface_discussion2 from './img/map_and_cavnas_interface_discussion2.webp'
+import map_and_canvas_interface_discussion2 from '../img/map_and_cavnas_interface_discussion2.webp'
 
 <figure>
   <img src={map_and_canvas_interface_discussion2} alt='회의 내용'/>
@@ -147,7 +147,7 @@ import map_and_canvas_interface_discussion2 from './img/map_and_cavnas_interface
 
 그리고, 제일 먼저 한 일은, 내가 이걸 구현하기 위해서 어떤 과정을 거쳐야하는 지를 파악하는 것이었다.<br/>
 
-import canvas_with_map_process_design from './img/canvas_with_map_process_design.webp'
+import canvas_with_map_process_design from '../img/canvas_with_map_process_design.webp'
 
 <figure>
   <img src={canvas_with_map_process_design} alt='깃허브 이슈에 등록한 내 작업 목록'/>
@@ -208,7 +208,7 @@ import canvas_with_map_process_design from './img/canvas_with_map_process_design
 
 ## 📝 설계에 대한 계획 수립
 
-import canvas_with_map_process_design2 from './img/canvas_with_map_process_design2.webp'
+import canvas_with_map_process_design2 from '../img/canvas_with_map_process_design2.webp'
 
 <figure>
   <img src={canvas_with_map_process_design2} alt='스토리북 이미지'/>
@@ -271,7 +271,7 @@ import canvas_with_map_process_design2 from './img/canvas_with_map_process_desig
 
 그렇게 프로젝트에 대해서 서로가 생각하는 것을 일치 시키고, 이 내용을 바탕으로 다음과 같은 그림을 그렸다.<br/>
 
-import canvas_and_map_structure from './img/canvas_and_map_structure.webp'
+import canvas_and_map_structure from '../img/canvas_and_map_structure.webp'
 
 <figure>
   <img src={canvas_and_map_structure} alt='스토리북 이미지'/>
@@ -280,8 +280,8 @@ import canvas_and_map_structure from './img/canvas_and_map_structure.webp'
 
 이렇게 작성하면서 관련된 요소의 파악도 진행하였다.<br/>
 
-import mapTest from './img/mapTest.webp'
-import canvasTest from './img/canvasTest.webp'
+import mapTest from '../img/mapTest.webp'
+import canvasTest from '../img/canvasTest.webp'
 
 <figure>
   <img src={mapTest} alt='지도 테스트 이미지'/>
@@ -321,14 +321,14 @@ import canvasTest from './img/canvasTest.webp'
 - 지도는 `Wrapper`가 되는 `HTML 태그` 요소보다 약간 큰 사이즈가 랜더링된다. (지도의 크기는 지도의 크기를 의미하며, Wrapper는 지도를 감싸는 HTML 태그를 의미한다.)
 - 드래그나 줌인 줌아웃 이벤트로 사전에 랜더링 된 범위를 넘어서면 다시 랜더링이 된다.
 
-import map_tile1 from './img/map_tile1.webp'
+import map_tile1 from '../img/map_tile1.webp'
 
 <figure>
   <img src={map_tile1} alt='지도 타일 이미지' style={{width: '30%'}}/>
   <figcaption> 지도 타일 이미지 1</figcaption>
 </figure>
 
-import map_tile2 from './img/map_tile2.webp'
+import map_tile2 from '../img/map_tile2.webp'
 
 <figure>
   <img src={map_tile2} alt='지도 타일 이미지'/>
@@ -351,7 +351,7 @@ import map_tile2 from './img/map_tile2.webp'
 
 이를 위해서는 지도와 나머지 구조간의 의존성을 최대한 끊을 필요가 있었다.<br/>
 
-import map_and_canvas_structure from './img/map_and_canvas_structure.webp'
+import map_and_canvas_structure from '../img/map_and_canvas_structure.webp'
 
 <figure>
   <img src={map_and_canvas_structure} alt='지도-캔버스 연동 구조'/>
@@ -385,23 +385,21 @@ import map_and_canvas_structure from './img/map_and_canvas_structure.webp'
 이와 관련해서 네이버지도 API를 정말 깊게 찾아보았고, 그 내용은 다음과 같다. <br/>
 
 
-import zoom_cal_gpt1 from './img/zoom_cal_gpt1.webp'
-import zoom_cal_gpt2 from './img/zoom_cal_gpt2.webp'
-import zoom_cal_gpt3 from './img/zoom_cal_gpt3.webp'
+import zoom_cal_gpt1 from '../img/zoom_cal_gpt1.webp'
+import zoom_cal_gpt2 from '../img/zoom_cal_gpt2.webp'
+import zoom_cal_gpt3 from '../img/zoom_cal_gpt3.webp'
 
 
 <details>
   <summary>🚀 네이버 지도 API를 통한 좌표 변환 과정 탐구</summary>
 
   - 네이버 지도 API에서는 다음과 같은 기능을 제공한다.<br/>
-  1.
-  [naver](https://navermaps.github.io/maps.js.ncp/docs/naver.html)[.maps](https://navermaps.github.io/maps.js.ncp/docs/naver.maps.html).MapSystemProjection**<br/>
+  1. [naver](https://navermaps.github.io/maps.js.ncp/docs/naver.html)[.maps](https://navermaps.github.io/maps.js.ncp/docs/naver.maps.html).MapSystemProjection**<br/>
   - MapSystemProjection은 현재 설정된 지도 유형의
   [Projection](https://navermaps.github.io/maps.js.ncp/docs/naver.maps.Projection.html)을 가공해 지도 내부에서 사용하는 투영 객체이다. 이 객체를
   이용하면 지도 좌표와 세계 좌표, 화면 픽셀 좌표를 서로 변환할 수 있다.<br/>
   - 단, 이는 추후 확장 방안에서 카카오 지도, 구글 지도 등과 연동하기로 했으므로 고려하지 않는다.<br/>
-  2.
-  [naver](https://navermaps.github.io/maps.js.ncp/docs/naver.html)[.maps](https://navermaps.github.io/maps.js.ncp/docs/naver.maps.html).LatLngBounds**<br/>
+  2. [naver](https://navermaps.github.io/maps.js.ncp/docs/naver.html)[.maps](https://navermaps.github.io/maps.js.ncp/docs/naver.maps.html).LatLngBounds**<br/>
   - `LatLngBounds` 클래스는 남서쪽과 북동쪽의 위/경도 좌표가 설정돼 있는 직사각형의 지리적 영역(이하 좌표 경계)을 정의한다.<br/>
   - 이는 왼쪽 아래 꼭짓점과 오른쪽 위 꼭짓점의 위/경도 좌표를 주는 메서드이다.<br/>
   - 이런 기능은 대부분의 지도 API가 제공하고 있으며, 앞서 보여준 매핑도에도 부합한다.<br/>
@@ -560,7 +558,7 @@ import zoom_cal_gpt3 from './img/zoom_cal_gpt3.webp'
 
 ## 📝 컴포넌트 z-index 설계
 
-import canvas_and_map_z_index from './img/canvas_and_map_z_index.webp'
+import canvas_and_map_z_index from '../img/canvas_and_map_z_index.webp'
 
 <figure>
   <img src={canvas_and_map_z_index} alt='캔버스와 지도 z-index 설계'/>
@@ -579,7 +577,7 @@ import canvas_and_map_z_index from './img/canvas_and_map_z_index.webp'
 
 그래서 앞에서 언급했던 직접 예제를 통해 구현하면서 각 요소가 이렇게 되겠구나를 파악함과 동시에, 멘토님과의 멘토링을 통해서 부족한 점을 보완해서 다음과 같은 설계를 할 수 있었다.<br/>
 
-import canvas_and_map_loading from './img/canvas_and_map_loading.webp'
+import canvas_and_map_loading from '../img/canvas_and_map_loading.webp'
 
 <figure>
   <img src={canvas_and_map_loading} alt='로딩부터 동작까지 흐름 설계'/>
@@ -670,163 +668,7 @@ zIndex: {
 
 그 다음으로 한 것은 지도를 구현한 것이었다. 아래는 지도의 코드이다.<br/>
 
-<details>
-  <summary>🚀 지도 구현 코드</summary>
 
-```tsx title="Map.tsx"
-// Map.tsx
-import {NaverMap} from '@/component/maps/NaverMap.tsx';
-import {ReactNode, useEffect, useState} from 'react';
-import classNames from 'classnames';
-interface IMapProps {
-lat: number;
-lng: number;
-className?: string;
-type: string;
-}
-const validateKindOfMap = (type: string) => ['naver'].includes(type);
-export const Map = (props: IMapProps) => {
-if (!validateKindOfMap(props.type)) throw new Error('Invalid map type');
-const [MapComponent, setMapComponent] = useState<ReactNode>();
-useEffect(() => {
-if (props.type === 'naver') {
-setMapComponent(<NaverMap lat={props.lat} lng={props.lng}/>);
-}
-}, []);
-return (
-<article className={classNames({'h-screen': !props.className}, props.className)}>
-  {MapComponent}
-</article>
-);
-};
-```
-
-```tsx title="NaverMap.tsx"
-// NaverMap.tsx
-import { useEffect, useRef } from 'react';
-import { INaverMapOptions, setNaverMapObj } from '@/utils/maps/naverMap/setNaverMapObj.ts';
-export const NaverMap = (props: INaverMapOptions) => {
-const mapRef = useRef < HTMLDivElement > (null);
-const mapOptions: INaverMapOptions = {
-  lat: props.lat,
-  lng: props.lng,
-  zoom: props.zoom,
-};
-useEffect(() => {
-  if (mapRef.current) {
-    setNaverMapObj(mapRef.current, mapOptions);
-  }
-}, []);
-return <section ref={mapRef} className="w-full h-full"/>;
-};
-```
-
-```tsx title="setNaverMapObj.ts"
-// setNaverMapObj.ts
-export interface INaverMapOptions {
-lat: number;
-lng: number;
-zoom ? : number;
-}
-export const setNaverMapOption = (mapOptions: INaverMapOptions): INaverMapOptions => {
-return {
-...mapOptions,
-  lat: mapOptions.lat ? mapOptions.lat : 37.42829747263545,
-  lng: mapOptions.lng ? mapOptions.lng : 126.76620435615891,
-  zoom: mapOptions.zoom ? mapOptions.zoom : 20,
-};
-};
-export const setNaverMapObj = (
-htmlElement: HTMLElement,
-mapOptions: INaverMapOptions,
-): naver.maps.Map => {
-const {lat, lng, ...restProps} = setNaverMapOption(mapOptions);
-return new naver.maps.Map(htmlElement, {
-  center: new naver.maps.LatLng(lat, lng),
-  ...restProps,
-});
-};
-```
-</details>
-
-
-그리고 레이어의 기본이 될 캔버스를 구현하였다. <br/>
-
-<details>
-  <summary>🚀 캔버스 구현 코드</summary>
-
-```tsx title="Canvas.tsx"
-// Canvas.tsx
-import classNames from 'classnames';
-import { useEffect, useRef } from 'react';
-interface ICanvasProps {
-  className?: string;
-  onClick?: () => void;
-  onMouseDown?: () => void;
-  onMouseUp?: () => void;
-  onMouseMove?: () => void;
-}
-export const Canvas = (props: ICanvasProps) => {
-  const { className, ...rest } = props;
-  const ref = useRef<HTMLCanvasElement>(null);
-  useEffect(() => {
-    const canvas = ref.current;
-    if (!canvas) return;
-    const context = canvas.getContext('2d');
-    if (!context) return;
-    canvas.width = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
-
-    context.fillRect(100, 100, 200, 200);
-  }, []);
-  return (
-    <canvas
-      ref={ref}
-      className={classNames('z-1000 absolute h-full w-full bg-transparent', className)}
-      {...rest}
-    />
-  );
-};
-```
-
-```tsx title="CanvasWithMap.tsx"
-// CanvasWithMap.tsx
-import { Canvas } from '@/component/canvas/Canvas.tsx';
-import { Map } from '@/component/maps/Map.tsx';
-import classNames from 'classnames';
-interface ICanvasWithMapProps {
-  className?: string;
-  lat: number;
-  lng: number;
-  zoom: number;
-  mapType: string;
-}
-export const CanvasWithMap = (props: ICanvasWithMapProps) => {
-  return (
-    <div className={classNames('relative h-screen', props.className)}>
-      <Canvas />
-      <Map lat={props.lat} lng={props.lng} type={props.mapType} zoom={props.zoom} />
-    </div>
-  );
-};
-```
-
-```tsx title="GuestView.tsx"
-// GuestView.tsx
-import { HeaderContext } from '@/component/layout/header/LayoutHeaderProvider';
-import { useContext, useEffect } from 'react';
-import { CanvasWithMap } from '@/component/canvas/CanvasWithMap.tsx';
-
-export const GuestView = () => {
-  const headerContext = useContext(HeaderContext);
-    }, []);
-
-  // TODO: geoCoding API를 이용해서 현재 위치나 시작위치를 기반으로 자동 좌표 설정 구현 (현재: 하드코딩)
-  return <CanvasWithMap lat={37.3595704} lng={127.105399} zoom={14} mapType="naver" />;
-};
-```
-
-</details>
 
 캔버스에는 의도적으로 사각형을 배치하였다.<br/>
 이를 통해서 캔버스가 제대로 보이는지 확인하고자 했다.캔버스의 배경색을 투명하게 만들고 화면을 꽉 채우게 만들어서 지도와 겹쳐보일 수 있게 만들었다.<br/>
@@ -849,7 +691,25 @@ export const GuestView = () => {
 
 위의 `top-child`와 `bottom-child` 처럼 겹쳐있는 레이어에 대해서 어떻게 동시에 같은 이벤트를 발생시킬 것인가에 대한 어려움이 있었다.<br/>
 
-우리가 구현해야 하는 이벤트는 다음과 같았다.<br/>
+import touch_event_img1 from './img/touch_event_img1.webp'
+
+<figure>
+  <img src={touch_event_img1} alt='터치 이벤트 설계 1'/>
+  <figcaption>터치 이벤트 설계 1</figcaption>
+</figure>
+
+import touch_event_img2 from './img/touch_event_img2.webp'
+
+<figure>
+  <img src={touch_event_img2} alt='터치 이벤트 설계 2'/>
+  <figcaption>터치 이벤트 설계 2</figcaption>
+</figure>
+
+우리의 서비스에서 지도는 위와 같이 동작을 해야했다.<br/>
+
+지도와 캔버스가 겹쳐져 있을 때, 지도와 캔버스 모두에 이벤트가 발생해야 했다.<br/>
+
+그리고, 우리가 처리해야 하는 이벤트는 다음과 같았다.<br/>
 
 - 클릭<br/>
 - 드래그<br/>
@@ -863,17 +723,124 @@ export const GuestView = () => {
 
 그러나, 이는 의도대로 동작하지 않았다. `top-child`에는 정상적으로 이벤트가 적용이 되나, `bottom-child`에는 적용이 되지 않았기 때문이다.<br/>
 
-원인은 다음과 같았다.<br/>
+원인은 스택 컨텍스트(`Stacking Context`)에 의한 문제였다.<br/>
 
-스택 컨테스트(`Stacking Context`)에 의한 문제였다.<br/>
+[z-index와 스택 컨텍스트(쌓임 맥락)](/dev-lab/frontEnd/basic/css/z-index_and_stack_context/canvas-and-map-linking)<br/>
 
-간단하게만 설명하면, CSS에서 요소가 화면에 보여지는 `스택 컨텍스트`라는게 존재한다. `z-index`를 걸게 되면, 높은 `z-index`값을 가진 요소는 낮은 값을 가진 요소보다 앞에 위치하게 된다.<br/>
+스택컨텍스트 자체에 관련해선 에전에 작성한 위의 글을 참고하면 좋다.<br/>
+
+CSS에서 요소가 화면에 보여지는 `스택 컨텍스트`라는게 존재한다. `z-index`를 걸게 되면, 높은 `z-index`값을 가진 요소는 낮은 값을 가진 요소보다 앞에 위치하게 된다.<br/>
 
 그리고, 브라우저는 클릭 이벤트가 발생했을 때 가장 위에 있는 요소부터 이벤트를 처리한다.<br/>
 
 `top-child`가 위에 있으므로, 여기에 이벤트를 제일 먼저 전달한다. 그리고 `top-child`가 이 이벤트를 가로채고 해결한 상태로, `stopPropgation`같은 요소로 이벤트 전달을 막아서 생기는 문제였다.<br/>
 
 실제로, 우리가 헤더 등을 `absolute`로 구현하면 여기에만 이벤트가 적용되고 다른 곳에는 적용이 안되는데.. 이를 간과했던 것이다.<br/>
+
+## 🧑‍💻 1차 시도 : `pointer-event` 속성을 끄기
+
+첫 번째 시도로는 위에 있는 요소인 `top-chlid`의 `pointer-event` 속성을 끄는 것이었다.<br/>
+
+[pointer-events - CSS: Cascading Style Sheets | MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/pointer-events)<br/>
+
+`pointer-event`라고 함은 CSS의 속성 중 하나로, 요소가 마우스 클릭, 터치, 커서 이동과 같은 포인터 이벤트를 받을 수 있는지 여부를 제어하는 속성이다.<br/>
+
+단순하게 생각해서, 제일 위에 있는 요소가 이벤트를 다 잡아먹고 있다면, 그걸 끄면 되는게 아닌가? 하는 생각에서 였다.<br/>
+
+우리는 `tailwindcss`를 사용하고 있었기에, 다음과 같이 `pointer-event-none` 클래스를 주는 것만으로도 끌 수 있었다.<br/>
+
+```tsx
+<div class='container relative w-[300px] h-[300px]'>
+	<div class='top-child absolute z-30 w-full h-full pointer-event-none' /> // 여기에서 `pointer-event-none` 속성에 주목한다.
+	<div class='bottom-child absolute z-0 w-full h-full' />
+</div>
+```
+
+이렇게 하면 `top-child`의 모든 포인터 이벤트를 끌 수 있다.<br/>
+
+
+import touch_event_img3 from './img/touch_event_img3.webp'
+
+<figure>
+  <img src={touch_event_img3} alt='pointer-event 그림'/>
+  <figcaption>pointer-event 그림</figcaption>
+</figure>
+
+`pointer-event-none`을 주게 되면, `top-child`는 이벤트를 받지 않게 되고, `bottom-child`는 이벤트를 받게 된다.<br/>
+
+그러나, 이는 우리가 원하는 바가 아니었다. 우리는 `top-child`, `bottom-child` 모두 같은 이벤트가 동시에 발생하길 원했기 때문이다.<br/>
+
+## 🧑‍💻2차 시도 : 자식 요소에 직접적으로 이벤트를 트리거하기
+
+두번째 시도는 `cotainer`에서 이벤트가 발생하면 이를 `top-child`와 `bottom-child`에서 트리거하는 방식이었다.<br/>
+
+import click_event_flow2 from './img/click_event_flow2.webp'
+
+<figure>
+  <img src={click_event_flow2} alt='예상 이벤트 흐름'/>
+  <figcaption>예상 이벤트 흐름</figcaption>
+</figure>
+
+클릭을 기준으로만 생각을 했으며, 클릭 이벤트가 `container`에 발생하면 이를 `top-child`와 `bottom-child`에게 트리거하는 방식이었다.<br/>
+
+이를 위해서 다음과 같이 코드를 구현하였다.<br/>
+
+```tsx
+import { useRef } from 'react';
+
+const Container = () => {
+  const topChildRef = useRef<HTMLDivElement>(null);
+  const bottomChildRef = useRef<HTMLDivElement>(null);
+
+  const handleClick = () => {
+    topChildRef.current?.click();
+    bottomChildRef.current?.click();
+  };
+
+  return (
+    <div className='container relative w-[300px] h-[300px]' onClick={handleClick}>
+      <div className='top-child absolute z-30 w-full h-full' />
+      <div className='bottom-child absolute z-0 w-full h-full' />
+    </div>
+  );
+};
+```
+
+이렇게 하면, `container`에 클릭 이벤트가 발생하면 `top-child`와 `bottom-child`에게 클릭 이벤트를 트리거할 수 있게 된다.<br/>
+
+다만, 이는 2가지의 문제점이 있었다.<br/>
+
+1. `ref`를 통한 방식은 `HTMLElement`의 기본 이벤트만 트리거할 수 있다.<br/>
+2. `click()`과 같이 이벤트를 트리거할 경우 이벤트를 발생시킬 수는 있지만, 마우스가 클릭된 위치 등에 대한 부가정보를 전달할 수 없다.<br/>
+
+[MDN - UI Event](https://developer.mozilla.org/en-US/docs/Web/API/UI_Events)<br/>
+
+UI 이벤트는 위와 같이 정의되어 있으며, 이벤트 객체에는 마우스 클릭된 위치, 클릭된 버튼 등에 대한 부가정보가 담겨있다.<br/>
+
+다만 공식 문서를 살펴보면, 지원하는 `Trigger`가 많지 않다.<br/>
+
+우리는 네이버 지도 및 여러 지도에 대한 연동을 생각해야 했기 때문에, 조금 더 다양한 이벤트를 생성해서 넘겨줄 필요가 있었다.<br/>
+
+단순히 다양한 지도에 대응하는 것 뿐 아니라, 네이버 지도 등의 특정 지도만 놓고 보더라도, 커스텀 이벤트를 만들어서 제공하고 있었기 때문이다.<br/>
+
+[네이버 지도 API 이벤트](https://navermaps.github.io/maps.js.ncp/docs/naver.maps.Event.html)<br/>
+
+또한, `click()`과 같은 메서드를 통해서 이벤트를 트리거할 경우, 이벤트 객체를 생성하지 않기 때문에 이벤트 객체에 대한 부가정보를 전달할 수 없다.<br/>
+
+import click_event_flow from './img/click_event_flow.webp'
+
+<figure>
+  <img src={click_event_flow} alt='이벤트 흐름'/>
+  <figcaption>이벤트 흐름</figcaption>
+</figure>
+
+위 그림을 보면 알겠지만, 이 방식은 겹쳐있을 때 뿐만 아니라, 멀리 떨어져있는 요소에 대해서도 이벤트를 트리거할 수 있게 해준다.<br/>
+
+또한, `ref.click()`은 인자를 전달받지 않는다.<br/>
+
+이 말은 이벤트 객체를 전달할 수 없다는 것이고, 이벤트 발생 시점의 정보를 전달할 수 없다는 의미가 되기도 한다.<br/>
+
+
 
 ## 🤔 캔버스와 지도 간의 미묘한 동기화 차이를 어떻게 할 것인가 ?
 
