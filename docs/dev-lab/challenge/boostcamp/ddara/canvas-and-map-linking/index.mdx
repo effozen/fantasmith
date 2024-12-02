@@ -49,7 +49,7 @@ import ReactPlayer from 'react-player'
 
 일단, 이 기술들이 무엇인지 알고, 어떻게 돌아가는 지에 대해서 알아야 설계를 할 수 있었기 때문이다.<br/>
 
-import canvas_and_map_search from './img/canvas_and_map_search.webp'
+import canvas_and_map_search from '../img/canvas_and_map_search.webp'
 
 <figure>
   <img style={{width: '30%'}} src={canvas_and_map_search} alt='참고 자료'/>
@@ -115,14 +115,14 @@ interface 주고받을데이터 {
 
 이에, 그림을 그려가면서 구조를 논하였고, 이에 생각이 동기화되어 명확하게 이해할 수 있었다.<br/>
 
-import map_and_canvas_interface_discussion1 from './img/map_and_cavnas_interface_discussion1.webp'
+import map_and_canvas_interface_discussion1 from '../img/map_and_cavnas_interface_discussion1.webp'
 
 <figure>
   <img src={map_and_canvas_interface_discussion1} alt='회의 내용'/>
   <figcaption> 회의 내용 1</figcaption>
 </figure>
 
-import map_and_canvas_interface_discussion2 from './img/map_and_cavnas_interface_discussion2.webp'
+import map_and_canvas_interface_discussion2 from '../img/map_and_cavnas_interface_discussion2.webp'
 
 <figure>
   <img src={map_and_canvas_interface_discussion2} alt='회의 내용'/>
@@ -147,7 +147,7 @@ import map_and_canvas_interface_discussion2 from './img/map_and_cavnas_interface
 
 그리고, 제일 먼저 한 일은, 내가 이걸 구현하기 위해서 어떤 과정을 거쳐야하는 지를 파악하는 것이었다.<br/>
 
-import canvas_with_map_process_design from './img/canvas_with_map_process_design.webp'
+import canvas_with_map_process_design from '../img/canvas_with_map_process_design.webp'
 
 <figure>
   <img src={canvas_with_map_process_design} alt='깃허브 이슈에 등록한 내 작업 목록'/>
@@ -208,7 +208,7 @@ import canvas_with_map_process_design from './img/canvas_with_map_process_design
 
 ## 📝 설계에 대한 계획 수립
 
-import canvas_with_map_process_design2 from './img/canvas_with_map_process_design2.webp'
+import canvas_with_map_process_design2 from '../img/canvas_with_map_process_design2.webp'
 
 <figure>
   <img src={canvas_with_map_process_design2} alt='스토리북 이미지'/>
@@ -271,7 +271,7 @@ import canvas_with_map_process_design2 from './img/canvas_with_map_process_desig
 
 그렇게 프로젝트에 대해서 서로가 생각하는 것을 일치 시키고, 이 내용을 바탕으로 다음과 같은 그림을 그렸다.<br/>
 
-import canvas_and_map_structure from './img/canvas_and_map_structure.webp'
+import canvas_and_map_structure from '../img/canvas_and_map_structure.webp'
 
 <figure>
   <img src={canvas_and_map_structure} alt='스토리북 이미지'/>
@@ -280,8 +280,8 @@ import canvas_and_map_structure from './img/canvas_and_map_structure.webp'
 
 이렇게 작성하면서 관련된 요소의 파악도 진행하였다.<br/>
 
-import mapTest from './img/mapTest.webp'
-import canvasTest from './img/canvasTest.webp'
+import mapTest from '../img/mapTest.webp'
+import canvasTest from '../img/canvasTest.webp'
 
 <figure>
   <img src={mapTest} alt='지도 테스트 이미지'/>
@@ -321,14 +321,14 @@ import canvasTest from './img/canvasTest.webp'
 - 지도는 `Wrapper`가 되는 `HTML 태그` 요소보다 약간 큰 사이즈가 랜더링된다. (지도의 크기는 지도의 크기를 의미하며, Wrapper는 지도를 감싸는 HTML 태그를 의미한다.)
 - 드래그나 줌인 줌아웃 이벤트로 사전에 랜더링 된 범위를 넘어서면 다시 랜더링이 된다.
 
-import map_tile1 from './img/map_tile1.webp'
+import map_tile1 from '../img/map_tile1.webp'
 
 <figure>
   <img src={map_tile1} alt='지도 타일 이미지' style={{width: '30%'}}/>
   <figcaption> 지도 타일 이미지 1</figcaption>
 </figure>
 
-import map_tile2 from './img/map_tile2.webp'
+import map_tile2 from '../img/map_tile2.webp'
 
 <figure>
   <img src={map_tile2} alt='지도 타일 이미지'/>
@@ -351,7 +351,7 @@ import map_tile2 from './img/map_tile2.webp'
 
 이를 위해서는 지도와 나머지 구조간의 의존성을 최대한 끊을 필요가 있었다.<br/>
 
-import map_and_canvas_structure from './img/map_and_canvas_structure.webp'
+import map_and_canvas_structure from '../img/map_and_canvas_structure.webp'
 
 <figure>
   <img src={map_and_canvas_structure} alt='지도-캔버스 연동 구조'/>
@@ -385,23 +385,21 @@ import map_and_canvas_structure from './img/map_and_canvas_structure.webp'
 이와 관련해서 네이버지도 API를 정말 깊게 찾아보았고, 그 내용은 다음과 같다. <br/>
 
 
-import zoom_cal_gpt1 from './img/zoom_cal_gpt1.webp'
-import zoom_cal_gpt2 from './img/zoom_cal_gpt2.webp'
-import zoom_cal_gpt3 from './img/zoom_cal_gpt3.webp'
+import zoom_cal_gpt1 from '../img/zoom_cal_gpt1.webp'
+import zoom_cal_gpt2 from '../img/zoom_cal_gpt2.webp'
+import zoom_cal_gpt3 from '../img/zoom_cal_gpt3.webp'
 
 
 <details>
   <summary>🚀 네이버 지도 API를 통한 좌표 변환 과정 탐구</summary>
 
   - 네이버 지도 API에서는 다음과 같은 기능을 제공한다.<br/>
-  1.
-  [naver](https://navermaps.github.io/maps.js.ncp/docs/naver.html)[.maps](https://navermaps.github.io/maps.js.ncp/docs/naver.maps.html).MapSystemProjection**<br/>
+  1. [naver](https://navermaps.github.io/maps.js.ncp/docs/naver.html)[.maps](https://navermaps.github.io/maps.js.ncp/docs/naver.maps.html).MapSystemProjection**<br/>
   - MapSystemProjection은 현재 설정된 지도 유형의
   [Projection](https://navermaps.github.io/maps.js.ncp/docs/naver.maps.Projection.html)을 가공해 지도 내부에서 사용하는 투영 객체이다. 이 객체를
   이용하면 지도 좌표와 세계 좌표, 화면 픽셀 좌표를 서로 변환할 수 있다.<br/>
   - 단, 이는 추후 확장 방안에서 카카오 지도, 구글 지도 등과 연동하기로 했으므로 고려하지 않는다.<br/>
-  2.
-  [naver](https://navermaps.github.io/maps.js.ncp/docs/naver.html)[.maps](https://navermaps.github.io/maps.js.ncp/docs/naver.maps.html).LatLngBounds**<br/>
+  2. [naver](https://navermaps.github.io/maps.js.ncp/docs/naver.html)[.maps](https://navermaps.github.io/maps.js.ncp/docs/naver.maps.html).LatLngBounds**<br/>
   - `LatLngBounds` 클래스는 남서쪽과 북동쪽의 위/경도 좌표가 설정돼 있는 직사각형의 지리적 영역(이하 좌표 경계)을 정의한다.<br/>
   - 이는 왼쪽 아래 꼭짓점과 오른쪽 위 꼭짓점의 위/경도 좌표를 주는 메서드이다.<br/>
   - 이런 기능은 대부분의 지도 API가 제공하고 있으며, 앞서 보여준 매핑도에도 부합한다.<br/>
@@ -560,7 +558,7 @@ import zoom_cal_gpt3 from './img/zoom_cal_gpt3.webp'
 
 ## 📝 컴포넌트 z-index 설계
 
-import canvas_and_map_z_index from './img/canvas_and_map_z_index.webp'
+import canvas_and_map_z_index from '../img/canvas_and_map_z_index.webp'
 
 <figure>
   <img src={canvas_and_map_z_index} alt='캔버스와 지도 z-index 설계'/>
@@ -579,7 +577,7 @@ import canvas_and_map_z_index from './img/canvas_and_map_z_index.webp'
 
 그래서 앞에서 언급했던 직접 예제를 통해 구현하면서 각 요소가 이렇게 되겠구나를 파악함과 동시에, 멘토님과의 멘토링을 통해서 부족한 점을 보완해서 다음과 같은 설계를 할 수 있었다.<br/>
 
-import canvas_and_map_loading from './img/canvas_and_map_loading.webp'
+import canvas_and_map_loading from '../img/canvas_and_map_loading.webp'
 
 <figure>
   <img src={canvas_and_map_loading} alt='로딩부터 동작까지 흐름 설계'/>
@@ -678,26 +676,31 @@ zIndex: {
 import {NaverMap} from '@/component/maps/NaverMap.tsx';
 import {ReactNode, useEffect, useState} from 'react';
 import classNames from 'classnames';
+
 interface IMapProps {
-lat: number;
-lng: number;
-className?: string;
-type: string;
+  lat: number;
+  lng: number;
+  className?: string;
+  type: string;
 }
+
 const validateKindOfMap = (type: string) => ['naver'].includes(type);
+
 export const Map = (props: IMapProps) => {
-if (!validateKindOfMap(props.type)) throw new Error('Invalid map type');
-const [MapComponent, setMapComponent] = useState<ReactNode>();
-useEffect(() => {
-if (props.type === 'naver') {
-setMapComponent(<NaverMap lat={props.lat} lng={props.lng}/>);
-}
+  if (!validateKindOfMap(props.type)) throw new Error('Invalid map type');
+  const [MapComponent, setMapComponent] = useState<ReactNode>();
+
+  useEffect(() => {
+    if (props.type === 'naver') {
+    setMapComponent(<NaverMap lat={props.lat} lng={props.lng}/>);
+  }
 }, []);
-return (
-<article className={classNames({'h-screen': !props.className}, props.className)}>
-  {MapComponent}
-</article>
-);
+
+  return (
+    <article className={classNames({'h-screen': !props.className}, props.className)}>
+      {MapComponent}
+    </article>
+  );
 };
 ```
 
@@ -705,46 +708,54 @@ return (
 // NaverMap.tsx
 import { useEffect, useRef } from 'react';
 import { INaverMapOptions, setNaverMapObj } from '@/utils/maps/naverMap/setNaverMapObj.ts';
+
 export const NaverMap = (props: INaverMapOptions) => {
-const mapRef = useRef < HTMLDivElement > (null);
-const mapOptions: INaverMapOptions = {
-  lat: props.lat,
-  lng: props.lng,
-  zoom: props.zoom,
-};
-useEffect(() => {
-  if (mapRef.current) {
-    setNaverMapObj(mapRef.current, mapOptions);
-  }
-}, []);
-return <section ref={mapRef} className="w-full h-full"/>;
+  const mapRef = useRef < HTMLDivElement > (null);
+  const mapOptions: INaverMapOptions = {
+    lat: props.lat,
+    lng: props.lng,
+    zoom: props.zoom,
+  };
+
+  useEffect(() => {
+    if (mapRef.current) {
+      setNaverMapObj(mapRef.current, mapOptions);
+    }
+  }, []);
+
+  return <section ref={mapRef} className="w-full h-full"/>;
 };
 ```
 
 ```tsx title="setNaverMapObj.ts"
 // setNaverMapObj.ts
+
 export interface INaverMapOptions {
-lat: number;
-lng: number;
-zoom ? : number;
+  lat: number;
+  lng: number;
+  zoom ? : number;
 }
+
 export const setNaverMapOption = (mapOptions: INaverMapOptions): INaverMapOptions => {
-return {
-...mapOptions,
-  lat: mapOptions.lat ? mapOptions.lat : 37.42829747263545,
-  lng: mapOptions.lng ? mapOptions.lng : 126.76620435615891,
-  zoom: mapOptions.zoom ? mapOptions.zoom : 20,
+
+  return {
+    ...mapOptions,
+    lat: mapOptions.lat ? mapOptions.lat : 37.42829747263545,
+    lng: mapOptions.lng ? mapOptions.lng : 126.76620435615891,
+    zoom: mapOptions.zoom ? mapOptions.zoom : 20,
+  };
 };
-};
+
 export const setNaverMapObj = (
-htmlElement: HTMLElement,
-mapOptions: INaverMapOptions,
+  htmlElement: HTMLElement,
+  mapOptions: INaverMapOptions,
 ): naver.maps.Map => {
-const {lat, lng, ...restProps} = setNaverMapOption(mapOptions);
-return new naver.maps.Map(htmlElement, {
-  center: new naver.maps.LatLng(lat, lng),
-  ...restProps,
-});
+  const {lat, lng, ...restProps} = setNaverMapOption(mapOptions);
+
+  return new naver.maps.Map(htmlElement, {
+    center: new naver.maps.LatLng(lat, lng),
+    ...restProps,
+  });
 };
 ```
 </details>
@@ -759,6 +770,7 @@ return new naver.maps.Map(htmlElement, {
 // Canvas.tsx
 import classNames from 'classnames';
 import { useEffect, useRef } from 'react';
+
 interface ICanvasProps {
   className?: string;
   onClick?: () => void;
@@ -766,9 +778,11 @@ interface ICanvasProps {
   onMouseUp?: () => void;
   onMouseMove?: () => void;
 }
+
 export const Canvas = (props: ICanvasProps) => {
   const { className, ...rest } = props;
   const ref = useRef<HTMLCanvasElement>(null);
+
   useEffect(() => {
     const canvas = ref.current;
     if (!canvas) return;
@@ -779,6 +793,7 @@ export const Canvas = (props: ICanvasProps) => {
 
     context.fillRect(100, 100, 200, 200);
   }, []);
+
   return (
     <canvas
       ref={ref}
@@ -794,6 +809,7 @@ export const Canvas = (props: ICanvasProps) => {
 import { Canvas } from '@/component/canvas/Canvas.tsx';
 import { Map } from '@/component/maps/Map.tsx';
 import classNames from 'classnames';
+
 interface ICanvasWithMapProps {
   className?: string;
   lat: number;
@@ -801,6 +817,7 @@ interface ICanvasWithMapProps {
   zoom: number;
   mapType: string;
 }
+
 export const CanvasWithMap = (props: ICanvasWithMapProps) => {
   return (
     <div className={classNames('relative h-screen', props.className)}>
@@ -819,7 +836,6 @@ import { CanvasWithMap } from '@/component/canvas/CanvasWithMap.tsx';
 
 export const GuestView = () => {
   const headerContext = useContext(HeaderContext);
-    }, []);
 
   // TODO: geoCoding API를 이용해서 현재 위치나 시작위치를 기반으로 자동 좌표 설정 구현 (현재: 하드코딩)
   return <CanvasWithMap lat={37.3595704} lng={127.105399} zoom={14} mapType="naver" />;
@@ -849,7 +865,25 @@ export const GuestView = () => {
 
 위의 `top-child`와 `bottom-child` 처럼 겹쳐있는 레이어에 대해서 어떻게 동시에 같은 이벤트를 발생시킬 것인가에 대한 어려움이 있었다.<br/>
 
-우리가 구현해야 하는 이벤트는 다음과 같았다.<br/>
+import touch_event_img1 from './img/touch_event_img1.webp'
+
+<figure>
+  <img src={touch_event_img1} alt='터치 이벤트 설계 1'/>
+  <figcaption>터치 이벤트 설계 1</figcaption>
+</figure>
+
+import touch_event_img2 from './img/touch_event_img2.webp'
+
+<figure>
+  <img src={touch_event_img2} alt='터치 이벤트 설계 2'/>
+  <figcaption>터치 이벤트 설계 2</figcaption>
+</figure>
+
+우리의 서비스에서 지도는 위와 같이 동작을 해야했다.<br/>
+
+지도와 캔버스가 겹쳐져 있을 때, 지도와 캔버스 모두에 이벤트가 발생해야 했다.<br/>
+
+그리고, 우리가 처리해야 하는 이벤트는 다음과 같았다.<br/>
 
 - 클릭<br/>
 - 드래그<br/>
@@ -859,15 +893,26 @@ export const GuestView = () => {
 
 사실 처음에는 대수롭지 않게 아주 간단하게 생각했었다.<br/>
 
+import canvas_map_event from './img/canvas_map_event.webp'
+
+<figure>
+  <img src={canvas_map_event} alt='캔버스와 지도 이벤트'/>
+  <figcaption>캔버스와 지도 이벤트</figcaption>
+</figure>
+
 당연하게 `top-child`를 클릭하면 바로 아래 레이어인 `bottom-child`에게도 그 이벤트가 적용될거라고 생각했기 때문이다.<br/>
 
-그러나, 이는 의도대로 동작하지 않았다. `top-child`에는 정상적으로 이벤트가 적용이 되나, `bottom-child`에는 적용이 되지 않았기 때문이다.<br/>
+그러나, 이는 의도대로 동작하지 않았다. `top-child`에는 정상적으로 이벤트가 적용이 되나, `bottom-child`에는 적용이 되지 않았기 때문이다.<br/><br/>
 
-원인은 다음과 같았다.<br/>
+### 🤔 원인 분석 : `쌓임 맥락(Stacking Context)`
 
-스택 컨테스트(`Stacking Context`)에 의한 문제였다.<br/>
+원인은 스택 컨텍스트(`Stacking Context`)에 의한 문제였다.<br/>
 
-간단하게만 설명하면, CSS에서 요소가 화면에 보여지는 `스택 컨텍스트`라는게 존재한다. `z-index`를 걸게 되면, 높은 `z-index`값을 가진 요소는 낮은 값을 가진 요소보다 앞에 위치하게 된다.<br/>
+[z-index와 스택 컨텍스트(쌓임 맥락)](/dev-lab/frontEnd/basic/css/z-index_and_stack_context/canvas-and-map-linking)<br/>
+
+스택컨텍스트 자체에 관련해선 에전에 작성한 위의 글을 참고하면 좋다.<br/>
+
+CSS에서 요소가 화면에 보여지는 `스택 컨텍스트`라는게 존재한다. `z-index`를 걸게 되면, 높은 `z-index`값을 가진 요소는 낮은 값을 가진 요소보다 앞에 위치하게 된다.<br/>
 
 그리고, 브라우저는 클릭 이벤트가 발생했을 때 가장 위에 있는 요소부터 이벤트를 처리한다.<br/>
 
@@ -875,8 +920,538 @@ export const GuestView = () => {
 
 실제로, 우리가 헤더 등을 `absolute`로 구현하면 여기에만 이벤트가 적용되고 다른 곳에는 적용이 안되는데.. 이를 간과했던 것이다.<br/>
 
-## 🤔 캔버스와 지도 간의 미묘한 동기화 차이를 어떻게 할 것인가 ?
+## 🧑‍💻 1차 시도 : `pointer-event` 속성을 끄기
 
+첫 번째 시도로는 위에 있는 요소인 `top-chlid`의 `pointer-event` 속성을 끄는 것이었다.<br/>
+
+[pointer-events - CSS: Cascading Style Sheets | MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/pointer-events)<br/>
+
+`pointer-event`라고 함은 CSS의 속성 중 하나로, 요소가 마우스 클릭, 터치, 커서 이동과 같은 포인터 이벤트를 받을 수 있는지 여부를 제어하는 속성이다.<br/>
+
+단순하게 생각해서, 제일 위에 있는 요소가 이벤트를 다 잡아먹고 있다면, 그걸 끄면 되는게 아닌가? 하는 생각에서 였다.<br/>
+
+우리는 `tailwindcss`를 사용하고 있었기에, 다음과 같이 `pointer-event-none` 클래스를 주는 것만으로도 끌 수 있었다.<br/>
+
+```tsx
+<div class='container relative w-[300px] h-[300px]'>
+	<div class='top-child absolute z-30 w-full h-full pointer-event-none' /> // 여기에서 `pointer-event-none` 속성에 주목한다.
+	<div class='bottom-child absolute z-0 w-full h-full' />
+</div>
+```
+
+이렇게 하면 `top-child`의 모든 포인터 이벤트를 끌 수 있다.<br/>
+
+
+import touch_event_img3 from './img/touch_event_img3.webp'
+
+<figure>
+  <img src={touch_event_img3} alt='pointer-event 그림'/>
+  <figcaption>pointer-event 그림</figcaption>
+</figure>
+
+`pointer-event-none`을 주게 되면, `top-child`는 이벤트를 받지 않게 되고, `bottom-child`는 이벤트를 받게 된다.<br/>
+
+그러나, 이는 우리가 원하는 바가 아니었다. 우리는 `top-child`, `bottom-child` 모두 같은 이벤트가 동시에 발생하길 원했기 때문이다.<br/>
+
+## 🧑‍💻 2차 시도 : 자식 요소에 직접적으로 이벤트를 트리거하기
+
+두번째 시도는 `cotainer`에서 이벤트가 발생하면 이를 `top-child`와 `bottom-child`에서 트리거하는 방식이었다.<br/>
+
+import click_event_flow2 from './img/click_event_flow2.webp'
+
+<figure>
+  <img src={click_event_flow2} alt='예상 이벤트 흐름'/>
+  <figcaption>예상 이벤트 흐름</figcaption>
+</figure>
+
+클릭을 기준으로만 생각을 했으며, 클릭 이벤트가 `container`에 발생하면 이를 `top-child`와 `bottom-child`에게 트리거하는 방식이었다.<br/>
+
+이를 위해서 다음과 같이 코드를 구현하였다.<br/>
+
+```tsx
+import { useRef } from 'react';
+
+const Container = () => {
+  const topChildRef = useRef<HTMLDivElement>(null);
+  const bottomChildRef = useRef<HTMLDivElement>(null);
+
+  const handleClick = () => {
+    topChildRef.current?.click();
+    bottomChildRef.current?.click();
+  };
+
+  return (
+    <div className='container relative w-[300px] h-[300px]' onClick={handleClick}>
+      <div className='top-child absolute z-30 w-full h-full' />
+      <div className='bottom-child absolute z-0 w-full h-full' />
+    </div>
+  );
+};
+```
+
+이렇게 하면, `container`에 클릭 이벤트가 발생하면 `top-child`와 `bottom-child`에게 클릭 이벤트를 트리거할 수 있게 된다.<br/>
+
+다만, 이는 2가지의 문제점이 있었다.<br/>
+
+1. `ref`를 통한 방식은 `HTMLElement`의 기본 이벤트만 트리거할 수 있다.<br/>
+2. `click()`과 같이 이벤트를 트리거할 경우 이벤트를 발생시킬 수는 있지만, 마우스가 클릭된 위치 등에 대한 부가정보를 전달할 수 없다.<br/>
+
+[MDN - UI Event](https://developer.mozilla.org/en-US/docs/Web/API/UI_Events)<br/>
+
+UI 이벤트는 위와 같이 정의되어 있으며, 이벤트 객체에는 마우스 클릭된 위치, 클릭된 버튼 등에 대한 부가정보가 담겨있다.<br/>
+
+다만 공식 문서를 살펴보면, 지원하는 `Trigger`가 많지 않다.<br/>
+
+우리는 네이버 지도 및 여러 지도에 대한 연동을 생각해야 했기 때문에, 조금 더 다양한 이벤트를 생성해서 넘겨줄 필요가 있었다.<br/>
+
+단순히 다양한 지도에 대응하는 것 뿐 아니라, 네이버 지도 등의 특정 지도만 놓고 보더라도, 커스텀 이벤트를 만들어서 제공하고 있었기 때문이다.<br/>
+
+[네이버 지도 API 이벤트](https://navermaps.github.io/maps.js.ncp/docs/naver.maps.Event.html)<br/>
+
+또한, `click()`과 같은 메서드를 통해서 이벤트를 트리거할 경우, 이벤트 객체를 생성하지 않기 때문에 이벤트 객체에 대한 부가정보를 전달할 수 없다.<br/>
+
+import click_event_flow from './img/click_event_flow.webp'
+
+<figure>
+  <img src={click_event_flow} alt='이벤트 흐름'/>
+  <figcaption>이벤트 흐름</figcaption>
+</figure>
+
+위 그림을 보면 알겠지만, 이 방식은 겹쳐있을 때 뿐만 아니라, 멀리 떨어져있는 요소에 대해서도 이벤트를 트리거할 수 있게 해준다.<br/>
+
+또한, `ref.click()`은 인자를 전달받지 않는다.<br/>
+
+이 말은 이벤트 객체를 전달할 수 없다는 것이고, 이벤트 발생 시점의 정보를 전달할 수 없다는 의미가 되기도 한다.<br/>
+
+실제로 이와 관련해서 출력해보면 다음과 같이 나온다. <br/>
+
+import map_click_result from './img/map_click_result.webp'
+
+<figure>
+  <img src={map_click_result} alt='맵 클릭 결과' style={{width:'30%'}}/>
+  <figcaption>맵 클릭 결과</figcaption>
+</figure>
+
+위를 보면 `clickX`, `clickY` 등 여러가지 정보가 다 `0`으로 채워져있는 것을 볼 수 있다.<br/>
+
+import argument_zero from './img/argument_zero.webp'
+
+<figure>
+  <img src={argument_zero} alt='인자가 0인 모습'/>
+  <figcaption>인자 0인 모습</figcaption>
+</figure>
+
+위에서 볼 수 있듯이 인자가 0인 것을 볼 수 있다.<br/>
+
+## 🧑‍💻 3차 시도(성공) : `Custom Event`를 통한 이벤트 전달
+
+부스트캠프의 과정 중에서 `EventEmiiter`와 관련된 내용을 학습했었다.<br/>
+
+`Node.js` 환경에서 멀티 쓰레드를 다루는 방법을 학습했었는데, 이 과정 속에서 `EventEmitter`를 사용했었다.<br/>
+
+이때에 커스텀 이벤트를 발생시키는 방법을 학습했었기에 이게 문뜩 떠올라서 적용해보기로 했다.<br/>
+
+방식은 간단하다. <br/>
+
+`new Event('click')`과 같이 이벤트 객체를 생성하고, 이것을 `dispatchEvent()` 로 잡아주는 방식이다.<br/>
+
+이에 대한 구조는 다음과 같다. <br/>
+
+import click_event_flow3 from './img/click_event_flow3.webp'
+
+<figure>
+  <img src={click_event_flow3} alt='커스텀 이벤트 흐름'/>
+  <figcaption>커스텀 이벤트 흐름</figcaption>
+</figure>
+
+기존에 그렸던 것과는 큰 차이가 없으나, 방법은 이벤트를 직접적으로 발생시키기 보다는 커스텀 이벤트를 정의해서 이거에 기반해서 전달하는 것이다.<br/>
+
+이렇게 했을 경우의 장점은 다음과 같다.<br/>
+
+- `"click"`과 같이 기본 이벤트를 생성해서 전달하게 되면, `click()`과 똑같은 효과를 유발할 수 있다. 즉, 기본 이벤트 사용이 가능하다.
+- 네이버지도나, 여러 지도가 만든 커스텀 이벤트를 그대로 사용할 수 있다.
+
+이에 대한 원리는 다음과 같다.<br/>
+
+<details>
+
+  <summary> 🧑‍💻리액트의 `props.onClick`으로 기본 메서드를 잡아낼 수 있는 원리 🧑‍💻</summary>
+
+  ### 🤔 리액트의 `props.onClick`으로 기본 메서드를 잡아낼 수 있는 원리
+
+  리액트의 `props.onClick`으로 `new Event('click')`에 의해 생성된 이벤트를 잡아낼 수 있는지에 대해 알아보고, 그 원리를 살펴보자.<br/>
+
+  ---
+
+  #### 1. **`new Event('click')` 생성의 동작 원리**
+
+  `new Event('click')`는 DOM의 `표준 이벤트 생성 메서드`이다. 이는 `Event` 생성자를 사용하여 이벤트 객체를 생성하며, 특정 요소에서 이 이벤트를 발생시키려면 `dispatchEvent` 메서드를 사용해야 한다.<br/>
+
+  ```jsx
+  const button = document.querySelector('button');
+  const clickEvent = new Event('click');
+
+  // 버튼 요소에 이벤트 발생시키기
+  button.dispatchEvent(clickEvent);
+
+  ```
+
+  ---
+
+  #### 2. **리액트의 `props.onClick` 동작 원리**
+
+  리액트에서 `props.onClick`은 DOM 요소의 `addEventListener('click', handler)`를 대체하여 동작한다. 리액트는 내부적으로 이벤트 위임 방식을 사용하며, 최상위 DOM 노드에 이벤트를 등록하고 해당 이벤트가 발생하면 `SyntheticEvent` 객체를 생성해 컴포넌트의 핸들러로 전달한다.<br/>
+
+  따라서, 리액트 컴포넌트의 `onClick` 핸들러는 **리액트가 관리하는 SyntheticEvent로 감싼 이벤트**를 받을 수 있다.<br/>
+
+  ```jsx
+  function App() {
+    const handleClick = (e) => {
+    console.log(e); // SyntheticEvent 객체
+  };
+
+    return <button onClick={handleClick}>Click Me</button>;
+  }
+  ```
+
+  ---
+
+  #### 3. **`new Event('click')`로 생성된 이벤트 처리**
+
+  `new Event('click')`로 생성된 이벤트는 **기본 DOM 이벤트**로 발생한다. 리액트의 `onClick` 핸들러는 DOM 이벤트를 감지할 수 있으므로, `new Event('click')`로 발생한 이벤트도 리액트의 `props.onClick`에서 잡아낼 수 있다.<br/>
+
+  ```jsx
+  function App() {
+  const handleClick = (e) => {
+    console.log('Button clicked!', e);
+  };
+
+  // DOM 이벤트 강제로 발생시키기
+  useEffect(() => {
+    const button = document.querySelector('button');
+    const event = new Event('click');
+    button.dispatchEvent(event);
+  }, []);
+
+  return <button onClick={handleClick}>Click Me</button>;
+  }
+
+  ```
+
+  위 코드에서, `useEffect` 내에서 DOM 요소에 대해 `new Event('click')`을 `dispatchEvent`로 발생시키면, 리액트의 `onClick` 핸들러인 `handleClick`이 호출된다.<br/>
+
+  ---
+
+  #### 4. **SyntheticEvent와 DOM Event의 차이점**
+
+  리액트의 `onClick`에서 제공되는 이벤트 객체는 `SyntheticEvent`로, DOM 이벤트와는 약간 다르다. 하지만 `SyntheticEvent` 내부에서 실제 DOM 이벤트(`nativeEvent`)에 접근할 수 있다.<br/>
+
+  ```jsx
+  const handleClick = (e) => {
+  console.log(e.nativeEvent); // 실제 DOM Event
+  };
+
+  ```
+
+  `new Event('click')`로 생성된 이벤트도 리액트에서 SyntheticEvent로 래핑되므로 리액트 핸들러에서 정상적으로 처리된다.<br/>
+
+  ---
+
+  #### 5. **결론**
+
+  `new Event('click')`로 생성된 이벤트는 `dispatchEvent`를 사용해 DOM 요소에서 발생시키면, 리액트의 `props.onClick` 핸들러에서 이를 감지하고 처리할 수 있다.<br/>
+
+  **리액트의 이벤트 시스템은 DOM 이벤트를 SyntheticEvent로 래핑하여 작동하므로 정상적으로 핸들러가 호출된다.**<br/>
+
+</details>
+
+`HTML` 표준 방식을 사용하기에 이를 사용하기 위해서는 `ref`가 필요했다.<br/>
+
+이미 위에서 `ref`를 사용했으므로 이를 활용하기로 하였다.<br/>
+
+이를 위한 코드는 다음과 같다.<br/>
+
+```tsx
+// 이벤트를 특정 컴포넌트의 DOM에 전달하는 함수
+function triggerEventOnComponent(
+  componentRef: React.RefObject<HTMLElement>,
+  eventType: string,
+  eventInit: ITriggerEventOptions = {},
+): void {
+  if (componentRef.current) {
+    const event = new MouseEvent(eventType, {
+      bubbles: true,
+      cancelable: true,
+      ...eventInit,
+    });
+    componentRef.current.dispatchEvent(event);
+  }
+}
+```
+
+이렇게 하면, `MouseEvent`를 통해서 이벤트를 생성하고, `dispatchEvent`를 통해서 이벤트를 발생시킬 수 있게 된다.<br/>
+
+<details>
+
+  <summary>🚀 실제 작성했던 코드 원문</summary>
+
+  ```tsx
+  import { Canvas } from '@/component/canvas/Canvas.tsx';
+  import { Map } from '@/component/maps/Map.tsx';
+  import classNames from 'classnames';
+  import { useCallback, useState, useRef } from 'react';
+  import { ICanvasVertex } from '@/utils/screen/canvasUtils.ts';
+  import { INaverMapVertexPosition } from '@/utils/maps/naverMap/naverMapUtils.ts';
+
+  interface ICanvasWithMapProps {
+    className?: string;
+    lat: number;
+    lng: number;
+    zoom: number;
+    mapType: string;
+  }
+
+  export interface ILocationObject {
+    canvas: ICanvasVertex;
+    map: INaverMapVertexPosition;
+  }
+
+  // 타입 정의
+  interface ITriggerEventOptions {
+    clientX?: number;
+    clientY?: number;
+  }
+
+  // 이벤트를 특정 컴포넌트의 DOM에 전달하는 함수
+  function triggerEventOnComponent(
+    componentRef: React.RefObject<HTMLElement>,
+    eventType: string,
+    eventInit: ITriggerEventOptions = {},
+  ): void {
+    if (componentRef.current) {
+      const event = new MouseEvent(eventType, {
+        bubbles: true,
+        cancelable: true,
+        ...eventInit,
+      });
+      componentRef.current.dispatchEvent(event);
+    }
+  }
+
+  export const CanvasWithMap = (props: ICanvasWithMapProps) => {
+    const componentRef = useRef<HTMLElement | null>(null);
+
+    const defaultLocationObject: ILocationObject = {
+      canvas: { ne: { x: 0, y: 0 }, nw: { x: 0, y: 0 }, se: { x: 0, y: 0 }, sw: { x: 0, y: 0 } },
+      map: {
+        ne: { lng: 0, lat: 0 },
+        nw: { lng: 0, lat: 0 },
+        se: { lng: 0, lat: 0 },
+        sw: { lng: 0, lat: 0 },
+      },
+    };
+
+  const [locationObject, setLocationObject] = useState<ILocationObject>(defaultLocationObject);
+
+  const setCanvasLocation = useCallback((canvas: ICanvasVertex) => {
+    setLocationObject(prev => ({ ...prev, canvas }));
+  }, []);
+
+  const setNaverMapLocation = useCallback((map: INaverMapVertexPosition) => {
+    setLocationObject(prev => ({ ...prev, map }));
+  }, []);
+
+  const triggerClickEvent = () => {
+    triggerEventOnComponent(componentRef, 'click');
+  };
+
+  const triggerMouseDownEvent = () => {
+    triggerEventOnComponent(componentRef, 'mousedown', { clientX: 100, clientY: 200 });
+  };
+
+  return (
+    <div className={classNames('relative h-screen', props.className)} onClick={triggerClickEvent}>
+      <Canvas setCanvasLocation={setCanvasLocation} locationObject={locationObject} />
+      <Map
+        lat={props.lat}
+        lng={props.lng}
+        type={props.mapType}
+        zoom={props.zoom}
+        setNaverMapLocation={setNaverMapLocation}
+        className="z-0 h-screen"
+        ref={componentRef}
+      />
+    </div>
+    );
+  };
+  ```
+
+</details>
+
+실제로 작성했던 코드인데, 이렇게 이벤트 객체를 생성하고 `dispatchEvent`로 받아주는 형식이다.<br/>
+
+참고로 찾아보니, `ref.current.click()`과 `dispatchEvent`의 차이점은 다음과 같았다.<br/>
+
+| 특성 | `ref.current.click()` | `dispatchEvent()` 방식 |
+| --- | --- | --- |
+| 이벤트 전파 | 없음 (버블링 X) | 버블링 가능 (`bubbles: true`) |
+| React SyntheticEvent 동작 | 아님 | 작동 |
+| 기본 클릭 동작 실행 | 실행됨 (`<a>`의 링크 클릭 등) | 실행되지 않음 |
+| 사용 목적 | 간단한 DOM 클릭 트리거 | 커스터마이징된 이벤트 처리 |
+
+### 🤔 콜스택 에러 발생
+
+잘 동작할 줄 알았으나, 다음과 같은 에러가 발생하였다.<br/>
+
+import call_stack_error from './img/call_stack_error.webp'
+
+<figure>
+  <img src={call_stack_error} alt='콜스택 에러'/>
+  <figcaption>콜스택 에러</figcaption>
+</figure>
+
+에러 메세지를 해석해보니, 콜스택이 초과해버린.. 그런 이슈였다. (맥을 쓰고, 브라우저에서도 이와 관련해서 최적화가 되면서 굉장히 오랜만에 본 이슈라서 신선했다.)<br/>
+
+분명 코드 로직에는 문제가 없는데 무엇때문일까…? 싶어서 살펴보니 다음과 같은 설정이 되어있었다.<br/>
+
+```tsx
+// 이벤트를 특정 컴포넌트의 DOM에 전달하는 함수
+function triggerEventOnComponent(
+  componentRef: React.RefObject<HTMLElement>,
+  eventType: string,
+  eventInit: ITriggerEventOptions = {},
+): void {
+  if (componentRef.current) {
+      const event = new MouseEvent(eventType, {
+      bubbles: true, // 이게 문제였다.
+      cancelable: true,
+      ...eventInit,
+    });
+    componentRef.current.dispatchEvent(event);
+  }
+}
+```
+
+이벤트 캡쳐링/버블링 관련해서 `bubbles` 속성을 `true`로 설정해놓았었는데, 이게 문제였다.<br/>
+
+import bubbling_diagram from './img/bubbling_diagram.webp'
+
+<figure>
+  <img src={bubbling_diagram} alt='문제 상황'/>
+  <figcaption>문제 상황</figcaption>
+</figure>
+
+이렇게까지 하고 나니 이벤트와 관련해서는 원래 의도대로 동시에 발생시킬 수 있었고, 좌표 전달도 할 수 있었다.<br/>
+
+import click_event_work from './img/click_event_work.webp'
+
+<figure>
+  <img src={click_event_work} alt='이벤트 정상 작동'/>
+  <figcaption>이벤트 정상 작동</figcaption>
+</figure>
+
+import click_event_work2 from './img/click_event_work2.webp'
+
+<figure>
+  <img src={click_event_work2} alt='이벤트 정상 작동2'/>
+  <figcaption>이벤트 정상 작동2</figcaption>
+</figure>
+
+위와 같이 이벤트가 정상적으로 동작하는 것을 볼 수 있다.<br/>
+
+이제 의도대로 이벤트를 발생시킬 수 있게 되었다. <br/>
+
+## 🧑‍💻 추가적인 고려사항 : 네이버 지도는 자체적으로 이벤트를 처리한다.
+
+```html
+  <div class='container relative w-[300px] h-[300px]'>
+    <div class='top-child absolute z-30 w-full h-full pointer-event-none' />
+    <div class='bottom-child absolute z-0 w-full h-full' />
+  </div>
+```
+
+이 예제 처럼, 나는 `HTMLElement` 단위로 생각을 하고 있었다.<br/>
+
+앞에서 네이버 지도 등 여러가지를 고려한다고는 했지만 지도에 제대로 무언가를 입혀서 동작을 해보지는 않았었다.<br/>
+
+[네이버 지도 API 링크](https://navermaps.github.io/maps.js.ncp/docs/tutorial-5-map-moves.example.html)<br/>
+
+위 링크를 보면 알겠지만, 네이버 지도는 이동에 대해서는 자체적인 기능을 제공하고 있었다.<br/>
+
+<figure>
+  <img src={map_tile1} alt='지도 타일 이미지' style={{width: '30%'}}/>
+  <figcaption> 지도 타일 이미지 1</figcaption>
+</figure>
+
+앞서 언급했듯이, 개발자 도구를 통해 네이버 지도를 살펴보았을 때, 네이버지도는 하나의 타일 단위로 해서 여러 이미지들을 합쳐서 하나의 화면을 보여주는 방식으로 구현되어 있기에, 이를 동시에 처리하기 위해서 이렇게 구현한게 아닐까 싶었다.<br/>
+
+<figure>
+  <img src={map_tile2} alt='지도 타일 이미지'/>
+  <figcaption> 지도 타일 이미지 2</figcaption>
+</figure>
+
+클릭한 옵션에 대한 부분을 보더라도, `absolute`나 `z-index`와 같은 속성이 보이며, 하나의 레이어 위에서 동작하는게 아닐까 싶었다.<br/>
+
+또한, 네이버 지도는 앞에서 확인했듯이 모든 지도를 로딩하는 게 아니라 필요한 부분만 로딩하는 방식이라.. 이런 부분에 대한 처리때문에라도 자체적으로 이벤트 핸들러 등을 다 구현한게 아닌가 싶었다. <br/>
+
+```tsx
+  var map = new naver.maps.Map('map', {
+    center: new naver.maps.LatLng(37.5666805, 126.9784147),
+    zoom: 9
+  });
+
+  var jeju = new naver.maps.LatLng(33.3590628, 126.534361),
+      busan = new naver.maps.LatLng(35.1797865, 129.0750194),
+      dokdo = new naver.maps.LatLngBounds(
+      new naver.maps.LatLng(37.2380651, 131.8562652),
+      new naver.maps.LatLng(37.2444436, 131.8786475)),
+      seoul = new naver.maps.LatLngBounds(
+      new naver.maps.LatLng(37.42829747263545, 126.76620435615891),
+      new naver.maps.LatLng(37.7010174173061, 127.18379493229875));
+
+
+  $("#to-jeju").on("click", function(e) {
+    e.preventDefault();
+
+    map.setCenter(jeju);
+  });
+
+  $("#to-1").on("click", function(e) {
+    e.preventDefault();
+
+    map.setZoom(6, true);
+  });
+
+  $("#to-dokdo").on("click", function(e) {
+    e.preventDefault();
+
+    map.fitBounds(dokdo);
+  });
+
+  $("#to-busan").on("click", function(e) {
+    e.preventDefault();
+
+    map.panTo(busan);
+  });
+
+  $("#to-seoul").on("click", function(e) {
+    e.preventDefault();
+
+    map.panToBounds(seoul);
+  });
+
+  $("#panBy").on("click", function(e) {
+    e.preventDefault();
+
+    map.panBy(new naver.maps.Point(10, 10));
+  });
+```
+
+위 예제에서 살펴볼 수 있듯이, 이동에 대한 부분 등은 `panTo`, `panBy` 과 같은 요소를 사용하면 될 것 같았다.<br/>
+
+## 🧑‍💻 마지막 문제 : 캔버스와 지도 간의 미묘한 동기화 차이를 어떻게 할 것인가 ?
+
+3차 시도와, 추가적인 고려사항을 통해서 이제 네이버 지도와 캔버스에 대한 연동을 구현할 수 있게 되었다.<br/>
 
 <div style={{display: 'flex', justifyContent: 'center'}}>
 
@@ -884,3 +1459,203 @@ export const GuestView = () => {
 
 </div>
 
+그러나 위와 같이 지도와 캔버스의 이동 등이 제대로 동기화가 되지 않은 것을 볼 수 있었다.<br/>
+
+<div style={{display: 'flex', justifyContent: 'center'}}>
+
+  <ReactPlayer playing controls url='/video/canvas-and-map-linking/navermap_analysis2.mov'/>
+
+</div>
+
+수치를 맞춰서 움직인다고 해도, 위의 영상처럼 지도는 매번 재 랜더링이 이루어지기에 필연적으로 차이가 날 수 밖에 없었다.<br/>
+
+잠깐 막막하다가.. 다행히 캔버스도 이동할 시 매번 재랜더링을 해주는 것을 떠올렸고, 이에 따라서 일정 수준 이상 이동하면 지도와 캔버스 모두 동시에 재랜더링이 되는 방식을 채택하였다.<br/>
+
+드래그의 경우 이벤트가 너무 잦게 발생해서 쓰로틀링이나 디바운싱을 적용해야 했다. <br/>
+
+이에 따라서 최종적으로 작성한 코드는 다음과 같다. <br/>
+
+<details>
+
+  <summary>🚀 최종 코드</summary>
+
+```tsx
+import { useState, RefObject } from 'react';
+
+export const useCanvasInteraction = (
+  map: naver.maps.Map | null,
+  canvasRef: RefObject<HTMLCanvasElement>,
+  redrawCanvas: () => void,
+) => {
+const [isDragging, setIsDragging] = useState(false);
+const [dragStartPos, setDragStartPos] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+const [dragStartTime, setDragStartTime] = useState<number | null>(null);
+const [isTouchZooming, setIsTouchZooming] = useState(false);
+const [isTouching, setIsTouching] = useState(false);
+const [touchStartDistance, setTouchStartDistance] = useState<number | null>(null);
+const [touchCenter, setTouchCenter] = useState<{ x: number; y: number } | null>(null);
+
+/**
+ * @description 마우스 클릭을 시작했을 때 이벤트 (onMouseDown)
+ */
+const handleMouseDown = (e: React.MouseEvent) => {
+  if (!map || !canvasRef.current) return;
+
+  setDragStartTime(Date.now());
+  const rect = canvasRef.current.getBoundingClientRect();
+  setDragStartPos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+};
+
+/**
+ * @description 마우스가 움직일 때 이벤트 (onMouseMove)
+ */
+const handleMouseMove = () => {
+  if (!dragStartTime) return;
+
+  // TODO: 클릭 후 0.3초 이상이 경과했으면 dragging 시작, 이동 관련 로직 개선 필요
+  const timeElapsed = Date.now() - dragStartTime;
+  if (timeElapsed > 300 && !isDragging) {
+    setIsDragging(true);
+  }
+
+  if (isDragging) {
+    redrawCanvas();
+  }
+};
+
+/**
+ * @description 마우스를 손에서 떼서 클릭이 끝났을 때 이벤트 (onMouseUp)
+ */
+const handleMouseUp = () => {
+  setIsDragging(false);
+  setDragStartTime(null);
+};
+
+/**
+ * @description 줌 동작 처리 (onWheel)
+ */
+const handleWheel = (e: React.WheelEvent) => {
+  if (!map) return;
+  const zoomChange = e.deltaY < 0 ? 1 : -1;
+  map.setZoom(map.getZoom() + zoomChange);
+  redrawCanvas();
+};
+
+/**
+ * @description 터치 시작될 때 이벤트 (onTouchStart)
+ */
+const handleTouchStart = (e: React.TouchEvent) => {
+  if (e.touches.length === 2) {
+  setIsTouchZooming(true);
+
+  const distance = Math.sqrt(
+    (e.touches[0].clientX - e.touches[1].clientX) ** 2 +
+    (e.touches[0].clientY - e.touches[1].clientY) ** 2,
+  );
+
+  setTouchStartDistance(distance);
+
+  const centerX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+  const centerY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+  setTouchCenter({ x: centerX, y: centerY });
+} else if (e.touches.length === 1) {
+  const rect = canvasRef.current?.getBoundingClientRect();
+  if (!rect) return;
+
+  setDragStartPos({
+  x: e.touches[0].clientX - rect.left,
+  y: e.touches[0].clientY - rect.top,
+});
+  setIsTouching(true);
+}
+};
+
+/**
+ * @description 터치한 채로 화면을 움직일 때 이벤트 (onTouchMove)
+ */
+const handleTouchMove = (e: React.TouchEvent) => {
+  if (isTouchZooming && e.touches.length === 2 && touchStartDistance) {
+    const newDistance = Math.sqrt(
+      (e.touches[0].clientX - e.touches[1].clientX) ** 2 +
+      (e.touches[0].clientY - e.touches[1].clientY) ** 2,
+    );
+  const zoomChange = (newDistance - touchStartDistance) / 30; // TODO: 스케일링 비율 조정
+  const currentZoom = map?.getZoom() ?? 10;
+
+  map?.setOptions({ zoomOrigin: touchCenter });
+  map?.setZoom(currentZoom + zoomChange);
+
+  setTouchStartDistance(newDistance);
+} else if (isTouching && e.touches.length === 1) {
+  const rect = canvasRef.current?.getBoundingClientRect();
+  if (!rect) return;
+
+  const newX = e.touches[0].clientX - rect.left;
+  const newY = e.touches[0].clientY - rect.top;
+
+  const deltaX = dragStartPos.x - newX;
+  const deltaY = dragStartPos.y - newY;
+
+  map?.panBy(new naver.maps.Point(deltaX, deltaY));
+  setDragStartPos({ x: newX, y: newY });
+}
+  redrawCanvas();
+};
+
+  /**
+   * @description 터치 종료 시 이벤트 (onTouchEnd)
+   */
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (e.touches.length === 0) {
+      setIsTouchZooming(false);
+      setTouchStartDistance(null);
+      setTouchCenter(null);
+      setIsTouching(false);
+    }
+  };
+
+  return {
+    handleMouseDown,
+    handleMouseMove,
+    handleMouseUp,
+    handleWheel,
+    handleTouchStart,
+    handleTouchMove,
+    handleTouchEnd,
+    isDragging,
+    isTouching,
+  };
+};
+```
+
+</details>
+
+## 🚀 마무리
+
+정말 긴 글이었던 것 같다. <br/>
+
+처음 글을 써야지 마음을 먹었을 때만 해도 이렇게 길어질거라고는 생각을 못했는데.. 정제도 잘 안된거 같고.. <br/>
+
+지속적으로 퇴고좀 해야겠다. <br/>
+
+이번 글에서는 `캔버스`와 `지도`를 연동하는 방법을 이벤트의 관점에서 알아보았다. <br/>
+
+실제로 프로젝트를 진행했던 과정이며, 짧게 적었지만 과정 하나하나를 디버깅하고 추적하는데 정말 오랜 시간이 걸렸던 것 같다.<br/>
+
+이번 경험을 통해서 이벤트 자체에 대한 이해도를 높일 수 있었고, 이를 통해서 다른 이벤트에 대해서도 더 빠르게 해결할 수 있을 것 같다.<br/>
+
+쓸데없는 사족을 좀만 덧붙이면.. 어떤 이벤트 상황을 줘도 다룰 수 있을 것 같다는 생각이 들정도로.. 정말 고생을 많이하고 탐구도 많이 했었다. <br/>
+
+일부러 내가 겪은 경험을 상세하게 적어서.. 비슷한 문제를 겪은 사람들이 있다면 글의 일부분을 통해서라도 도움이 되었으면 한다. <br/>
+
+## 📚 정리
+
+- `click()` 등의 트리거를 통해 발생시키는 방식은 이벤트 객체를 전달하지 못한다.
+- `MouseEvent`를 통해서 이벤트를 생성하고, `dispatchEvent`로 이벤트를 발생시키는게 가장 범용적인 방법인 듯 하다.
+- 동시에 같은 이벤트를 발생시키고, 같은 시각적 효과를 낳는 것은 단순히 이벤트 하나로 되는 문제가 아니다. 마지막 고려사항으로 동기화 차이를 고려했듯이, 상황에 맞춰서 추가적인 요소를 고려해야한다.
+- 즉, 은총알은 없다. 문제에 맞게 적절한 해결책을 찾아야한다.
+- 이 글이 그런 문제를 찾아나갈 때 도움이 되었으면 좋겠다.
+
+<br/>
+
+긴글 읽어주셔서 감사합니다. 🙇
