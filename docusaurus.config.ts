@@ -91,6 +91,24 @@ const config: Config = {
         sidebarCollapsible: true, // 사이드바 접기/펼치기
       },
     ],
+    [
+      '@docusaurus/plugin-content-blog',
+      {
+        id: 'feedback_log', // 새로운 블로그의 고유 ID
+        path: './feedback_log', // 새로운 블로그 디렉토리 경로
+        routeBasePath: 'feedback_log', // 새로운 블로그의 URL 경로 (예: /blog2)
+        blogTitle: '🏃 습관 기록', // 새로운 블로그의 제목
+        blogDescription: '성장을 위해 꾸준하게 실천한 내용을 기록합니다.',
+        showReadingTime: true,
+        feedOptions: {
+          type: ['rss', 'atom'],
+          xslt: true,
+        },
+        editUrl: 'https://github.com/effozen/fantasmith/tree/main/', // 편집 URL
+        blogSidebarTitle: '📝 목차', // 사이드바 제목 (필요한 경우)
+        // 필요에 따라 추가 설정 가능
+      },
+    ],
     '@docusaurus/theme-live-codeblock',
   ],
 
@@ -112,6 +130,11 @@ const config: Config = {
       },
       items: [
         {to: '/blog', label: '🚀 성장 이야기', position: 'left'},
+        {
+          to: '/feedback_log', // 새로운 블로그 경로
+          label: '🏃 습관 기록', // 새로운 블로그 라벨
+          position: 'left',
+        },
         {
           href: 'https://github.com/effozen',
           label: 'GitHub',
@@ -170,6 +193,10 @@ const config: Config = {
             {
               label: '🚀 성장이야기',
               to: '/blog',
+            },
+            {
+              label: '🏃 습관 기록', // 새로운 블로그 링크
+              to: '/feedback_log',
             },
             {
               label: 'GitHub',
