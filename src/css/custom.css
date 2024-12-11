@@ -5,9 +5,9 @@
  */
 
 /* You can override the default Infima variables here. */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* @tailwind base; */
+/* @tailwind components; */
+/* @tailwind utilities; */
 
 :root {
   /* Primary Colors (Atlassian Blue Palette) */
@@ -258,14 +258,14 @@
   --ifm-color-alert-danger-border: var(--ifm-color-danger);
 }
 
-header h1 {
-  font-weight: bold;
-}
+/* header h1 { */
+/*   font-weight: bold; */
+/* } */
 
 .markdown a {
-  display: inline-flex;
-  align-items: center;
-  font-weight: bold;
+  /* display: inline-flex; */
+  /* align-items: center; */
+  /* font-weight: bold; */
   color: var(--ifm-color-link);
 }
 
@@ -279,19 +279,19 @@ header h1 {
   padding-left:0.3rem;
 }
 
-a.footer__link-item {
-  display: flex;
-  align-items: center;
-}
+/* a.footer__link-item { */
+/*   display: flex; */
+/*   align-items: center; */
+/* } */
 
-a.card {
-  font-weight: bold;
-}
+/* a.card { */
+/*   font-weight: bold; */
+/* } */
 
-a.navbar__item.navbar__link{
-  display: flex !important;
-  align-items: center !important;
-}
+/* a.navbar__item.navbar__link{ */
+/*   display: flex !important; */
+/*   align-items: center !important; */
+/* } */
 
 /* Reduce title size in blog list */
 .blog-list-page h2[class*="title"]
@@ -299,11 +299,11 @@ a.navbar__item.navbar__link{
   font-size: 2.2em;
 }
 
-footer a {
-  display: flex;
-  /* justify-content: center; */
-  align-items: center;
-}
+/* footer a { */
+/*   display: flex; */
+/*   !* justify-content: center; *! */
+/*   align-items: center; */
+/* } */
 
 /* Reduce title size in blog page */
 .blog-post-page h1[class*="title"]
@@ -317,15 +317,15 @@ footer a {
 }
 
 .markdown h1 {
-  display: flex;
-  align-items: center;
+  /* display: flex; */
+  /* align-items: center; */
   font-size: 2.2rem;
   font-weight: bold;
 }
 
 .markdown h2 {
-  display: flex;
-  align-items: center;
+  /* display: flex; */
+  /* align-items: center; */
   margin-top: 6.5rem;
   margin-bottom: 1.5rem;
   font-size: 1.7rem; /* 원하는 크기로 조정 */
@@ -334,8 +334,8 @@ footer a {
 }
 
 .markdown h3 {
-  display: flex;
-  align-items: center;
+  /* display: flex; */
+  /* align-items: center; */
   margin-top: 1.8rem;
   margin-bottom: 1.5rem;
   font-size: 1.5rem; /* 원하는 크기로 조정 */
@@ -344,8 +344,8 @@ footer a {
 }
 
 .markdown h4 {
-  display: flex;
-  align-items: center;
+  /* display: flex; */
+  /* align-items: center; */
   margin-top: 1.6rem;
   margin-bottom: 1.5rem;
   font-size: 1.5rem; /* 원하는 크기로 조정 */
@@ -390,81 +390,81 @@ footer a {
   font-weight: bold;
 }
 
-/* 1단계 목록: 숫자 */
-ol {
-  padding-left: 1.5rem; /* 마커 공간 확보 */
-  margin-top: 1.7rem;
-  margin-bottom: 1.7rem;
-  list-style-type: decimal;
-}
+/* !* 1단계 목록: 숫자 *! */
+/* ol { */
+/*   padding-left: 1.5rem; !* 마커 공간 확보 *! */
+/*   margin-top: 1.7rem; */
+/*   margin-bottom: 1.7rem; */
+/*   list-style-type: decimal; */
+/* } */
 
-/* 2단계 목록: 소문자 */
-ol ol {
-  list-style-type: lower-alpha;
-  padding-left: 1.5rem; /* 마커 공간 확보 */
-}
+/* !* 2단계 목록: 소문자 *! */
+/* ol ol { */
+/*   list-style-type: lower-alpha; */
+/*   padding-left: 1.5rem; !* 마커 공간 확보 *! */
+/* } */
 
-/* 3단계 목록: 소문자 로마 숫자 */
-ol ol ol {
-  list-style-type: lower-roman;
-  padding-left: 1.5rem; /* 마커 공간 확보 */
-}
+/* !* 3단계 목록: 소문자 로마 숫자 *! */
+/* ol ol ol { */
+/*   list-style-type: lower-roman; */
+/*   padding-left: 1.5rem; !* 마커 공간 확보 *! */
+/* } */
 
-/* 기본 리스트 스타일 제거 */
-.markdown ul {
-  /* content: '▸'; */
-  /* list-style: circle; */
-  padding-left: 1rem; /* 마커 공간 확보 */
-  /* padding-top: 1rem; */
-  /* padding-bottom: 1rem; */
-  margin-top: 1.7rem;
-  margin-bottom: 1.7rem;
-  /* border: 1px solid black; */
-  /* border-radius: 10px; */
-}
+/* !* 기본 리스트 스타일 제거 *! */
+/* .markdown ul { */
+/*   !* content: '▸'; *! */
+/*   !* list-style: circle; *! */
+/*   padding-left: 1rem; !* 마커 공간 확보 *! */
+/*   !* padding-top: 1rem; *! */
+/*   !* padding-bottom: 1rem; *! */
+/*   margin-top: 1.7rem; */
+/*   margin-bottom: 1.7rem; */
+/*   !* border: 1px solid black; *! */
+/*   !* border-radius: 10px; *! */
+/* } */
 
-/* !* 각 리스트 항목 앞에 ▸ 마커 추가 *! */
-.markdown ul li::before {
-  content: '❄︎';
-  color: #007acc; /* 마커 색상 (원하는 색상으로 변경 가능) */
-  display: inline-block;
-  width:1rem; /* 마커와 텍스트 간의 간격 조정 */
-  margin-left: -0.5rem; /* 마커 위치 조정 */
-  margin-top: 0.15rem;
-  margin-bottom: 0.15rem;
-}
+/* !* !* 각 리스트 항목 앞에 ▸ 마커 추가 *! *! */
+/* .markdown ul li::before { */
+/*   content: '❄︎'; */
+/*   color: #007acc; !* 마커 색상 (원하는 색상으로 변경 가능) *! */
+/*   display: inline-block; */
+/*   width:1rem; !* 마커와 텍스트 간의 간격 조정 *! */
+/*   margin-left: -0.5rem; !* 마커 위치 조정 *! */
+/*   margin-top: 0.15rem; */
+/*   margin-bottom: 0.15rem; */
+/* } */
 
-/* 기본 리스트 스타일 제거 */
-.markdown ul ul {
-  /* content: '▸'; */
-  /* list-style: circle; */
-  padding-left: 1.5rem; /* 마커 공간 확보 */
-  /* padding-top: 1rem; */
-  /* padding-bottom: 1rem; */
-  margin-top: 0.2rem;
-  margin-bottom: 0.2rem;
-  /* border: 1px solid black; */
-  /* border-radius: 10px; */
-}
+/* !* 기본 리스트 스타일 제거 *! */
+/* .markdown ul ul { */
+/*   !* content: '▸'; *! */
+/*   !* list-style: circle; *! */
+/*   padding-left: 1.5rem; !* 마커 공간 확보 *! */
+/*   !* padding-top: 1rem; *! */
+/*   !* padding-bottom: 1rem; *! */
+/*   margin-top: 0.2rem; */
+/*   margin-bottom: 0.2rem; */
+/*   !* border: 1px solid black; *! */
+/*   !* border-radius: 10px; *! */
+/* } */
 
-/* !* 각 리스트 항목 앞에 ▸ 마커 추가 *! */
-.markdown ul ul li::before {
-  content: '✏︎';
-  color: #007acc; /* 마커 색상 (원하는 색상으로 변경 가능) */
-  display: inline-block;
-  width:1.5rem; /* 마커와 텍스트 간의 간격 조정 */
-  margin-left: -0.5rem; /* 마커 위치 조정 */
-}
+/* !* !* 각 리스트 항목 앞에 ▸ 마커 추가 *! *! */
+/* .markdown ul ul li::before { */
+/*   content: '✏︎'; */
+/*   color: #007acc; !* 마커 색상 (원하는 색상으로 변경 가능) *! */
+/*   display: inline-block; */
+/*   width:1.5rem; !* 마커와 텍스트 간의 간격 조정 *! */
+/*   margin-left: -0.5rem; !* 마커 위치 조정 *! */
+/* } */
 
 
-/* !* 각 리스트 항목 앞에 ▸ 마커 추가 *! */
-.markdown ul ul ul li::before {
-  content: '▸';
-  color: #007acc; /* 마커 색상 (원하는 색상으로 변경 가능) */
-  display: inline-block;
-  width:1.5rem; /* 마커와 텍스트 간의 간격 조정 */
-  margin-left: -0.5rem; /* 마커 위치 조정 */
-}
+/* !* !* 각 리스트 항목 앞에 ▸ 마커 추가 *! *! */
+/* .markdown ul ul ul li::before { */
+/*   content: '▸'; */
+/*   color: #007acc; !* 마커 색상 (원하는 색상으로 변경 가능) *! */
+/*   display: inline-block; */
+/*   width:1.5rem; !* 마커와 텍스트 간의 간격 조정 *! */
+/*   margin-left: -0.5rem; !* 마커 위치 조정 *! */
+/* } */
 
 .markdown p {
   margin-bottom: 0.5rem;
@@ -523,9 +523,9 @@ header h1 {
   border-radius: 5px;
 }
 
-.container .row nav div.sidebarItemTitle_Sqs_ {
-  font-weight: 900;
-}
+/* .container .row nav div.sidebarItemTitle_Sqs_ { */
+/*   font-weight: 900; */
+/* } */
 
 main article header h2 a {
   font-size: 1.85rem;
@@ -584,86 +584,86 @@ blockquote {
   margin-right: auto;
 }
 
-@media screen and (max-width: 996px) {
-}
+/* @media screen and (max-width: 996px) { */
+/* } */
 
-@media screen and (max-width: 996px) {
+/* @media screen and (max-width: 996px) { */
 
 
-  html, body {
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden !important;
-  }
+/*   html, body { */
+/*     width: 100%; */
+/*     margin: 0; */
+/*     padding: 0; */
+/*     overflow-x: hidden !important; */
+/*   } */
 
-  /* .container { */
-  /*   max-width: 100% !important; */
-  /*   padding-left: 0 !important; */
-  /*   padding-right: 0 !important; */
-  /*   margin-left: 0 !important; */
-  /*   margin-right: 0 !important; */
-  /* } */
+/*   !* .container { *! */
+/*   !*   max-width: 100% !important; *! */
+/*   !*   padding-left: 0 !important; *! */
+/*   !*   padding-right: 0 !important; *! */
+/*   !*   margin-left: 0 !important; *! */
+/*   !*   margin-right: 0 !important; *! */
+/*   !* } *! */
 
-  /* .row { */
-  /*   margin-left: 0 !important; */
-  /*   margin-right: 0 !important; */
-  /*   padding-left: 0 !important; */
-  /*   padding-right: 0 !important; */
-  /* } */
+/*   !* .row { *! */
+/*   !*   margin-left: 0 !important; *! */
+/*   !*   margin-right: 0 !important; *! */
+/*   !*   padding-left: 0 !important; *! */
+/*   !*   padding-right: 0 !important; *! */
+/*   !* } *! */
 
-  /* main { */
-  /*   width: 100% !important; */
-  /*   padding: 0 !important; */
-  /* } */
-  /* .navbar { */
-  /*   padding: 0 !important; */
-  /*   margin: 0 !important; */
-  /* } */
+/*   !* main { *! */
+/*   !*   width: 100% !important; *! */
+/*   !*   padding: 0 !important; *! */
+/*   !* } *! */
+/*   !* .navbar { *! */
+/*   !*   padding: 0 !important; *! */
+/*   !*   margin: 0 !important; *! */
+/*   !* } *! */
 
-  .navbar__item {
-    display: none;
-    visibility: hidden;
-    height: 0;
-    width: 0;
-  }
-}
+/*   .navbar__item { */
+/*     display: none; */
+/*     visibility: hidden; */
+/*     height: 0; */
+/*     width: 0; */
+/*   } */
+/* } */
 
-ul.breadcrumbs {
-  display: flex;
-  align-items: center;
-}
+/* ul.breadcrumbs { */
+/*   display: flex; */
+/*   align-items: center; */
+/* } */
 
-ul.breadcrumbs li{
-  display: flex;
-  align-items: center;
-}
+/* ul.breadcrumbs li{ */
+/*   display: flex; */
+/*   align-items: center; */
+/* } */
 
-/* 코드 블록 래퍼가 부모 컨테이너의 너비를 따르도록 설정 */
-.theme-code-block,
-.codeBlock {
-  width: 100%;
-  box-sizing: border-box;
-}
+/* !* 코드 블록 래퍼가 부모 컨테이너의 너비를 따르도록 설정 *! */
+/* .theme-code-block, */
+/* .codeBlock { */
+/*   width: 100%; */
+/*   box-sizing: border-box; */
+/* } */
 
-/* pre 요소 스타일 설정 */
-pre[class*="language-"] {
-  white-space: pre-wrap !important;        /* 줄바꿈 허용 */
-  overflow: hidden !important;             /* 스크롤 제거 */
-  word-break: break-word !important;       /* 긴 단어도 줄바꿈 */
-  overflow-wrap: anywhere !important;      /* 추가적인 줄바꿈 */
-  max-width: 100% !important;              /* 부모 너비 초과 방지 */
-  width: 100% !important;                  /* 전체 너비 사용 */
-  box-sizing: border-box !important;        /* 패딩과 보더 포함 */
-  padding: 1em !important;                  /* 패딩 조정 (필요 시) */
-}
+/* !* pre 요소 스타일 설정 *! */
+/* pre[class*="language-"] { */
+/*   white-space: pre-wrap !important;        !* 줄바꿈 허용 *! */
+/*   overflow: hidden !important;             !* 스크롤 제거 *! */
+/*   word-break: break-word !important;       !* 긴 단어도 줄바꿈 *! */
+/*   overflow-wrap: anywhere !important;      !* 추가적인 줄바꿈 *! */
+/*   max-width: 100% !important;              !* 부모 너비 초과 방지 *! */
+/*   width: 100% !important;                  !* 전체 너비 사용 *! */
+/*   box-sizing: border-box !important;        !* 패딩과 보더 포함 *! */
+/*   padding: 1em !important;                  !* 패딩 조정 (필요 시) *! */
+/* } */
 
-/* code 요소 스타일 설정 */
-code[class*="language-"] {
-  white-space: pre-wrap !important;        /* 줄바꿈 허용 */
-  word-break: break-word !important;       /* 긴 단어도 줄바꿈 */
-  overflow-wrap: anywhere !important;      /* 추가적인 줄바꿈 */
-  max-width: 100% !important;              /* 부모 너비 초과 방지 */
-  width: 100% !important;                  /* 전체 너비 사용 */
-  box-sizing: border-box !important;        /* 패딩과 보더 포함 */
-}
+/* !* code 요소 스타일 설정 *! */
+/* code[class*="language-"] { */
+/*   white-space: pre-wrap !important;        !* 줄바꿈 허용 *! */
+/*   word-break: break-word !important;       !* 긴 단어도 줄바꿈 *! */
+/*   overflow-wrap: anywhere !important;      !* 추가적인 줄바꿈 *! */
+/*   max-width: 100% !important;              !* 부모 너비 초과 방지 *! */
+/*   width: 100% !important;                  !* 전체 너비 사용 *! */
+/*   box-sizing: border-box !important;        !* 패딩과 보더 포함 *! */
+/* } */
