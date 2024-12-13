@@ -1,0 +1,54 @@
+/* src/css/colors.css */
+
+/* Light Mode (기본) */
+:root {
+	--color-bg: #FFFFFF;
+	--color-text-primary: #333333;
+	--color-text-secondary: #666666;
+	--color-link: #8B4513;
+	--color-button-bg: #A0522D;
+	--color-button-text: #FFFFFF;
+	--color-divider: #D2B48C;
+	--color-success: #6B8E23;
+	--color-warning: #CD853F;
+	--color-error: #8B0000;
+	--color-info: #4682B4;
+	--color-bg-emphasis: #F5DEB3;
+	--color-icon: #A0522D;
+	--color-hover: #8B4513;
+}
+
+html[data-theme="light"] {
+	--color-bg: #FFFFFF;
+	--color-text-primary: #333333;
+	--color-text-secondary: #666666;
+	--color-link: #8B4513;
+	--color-button-bg: #A0522D;
+	--color-button-text: #FFFFFF;
+	--color-divider: #D2B48C;
+	--color-success: #6B8E23;
+	--color-warning: #CD853F;
+	--color-error: #8B0000;
+	--color-info: #4682B4;
+	--color-bg-emphasis: #F5DEB3;
+	--color-icon: #A0522D;
+	--color-hover: #8B4513;
+}
+
+html[data-theme="dark"] {
+	--color-bg: #191919;
+	--color-bg-secondary: #373737;
+	--color-text-primary: #E0E0E0;
+	--color-text-secondary: #B0B0B0;
+	--color-link: #DEB887;
+	--color-button-bg: #D2691E;
+	--color-button-text: #191919;
+	--color-divider: #8B4513;
+	--color-success: #9ACD32;
+	--color-warning: #FFA07A;
+	--color-error: #CD5C5C;
+	--color-info: #5F9EA0;
+	--color-bg-emphasis: #8B4513;
+	--color-icon: #D2691E;
+	--color-hover: #CD853F;
+}

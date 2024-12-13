@@ -1,3 +1,5 @@
+/* src/css/custom.css */
+@import url("./colors.css");
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
 
 html {
@@ -8,62 +10,51 @@ html {
    기본 변수 정의 (Light 기준)
    ================================ */
 
-:root {
-	/* Light mode variables */
-	--color-bg: #FFFFFF;
-	--color-text-primary: #333333;
-	--color-text-secondary: #666666;
-	--color-link: #8B4513;
-	--color-button-bg: #A0522D;
-	--color-button-text: #FFFFFF;
-	--color-divider: #D2B48C;
-	--color-success: #6B8E23;
-	--color-warning: #CD853F;
-	--color-error: #8B0000;
-	--color-info: #4682B4;
-	--color-bg-emphasis: #F5DEB3;
-	--color-icon: #A0522D;
-	--color-hover: #8B4513;
-}
-
-/* ================================
-   테마별 변수 재정의
-   Light / Dark 모드에 따라 변수값 덮어쓰기
-   ================================ */
-
+/* =====================================
+   Light 모드에서 ifm 변수와 매핑
+   Docusaurus/Infima의 --ifm-* 변수를
+   우리가 정의한 색상값으로 덮어쓰기
+   ===================================== */
 html[data-theme="light"] {
-	--color-bg: #FFFFFF;
-	--color-text-primary: #333333;
-	--color-text-secondary: #666666;
-	--color-link: #8B4513;
-	--color-button-bg: #A0522D;
-	--color-button-text: #FFFFFF;
-	--color-divider: #D2B48C;
-	--color-success: #6B8E23;
-	--color-warning: #CD853F;
-	--color-error: #8B0000;
-	--color-info: #4682B4;
-	--color-bg-emphasis: #F5DEB3;
-	--color-icon: #A0522D;
-	--color-hover: #8B4513;
+	/* Docusaurus 기본 변수 맵핑 */
+	--ifm-background-color: var(--color-bg);
+	--ifm-background-color-alt: var(--color-bg-emphasis);
+	--ifm-font-color-base: var(--color-text-primary);
+	--ifm-font-color-secondary: var(--color-text-secondary);
+	--ifm-color-primary: var(--color-link);
+	--ifm-color-primary-dark: var(--color-button-bg); /* 필요하다면 더 어두운 톤으로 조정 가능 */
+	--ifm-color-success: var(--color-success);
+	--ifm-color-info: var(--color-info);
+	--ifm-color-warning: var(--color-warning);
+	--ifm-color-danger: var(--color-error);
+	--ifm-link-color: var(--color-link);
+	--ifm-color-emphasis-100: var(--color-divider);
+	--ifm-button-background-color: var(--color-button-bg);
+	--ifm-button-color: var(--color-button-text);
+	--ifm-button-hover-background-color: var(--color-hover);
 }
 
+/* =====================================
+   Dark 모드에서 ifm 변수와 매핑
+   기존 --color-* 다크 모드 값 유지
+   ===================================== */
 html[data-theme="dark"] {
-	--color-bg: #191919;
-	--color-bg-secondary: #373737;
-	--color-text-primary: #E0E0E0;
-	--color-text-secondary: #B0B0B0;
-	--color-link: #DEB887;
-	--color-button-bg: #D2691E;
-	--color-button-text: #191919;
-	--color-divider: #8B4513;
-	--color-success: #9ACD32;
-	--color-warning: #FFA07A;
-	--color-error: #CD5C5C;
-	--color-info: #5F9EA0;
-	--color-bg-emphasis: #8B4513;
-	--color-icon: #D2691E;
-	--color-hover: #CD853F;
+	/* Docusaurus 기본 변수 맵핑 */
+	--ifm-background-color: var(--color-bg);
+	--ifm-background-color-alt: var(--color-bg-emphasis);
+	--ifm-font-color-base: var(--color-text-primary);
+	--ifm-font-color-secondary: var(--color-text-secondary);
+	--ifm-color-primary: var(--color-link);
+	--ifm-color-primary-dark: var(--color-button-bg); /* 필요하다면 다크한 톤을 조정 가능 */
+	--ifm-color-success: var(--color-success);
+	--ifm-color-info: var(--color-info);
+	--ifm-color-warning: var(--color-warning);
+	--ifm-color-danger: var(--color-error);
+	--ifm-link-color: var(--color-link);
+	--ifm-color-emphasis-100: var(--color-divider);
+	--ifm-button-background-color: var(--color-button-bg);
+	--ifm-button-color: var(--color-button-text);
+	--ifm-button-hover-background-color: var(--color-hover);
 }
 
 /* ================================
