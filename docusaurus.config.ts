@@ -65,14 +65,14 @@ const config: Config = {
       } satisfies Preset.Options,
     ],
   ],
-  // 플러그인 설정
+  // 플러그인 설정 (라우트 등 동시에 설정)
   plugins: [
     [
       '@docusaurus/plugin-content-docs',
       {
-        id: 'dev-lab', // 문서의 ID
-        path: './docs/dev-lab', // 문서가 위치한 디렉토리
-        routeBasePath: 'dev-lab', // 라우트의 기본 경로
+        id: 'development', // 문서의 ID
+        path: './docs/development', // 문서가 위치한 디렉토리
+        routeBasePath: 'development', // 라우트의 기본 경로
         sidebarPath: require.resolve('./sidebars.ts'), // 사이드바 구성 파일
         editUrl: 'https://github.com/effozen/fantasmith/tree/main/', // 문서 편집 링크
         showLastUpdateTime: true, // 마지막 업데이트 시간 표시
@@ -85,6 +85,30 @@ const config: Config = {
         id: 'react-lab', // 문서의 ID
         path: './docs/react-lab', // 문서가 위치한 디렉토리
         routeBasePath: 'react-lab', // 라우트의 기본 경로
+        sidebarPath: require.resolve('./sidebars.ts'), // 사이드바 구성 파일
+        editUrl: 'https://github.com/effozen/fantasmith/tree/main/', // 문서 편집 링크
+        showLastUpdateTime: true, // 마지막 업데이트 시간 표시
+        sidebarCollapsible: false, // 사이드바 접기/펼치기
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'frontEnd', // 문서의 ID
+        path: './docs/frontEnd', // 문서가 위치한 디렉토리
+        routeBasePath: 'frontEnd', // 라우트의 기본 경로
+        sidebarPath: require.resolve('./sidebars.ts'), // 사이드바 구성 파일
+        editUrl: 'https://github.com/effozen/fantasmith/tree/main/', // 문서 편집 링크
+        showLastUpdateTime: true, // 마지막 업데이트 시간 표시
+        sidebarCollapsible: false, // 사이드바 접기/펼치기
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'challenge', // 문서의 ID
+        path: './docs/challenge', // 문서가 위치한 디렉토리
+        routeBasePath: 'challenge', // 라우트의 기본 경로
         sidebarPath: require.resolve('./sidebars.ts'), // 사이드바 구성 파일
         editUrl: 'https://github.com/effozen/fantasmith/tree/main/', // 문서 편집 링크
         showLastUpdateTime: true, // 마지막 업데이트 시간 표시
@@ -132,28 +156,22 @@ const config: Config = {
         height: 32,
       },
       items: [
-        {to: '/blog', label: 'Blog', position: 'left'},
+        {to: '/about', label: 'About', position: 'left'},
         {
-          to: '/feedback_log', // 새로운 블로그 경로
-          label: 'Habbit', // 새로운 블로그 라벨
-          position: 'left',
+          to: '/blog', type: 'dropdown', label: 'Blog', position: 'left', items: [
+            {to: '/blog', label: 'Blog'},
+            {to: '/feedback_log', label: 'Habbit'},
+          ]
         },
         {
-          type: 'doc',
-          sidebarId: 'generalSidebar',
-          position: 'left',
-          label: 'Dev-Lab ',
-          docsPluginId: 'dev-lab',
-          docId: 'index',
+          to: '/development', type: 'dropdown', label: 'Development', position: 'left', items: [
+            {to: '/development', label: 'Development'},
+            {to: '/react-lab', label: 'React-Lab'},
+            {to: '/frontEnd', label: 'Front-End'},
+            {to: '/challenge', label: 'Challenge'},
+          ]
         },
-        {
-          type: 'doc',
-          sidebarId: 'generalSidebar',
-          position: 'left',
-          label: ' React-Lab ',
-          docsPluginId: 'react-lab',
-          docId: 'index',
-        },
+        {to: '/project', label: 'Project', position: 'left'},
         {
           href: 'https://github.com/effozen',
           position: 'right',
@@ -169,8 +187,8 @@ const config: Config = {
           title: 'Docs',
           items: [
             {
-              label: 'Dev-Lab',
-              to: '/dev-lab',
+              label: 'development',
+              to: '/development',
             },
             {
               label: 'React-Lab',
@@ -225,7 +243,7 @@ const config: Config = {
     // SEO 및 링크 미리보기를 위한 메타데이터 설정
     metadata: [
       {name: 'author', content: 'Zen'},
-      { name: 'keywords', content: '프론트엔드 개발, 동기화, Zen, 블로그, 프로그래밍, 몰입' },
+      {name: 'keywords', content: '프론트엔드 개발, 동기화, Zen, 블로그, 프로그래밍, 몰입'},
       {name: 'twitter:card', content: 'summary_large_image'},
       // 전역 타이틀 및 설명을 설정하되, 개별 페이지에서 덮어쓸 수 있도록 합니다.
       {name: 'twitter:url', content: 'https://fantasmith.com'},

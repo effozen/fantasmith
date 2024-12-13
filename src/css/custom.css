@@ -44,3 +44,7 @@
 		flex: 2;
 	}
 }
+
+.navbar__link.active {
+	color: var(--ifm-link-color);
+}
