@@ -9,7 +9,7 @@ const config: Config = {
   title: `Zen's Atelier`,
   staticDirectories: ['public', 'static'],
   // 사이트 태그라인 설정
-  tagline: '동기화를 중요하게 생각하는 프론트앤드 개발자',
+  tagline: '동기화를 바탕으로 몰입을 이끌어내는 개발자',
   // 파비콘 설정
   favicon: 'img/favicon.ico',
 
@@ -146,7 +146,7 @@ const config: Config = {
           position: 'left',
           label: '🔬 Dev-Lab ',
           docsPluginId: 'dev-lab',
-          docId: 'intro',
+          docId: 'index',
         },
         {
           type: 'doc',
@@ -154,7 +154,7 @@ const config: Config = {
           position: 'left',
           label: ' 🧪 React-Lab ',
           docsPluginId: 'react-lab',
-          docId: 'intro',
+          docId: 'index',
         },
       ],
     },
@@ -166,11 +166,11 @@ const config: Config = {
           items: [
             {
               label: '🔬 Dev-Lab',
-              to: '/dev-lab/intro',
+              to: '/dev-lab',
             },
             {
               label: '🧪 React-Lab',
-              to: '/react-lab/intro',
+              to: '/react-lab',
             },
           ],
         },
@@ -269,7 +269,7 @@ const config: Config = {
           'https://x.com/effozen',
         ],
         jobTitle: '프론트엔드 개발자',
-        description: '동기화를 중요하게 생각하는 프론트앤드 개발자',
+        description: '동기화를 바탕으로 몰입을 이끌어내는 개발자',
       }),
     },
   ],

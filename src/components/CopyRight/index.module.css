@@ -1,0 +1,9 @@
+.copyright {
+	font-size: 0.75rem;
+	color: var(--color-text-secondary);
+	position: absolute;
+	bottom: 1rem;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+}
