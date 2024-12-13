@@ -173,7 +173,7 @@ const config: Config = {
         },
         {to: '/project', label: 'Project', position: 'left'},
         {
-          href: 'https://github.com/effozen',
+          href: 'https://github.com/effozen/fantasmith',
           position: 'right',
           className: 'header-github-link',
           'aria-label': 'GitHub repository',
@@ -181,52 +181,6 @@ const config: Config = {
       ],
     },
     footer: {
-      style: 'dark',
-      links: [
-        {
-          title: 'Docs',
-          items: [
-            {
-              label: 'development',
-              to: '/development',
-            },
-            {
-              label: 'React-Lab',
-              to: '/react-lab',
-            },
-          ],
-        },
-        {
-          title: 'Community',
-          items: [
-            {
-              label: 'linkedin',
-              href: 'https://www.linkedin.com/in/effozen/',
-            },
-            {
-              label: 'X',
-              href: 'https://x.com/effozen',
-            },
-          ],
-        },
-        {
-          title: 'More',
-          items: [
-            {
-              label: 'Blog',
-              to: '/blog',
-            },
-            {
-              label: 'Habbit', // 새로운 블로그 링크
-              to: '/feedback_log',
-            },
-            {
-              label: 'GitHub',
-              href: 'https://github.com/effozen',
-            },
-          ],
-        },
-      ],
       copyright: `Copyright © ${new Date().getFullYear()} Zen. Built with Docusaurus.`,
     },
     prism: {

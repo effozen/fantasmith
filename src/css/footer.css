@@ -1,0 +1,21 @@
+.footer {
+	background-color: var(--ifm-background-color);
+}
+
+.footer__link-item {
+	width: 100%;
+}
+
+.footer__copyright {
+	font-size: 0.75rem;
+	color: var(--color-text-secondary);
+}
+
+.margin56 {
+	margin-top: 3.5rem;
+}
+
+.gap19 {
+	gap: 19px;
+}
+
