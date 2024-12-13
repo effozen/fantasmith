@@ -146,7 +146,7 @@ const config: Config = {
           position: 'left',
           label: '🔬 Dev-Lab ',
           docsPluginId: 'dev-lab',
-          docId: 'intro',
+          docId: 'index',
         },
         {
           type: 'doc',
@@ -154,7 +154,7 @@ const config: Config = {
           position: 'left',
           label: ' 🧪 React-Lab ',
           docsPluginId: 'react-lab',
-          docId: 'intro',
+          docId: 'index',
         },
       ],
     },
@@ -166,11 +166,11 @@ const config: Config = {
           items: [
             {
               label: '🔬 Dev-Lab',
-              to: '/dev-lab/intro',
+              to: '/dev-lab',
             },
             {
               label: '🧪 React-Lab',
-              to: '/react-lab/intro',
+              to: '/react-lab',
             },
           ],
         },
