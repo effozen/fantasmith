@@ -1,0 +1,40 @@
+.menu-icon {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 1.125rem;
+}
+
+.menu-icon:hover {
+	text-decoration: none;
+	font-weight: bold;
+}
+
+.menu-icon-emoji {
+	background-color: var(--color-bg);
+	border-radius: 50%;
+	box-shadow: 0.1rem 0.1rem 0.1rem var(--color-text-primary);
+	width: 60px;
+	height: 60px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.menu-icon-title {
+	color: var(--color-text-primary);
+}
+
+.menu-icons {
+	display: flex;
+	justify-content: center;
+	gap: 2rem;
+}
+
+.menu-list {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 2rem;
+	margin-top: 5rem;
+}
