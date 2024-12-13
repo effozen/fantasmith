@@ -14,13 +14,21 @@
 .menu-icon-emoji {
 	background-color: var(--color-bg);
 	border-radius: 50%;
-	box-shadow: 0.1rem 0.1rem 0.1rem var(--color-text-primary);
 	width: 60px;
 	height: 60px;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 }
+
+.menu-icon-shadow {
+	box-shadow: 0.1rem 0.1rem 0.1rem var(--color-text-primary);
+}
+
+.menu-icon-background {
+	background-color: var(--color-bg-secondary);
+}
+
 .menu-icon-title {
 	color: var(--color-text-primary);
 }
