@@ -9,7 +9,7 @@ const config: Config = {
   title: `Zen's Atelier`,
   staticDirectories: ['public', 'static'],
   // 사이트 태그라인 설정
-  tagline: '동기화를 바탕으로 몰입을 이끌어내는 개발자',
+  tagline: '생각의 동기화를 바탕으로 몰입을 이끌어내는 개발자',
   // 파비콘 설정
   favicon: 'img/favicon.ico',
 
@@ -97,7 +97,7 @@ const config: Config = {
         id: 'feedback_log', // 새로운 블로그의 고유 ID
         path: './feedback_log', // 새로운 블로그 디렉토리 경로
         routeBasePath: 'feedback_log', // 새로운 블로그의 URL 경로 (예: /blog2)
-        blogTitle: '🏃 습관 기록', // 새로운 블로그의 제목
+        blogTitle: 'Habbit', // 새로운 블로그의 제목
         blogDescription: '성장을 위해 꾸준하게 실천한 내용을 기록합니다.',
         showReadingTime: true,
         feedOptions: {
@@ -123,28 +123,26 @@ const config: Config = {
       },
     },
     navbar: {
-      title: `Zen's Atelier`,
+      hideOnScroll: true,
       logo: {
         alt: '사이트 로고',
-        src: 'img/logo.webp',
+        src: 'img/logo_black.webp',
+        srcDark: 'img/logo_white.webp',
+        width: 32,
+        height: 32,
       },
       items: [
-        {to: '/blog', label: '🚀 성장 이야기', position: 'left'},
+        {to: '/blog', label: 'Blog', position: 'left'},
         {
           to: '/feedback_log', // 새로운 블로그 경로
-          label: '🏃 습관 기록', // 새로운 블로그 라벨
+          label: 'Habbit', // 새로운 블로그 라벨
           position: 'left',
-        },
-        {
-          href: 'https://github.com/effozen',
-          label: 'GitHub',
-          position: 'right',
         },
         {
           type: 'doc',
           sidebarId: 'generalSidebar',
           position: 'left',
-          label: '🔬 Dev-Lab ',
+          label: 'Dev-Lab ',
           docsPluginId: 'dev-lab',
           docId: 'index',
         },
@@ -152,9 +150,15 @@ const config: Config = {
           type: 'doc',
           sidebarId: 'generalSidebar',
           position: 'left',
-          label: ' 🧪 React-Lab ',
+          label: ' React-Lab ',
           docsPluginId: 'react-lab',
           docId: 'index',
+        },
+        {
+          href: 'https://github.com/effozen',
+          position: 'right',
+          className: 'header-github-link',
+          'aria-label': 'GitHub repository',
         },
       ],
     },
@@ -165,11 +169,11 @@ const config: Config = {
           title: 'Docs',
           items: [
             {
-              label: '🔬 Dev-Lab',
+              label: 'Dev-Lab',
               to: '/dev-lab',
             },
             {
-              label: '🧪 React-Lab',
+              label: 'React-Lab',
               to: '/react-lab',
             },
           ],
@@ -191,11 +195,11 @@ const config: Config = {
           title: 'More',
           items: [
             {
-              label: '🚀 성장이야기',
+              label: 'Blog',
               to: '/blog',
             },
             {
-              label: '🏃 습관 기록', // 새로운 블로그 링크
+              label: 'Habbit', // 새로운 블로그 링크
               to: '/feedback_log',
             },
             {
@@ -221,7 +225,7 @@ const config: Config = {
     // SEO 및 링크 미리보기를 위한 메타데이터 설정
     metadata: [
       {name: 'author', content: 'Zen'},
-      { name: 'keywords', content: '프론트엔드 개발, 동기화, Zen, 블로그, 프로그래밍' },
+      { name: 'keywords', content: '프론트엔드 개발, 동기화, Zen, 블로그, 프로그래밍, 몰입' },
       {name: 'twitter:card', content: 'summary_large_image'},
       // 전역 타이틀 및 설명을 설정하되, 개별 페이지에서 덮어쓸 수 있도록 합니다.
       {name: 'twitter:url', content: 'https://fantasmith.com'},
