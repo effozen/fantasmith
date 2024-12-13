@@ -1,9 +1,16 @@
 .copyright {
 	font-size: 0.75rem;
 	color: var(--color-text-secondary);
-	position: absolute;
-	bottom: 1rem;
 	width: 100%;
-	display: flex;
-	justify-content: center;
+	text-align: center;
+	height: 1.2rem;
+	position: absolute;
+	bottom: 0;
 }
+
+/* @media screen and (min-width: 100vh) { */
+/* 	.copyright { */
+/* 		position: fixed; */
+/* 		bottom: 1rem; */
+/* 	} */
+/* } */
