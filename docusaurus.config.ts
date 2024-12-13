@@ -205,7 +205,7 @@ const config: Config = {
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} Zen's Atelier. Built with Docusaurus.`,
+      copyright: `Copyright © ${new Date().getFullYear()} Zen. Built with Docusaurus.`,
     },
     prism: {
       theme: prismThemes.github,
@@ -269,7 +269,7 @@ const config: Config = {
           'https://x.com/effozen',
         ],
         jobTitle: '프론트엔드 개발자',
-        description: '동기화를 바탕으로 몰입을 이끌어내는 개발자',
+        description: '생각의 동기화를 통해 몰입을 이끌어내는 개발자',
       }),
     },
   ],
