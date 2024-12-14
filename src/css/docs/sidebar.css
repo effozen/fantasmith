@@ -1,0 +1,22 @@
+/* aside[class*="theme-doc-sidebar-container"] { */
+/* 	width: 15rem; */
+/* 	font-weight: 400; */
+/* 	font-size: 0.875rem; !* 14px *! */
+/* 	line-height: 1.4; */
+/* 	border-right: 0.1px solid var(--ifm-toc-border-color); */
+/* } */
+
+/* div[class*="sidebarWithHideableNavbar"] { */
+/* 	width: 100%; */
+/* } */
+
+/* button[class*="collapseSidebarButton"] { */
+/* 	width:100%; */
+/* 	display: flex !important; */
+/* 	justify-content: end; */
+/* 	background-color: transparent; */
+/* } */
+
+:root {
+	--doc-sidebar-width: 15rem !important;
+}
