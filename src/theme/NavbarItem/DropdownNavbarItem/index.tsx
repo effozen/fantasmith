@@ -13,7 +13,6 @@ import type {
   Props,
 } from '@theme/NavbarItem/DropdownNavbarItem';
 import styles from './styles.module.css';
-import {useLocation} from "@docusaurus/router";
 
 function isItemActive(
   item: LinkLikeNavbarItemProps,
@@ -47,20 +46,6 @@ function DropdownNavbarItemDesktop({
 }: DesktopOrMobileNavBarItemProps) {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [showDropdown, setShowDropdown] = useState(false);
-  const location = useLocation();
-
-  // 드롭다운 항목 중 활성화된 항목이 있는지 확인
-  const isActive = items.some(item => {
-    // 내부 링크 처리
-    if (item.to && location.pathname === item.to) {
-      return true;
-    }
-    // 외부 링크 처리 (필요시 조정)
-    if (item.href && location.pathname === new URL(item.href).pathname) {
-      return true;
-    }
-    return false;
-  });
 
   useEffect(() => {
     const handleClickOutside = (
@@ -101,7 +86,7 @@ function DropdownNavbarItemDesktop({
         // See https://github.com/facebook/docusaurus/pull/6003
         // There's probably a better solution though...
         href={props.to ? undefined : '#'}
-        className={clsx('navbar__link', { 'navbar__link--active': isActive }, className)}
+        className={clsx('navbar__link', className)}
         {...props}
         onClick={props.to ? undefined : (e) => e.preventDefault()}
         onKeyDown={(e) => {

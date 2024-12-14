@@ -20,3 +20,12 @@
 :root {
 	--doc-sidebar-width: 15rem !important;
 }
+
+@media screen and (max-width: 997px) {
+	div.navbar-sidebar__brand a.navbar__brand {
+		width: 100%;
+		padding: 0;
+		margin: 0;
+		margin-left: 69px;
+	}
+}
