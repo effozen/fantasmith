@@ -8,6 +8,7 @@
 @import url("./font.css");
 @import url("./spacing/globalSpacing.css");
 @import url("./markdown.css");
+@import url("./comment/utterances.css");
 
 .flex-center {
 	display: flex;
