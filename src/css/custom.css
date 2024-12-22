@@ -7,6 +7,7 @@
 @import url("./blog/sidebar.css");
 @import url("./font.css");
 @import url("./spacing/globalSpacing.css");
+@import url("./markdown.css");
 
 .flex-center {
 	display: flex;

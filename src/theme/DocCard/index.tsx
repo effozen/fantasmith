@@ -96,7 +96,7 @@ function CardCategory({
 }): JSX.Element | null {
   const href = findFirstSidebarItemLink(item);
   const categoryItemsPlural = useCategoryItemsPlural();
-  const cardImg = item?.customProps?.img ?? '/img/zen-social-card.jpeg';
+  const cardImg = item?.customProps?.img ?? '/img/logo.webp';
 
   // Unexpected: categories that don't have a link have been filtered upfront
   if (!href) {
@@ -117,7 +117,7 @@ function CardCategory({
 function CardLink({item}: {item: PropSidebarItemLink}): JSX.Element {
   const icon = isInternalUrl(item.href) ? '📄️' : '🔗';
   const doc = useDocById(item.docId ?? undefined);
-  const cardImg = item?.customProps?.img ?? '/img/zen-social-card.jpeg';
+  const cardImg = item?.customProps?.img ?? '/img/logo.webp';
 
   return (
     <CardLayout
