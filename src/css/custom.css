@@ -5,6 +5,8 @@
 @import url("./footer.css");
 @import url("./docs/sidebar.css");
 @import url("./blog/sidebar.css");
+@import url("./font.css");
+@import url("./spacing/globalSpacing.css");
 
 .flex-center {
 	display: flex;
