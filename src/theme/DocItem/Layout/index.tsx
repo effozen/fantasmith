@@ -14,6 +14,7 @@ import ContentVisibility from '@theme/ContentVisibility';
 import type {Props} from '@theme/DocItem/Layout';
 
 import styles from './styles.module.css';
+import {Comments} from "@site/src/components/Comments";
 
 /**
  * Decide if the toc should be rendered, on mobile or desktop viewports
@@ -25,11 +26,11 @@ function useDocTOC() {
   const hidden = frontMatter.hide_table_of_contents;
   const canRender = !hidden && toc.length > 0;
 
-  const mobile = canRender ? <DocItemTOCMobile /> : undefined;
+  const mobile = canRender ? <DocItemTOCMobile/> : undefined;
 
   const desktop =
     canRender && (windowSize === 'desktop' || windowSize === 'ssr') ? (
-      <DocItemTOCDesktop />
+      <DocItemTOCDesktop/>
     ) : undefined;
 
   return {
@@ -45,17 +46,18 @@ export default function DocItemLayout({children}: Props): JSX.Element {
   return (
     <div className="row">
       <div className={clsx('col', !docTOC.hidden && styles.docItemCol)}>
-        <ContentVisibility metadata={metadata} />
-        <DocVersionBanner />
+        <ContentVisibility metadata={metadata}/>
+        <DocVersionBanner/>
         <div className={styles.docItemContainer}>
           <article>
-            <DocBreadcrumbs />
-            <DocVersionBadge />
+            <DocBreadcrumbs/>
+            <DocVersionBadge/>
             {docTOC.mobile}
             <DocItemContent>{children}</DocItemContent>
-            <DocItemFooter />
+            <DocItemFooter/>
           </article>
-          <DocItemPaginator />
+          <DocItemPaginator/>
+          <Comments/>
         </div>
       </div>
       {docTOC.desktop && <div className="col col--3">{docTOC.desktop}</div>}
