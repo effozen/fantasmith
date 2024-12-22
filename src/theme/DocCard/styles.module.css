@@ -28,12 +28,12 @@
 
 .cardImgContainer {
   width: 100%;
-  height: 15rem;
+  height: 10rem;
   display: flex;
   justify-content: center;
   align-items: center;
   margin-top: 1rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
 }
 
 .cardImg {
