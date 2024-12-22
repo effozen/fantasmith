@@ -14,6 +14,9 @@ importers:
       '@docusaurus/plugin-content-blog':
         specifier: ^3.6.3
         version: 3.6.3(@docusaurus/plugin-content-docs@3.6.3(@mdx-js/react@3.1.0(@types/react@19.0.1)(react@18.3.1))(acorn@6.4.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3))(@mdx-js/react@3.1.0(@types/react@19.0.1)(react@18.3.1))(acorn@6.4.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)
+      '@docusaurus/plugin-content-docs':
+        specifier: ^3.6.3
+        version: 3.6.3(@mdx-js/react@3.1.0(@types/react@19.0.1)(react@18.3.1))(acorn@6.4.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)
       '@docusaurus/plugin-google-gtag':
         specifier: ^3.6.3
         version: 3.6.3(@mdx-js/react@3.1.0(@types/react@19.0.1)(react@18.3.1))(acorn@6.4.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)
@@ -38,6 +41,9 @@ importers:
       '@mdx-js/react':
         specifier: ^3.0.0
         version: 3.1.0(@types/react@19.0.1)(react@18.3.1)
+      client:
+        specifier: link:@docusaurus/plugin-content-docs/client
+        version: link:@docusaurus/plugin-content-docs/client
       clsx:
         specifier: ^2.0.0
         version: 2.1.1

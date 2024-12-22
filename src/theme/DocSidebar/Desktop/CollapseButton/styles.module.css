@@ -17,7 +17,8 @@
     position: sticky;
     bottom: 0;
     border-radius: 0;
-    border: 0.1px solid var(--ifm-toc-border-color);
+    /* border: 0.1px solid var(--ifm-toc-border-color); */
+    border: 0;
   }
 
   .collapseSidebarButtonIcon {
