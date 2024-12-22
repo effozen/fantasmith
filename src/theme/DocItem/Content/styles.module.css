@@ -13,14 +13,14 @@
 
 .tags {
 	display: inline;
-	margin: 0;
+	margin-top: 0.15rem;
 	padding: 0;
 }
 
 .tag {
 	margin: 0 0.4rem 0.5rem 0;
 	display: inline-block;
-	font-size: 0.75rem;
+	font-size: 0.7rem;
 }
 
 .titleCol {
