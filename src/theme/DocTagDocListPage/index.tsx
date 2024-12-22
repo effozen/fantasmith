@@ -48,7 +48,7 @@ function usePageTitle(props: Props): string {
 function DocItem({doc, docImg}: { doc: Props['tag']['items'][number], docImg:string }): JSX.Element {
 
   return (
-    <article className={clsx(styles.tagContainer)}>
+    <article className={clsx('card', styles.tagContainer)}>
       <Link to={doc.permalink}>
         <Heading as="h2">{doc.title}</Heading>
       </Link>
