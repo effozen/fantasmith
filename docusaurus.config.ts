@@ -39,22 +39,23 @@ const config: Config = {
       'classic',
       {
         docs: false,
-        blog: {
-          showReadingTime: true,
-          feedOptions: {
-            type: ['rss', 'atom'],
-            xslt: true,
-          },
-          // 리포지토리를 변경하세요.
-          // "이 페이지를 편집하세요" 링크를 제거하려면 이 부분을 삭제하세요.
-          editUrl: 'https://github.com/effozen/fantasmith/tree/main/',
-          // 블로깅 모범 사례를 강제하기 위한 유용한 옵션
-          onInlineTags: 'warn',
-          onInlineAuthors: 'warn',
-          onUntruncatedBlogPosts: 'warn',
-          blogSidebarTitle: '📝 Posts',
-          routeBasePath: 'blog',
-        },
+        blog: false,
+        // blog: {
+        //   showReadingTime: true,
+        //   feedOptions: {
+        //     type: ['rss', 'atom'],
+        //     xslt: true,
+        //   },
+        //   // 리포지토리를 변경하세요.
+        //   // "이 페이지를 편집하세요" 링크를 제거하려면 이 부분을 삭제하세요.
+        //   editUrl: 'https://github.com/effozen/fantasmith/tree/main/',
+        //   // 블로깅 모범 사례를 강제하기 위한 유용한 옵션
+        //   onInlineTags: 'warn',
+        //   onInlineAuthors: 'warn',
+        //   onUntruncatedBlogPosts: 'warn',
+        //   blogSidebarTitle: '📝 Posts',
+        //   routeBasePath: 'blog',
+        // },
         theme: {
           customCss: './src/css/custom.css',
         },
@@ -67,6 +68,30 @@ const config: Config = {
   ],
   // 플러그인 설정 (라우트 등 동시에 설정)
   plugins: [
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'blog', // 문서의 ID
+        path: './docs/blog', // 문서가 위치한 디렉토리
+        routeBasePath: 'blog', // 라우트의 기본 경로
+        sidebarPath: require.resolve('./sidebars.ts'), // 사이드바 구성 파일
+        editUrl: 'https://github.com/effozen/fantasmith/tree/main/', // 문서 편집 링크
+        showLastUpdateTime: true, // 마지막 업데이트 시간 표시
+        sidebarCollapsible: false, // 사이드바 접기/펼치기
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'feedback_log', // 문서의 ID
+        path: './docs/feedback_log', // 문서가 위치한 디렉토리
+        routeBasePath: 'feedback_log', // 라우트의 기본 경로
+        sidebarPath: require.resolve('./sidebars.ts'), // 사이드바 구성 파일
+        editUrl: 'https://github.com/effozen/fantasmith/tree/main/', // 문서 편집 링크
+        showLastUpdateTime: true, // 마지막 업데이트 시간 표시
+        sidebarCollapsible: false, // 사이드바 접기/펼치기
+      },
+    ],
     [
       '@docusaurus/plugin-content-docs',
       {
@@ -113,24 +138,6 @@ const config: Config = {
         editUrl: 'https://github.com/effozen/fantasmith/tree/main/', // 문서 편집 링크
         showLastUpdateTime: true, // 마지막 업데이트 시간 표시
         sidebarCollapsible: false, // 사이드바 접기/펼치기
-      },
-    ],
-    [
-      '@docusaurus/plugin-content-blog',
-      {
-        id: 'feedback_log', // 새로운 블로그의 고유 ID
-        path: './feedback_log', // 새로운 블로그 디렉토리 경로
-        routeBasePath: 'feedback_log', // 새로운 블로그의 URL 경로 (예: /blog2)
-        blogTitle: 'Habbit', // 새로운 블로그의 제목
-        blogDescription: '성장을 위해 꾸준하게 실천한 내용을 기록합니다.',
-        showReadingTime: true,
-        feedOptions: {
-          type: ['rss', 'atom'],
-          xslt: true,
-        },
-        editUrl: 'https://github.com/effozen/fantasmith/tree/main/', // 편집 URL
-        blogSidebarTitle: '📝 Posts', // 사이드바 제목 (필요한 경우)
-        // 필요에 따라 추가 설정 가능
       },
     ],
     '@docusaurus/theme-live-codeblock',
