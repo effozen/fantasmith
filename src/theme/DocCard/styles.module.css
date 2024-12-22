@@ -25,3 +25,19 @@
 .cardDescription {
   font-size: 0.875rem; /* 14px */
 }
+
+.cardImgContainer {
+  width: 100%;
+  height: 15rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.cardImg {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}

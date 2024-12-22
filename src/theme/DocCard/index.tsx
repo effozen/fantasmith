@@ -56,12 +56,15 @@ function CardLayout({
   icon,
   title,
   description,
+  cardImg,
 }: {
   href: string;
   icon: ReactNode;
   title: string;
   description?: string;
+  cardImg?: string;
 }): JSX.Element {
+
   return (
     <CardContainer href={href}>
       <Heading
@@ -71,6 +74,9 @@ function CardLayout({
         title={title}>
         {icon} {title}
       </Heading>
+      <div className={clsx(styles.cardImgContainer)} >
+        <img className={clsx(styles.cardImg)} src={cardImg} alt={title} />
+      </div>
       {description && (
         <p
           // className={clsx('text--truncate', styles.cardDescription)}
@@ -90,6 +96,7 @@ function CardCategory({
 }): JSX.Element | null {
   const href = findFirstSidebarItemLink(item);
   const categoryItemsPlural = useCategoryItemsPlural();
+  const cardImg = item?.customProps?.img ?? '/img/zen-social-card.jpeg';
 
   // Unexpected: categories that don't have a link have been filtered upfront
   if (!href) {
@@ -101,6 +108,7 @@ function CardCategory({
       href={href}
       icon="🗃️"
       title={item.label}
+      cardImg={cardImg}
       description={item.description ?? categoryItemsPlural(item.items.length)}
     />
   );
@@ -109,11 +117,14 @@ function CardCategory({
 function CardLink({item}: {item: PropSidebarItemLink}): JSX.Element {
   const icon = isInternalUrl(item.href) ? '📄️' : '🔗';
   const doc = useDocById(item.docId ?? undefined);
+  const cardImg = item?.customProps?.img ?? '/img/zen-social-card.jpeg';
+
   return (
     <CardLayout
       href={item.href}
       icon={icon}
       title={item.label}
+      cardImg={cardImg}
       description={item.description ?? doc?.description}
     />
   );
