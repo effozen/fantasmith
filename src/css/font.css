@@ -1,0 +1,29 @@
+h1 {
+	font-weight: 700;
+	font-size: 2rem !important;    /* 32px */
+	line-height: 1.4;   /* 가독성을 위한 임의 값 */
+}
+
+h2 {
+	font-weight: 700;
+	font-size: 1.5rem !important;  /* 26px */
+	line-height: 1.4;
+	margin-top: 6.5rem !important;
+}
+
+h2:nth-of-type(1) {
+	margin-top: 0 !important;
+}
+
+h3 {
+	font-weight: 700;
+	font-size: 1.25rem !important; /* 22px */
+	line-height: 1.4;
+	margin-top: 3.5rem !important;
+}
+
+h4 {
+	font-weight: 700;
+	font-size: 1.125rem; /* 20px */
+	line-height: 1.4;
+}

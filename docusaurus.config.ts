@@ -2,6 +2,9 @@ import {themes as prismThemes} from 'prism-react-renderer';
 import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
+import PrismLight from './src/utils/prismLight';
+import PrismDark from './src/utils/prismDark';
+
 // 이 파일은 Node.js에서 실행됩니다 - 여기에서는 클라이언트 사이드 코드(브라우저 API, JSX 등)를 사용하지 마세요.
 
 const config: Config = {
@@ -9,7 +12,7 @@ const config: Config = {
   title: `Zen's Atelier`,
   staticDirectories: ['public', 'static'],
   // 사이트 태그라인 설정
-  tagline: '동기화를 바탕으로 몰입을 이끌어내는 개발자',
+  tagline: '생각의 동기화를 바탕으로 몰입을 이끌어내는 개발자',
   // 파비콘 설정
   favicon: 'img/favicon.ico',
 
@@ -39,22 +42,23 @@ const config: Config = {
       'classic',
       {
         docs: false,
-        blog: {
-          showReadingTime: true,
-          feedOptions: {
-            type: ['rss', 'atom'],
-            xslt: true,
-          },
-          // 리포지토리를 변경하세요.
-          // "이 페이지를 편집하세요" 링크를 제거하려면 이 부분을 삭제하세요.
-          editUrl: 'https://github.com/effozen/fantasmith/tree/main/',
-          // 블로깅 모범 사례를 강제하기 위한 유용한 옵션
-          onInlineTags: 'warn',
-          onInlineAuthors: 'warn',
-          onUntruncatedBlogPosts: 'warn',
-          blogSidebarTitle: '📝 Posts',
-          routeBasePath: 'blog',
-        },
+        blog: false,
+        // blog: {
+        //   showReadingTime: true,
+        //   feedOptions: {
+        //     type: ['rss', 'atom'],
+        //     xslt: true,
+        //   },
+        //   // 리포지토리를 변경하세요.
+        //   // "이 페이지를 편집하세요" 링크를 제거하려면 이 부분을 삭제하세요.
+        //   editUrl: 'https://github.com/effozen/fantasmith/tree/main/',
+        //   // 블로깅 모범 사례를 강제하기 위한 유용한 옵션
+        //   onInlineTags: 'warn',
+        //   onInlineAuthors: 'warn',
+        //   onUntruncatedBlogPosts: 'warn',
+        //   blogSidebarTitle: '📝 Posts',
+        //   routeBasePath: 'blog',
+        // },
         theme: {
           customCss: './src/css/custom.css',
         },
@@ -65,14 +69,38 @@ const config: Config = {
       } satisfies Preset.Options,
     ],
   ],
-  // 플러그인 설정
+  // 플러그인 설정 (라우트 등 동시에 설정)
   plugins: [
     [
       '@docusaurus/plugin-content-docs',
       {
-        id: 'dev-lab', // 문서의 ID
-        path: './docs/dev-lab', // 문서가 위치한 디렉토리
-        routeBasePath: 'dev-lab', // 라우트의 기본 경로
+        id: 'blog', // 문서의 ID
+        path: './docs/blog', // 문서가 위치한 디렉토리
+        routeBasePath: 'blog', // 라우트의 기본 경로
+        sidebarPath: require.resolve('./sidebars.ts'), // 사이드바 구성 파일
+        editUrl: 'https://github.com/effozen/fantasmith/tree/main/', // 문서 편집 링크
+        showLastUpdateTime: true, // 마지막 업데이트 시간 표시
+        sidebarCollapsible: false, // 사이드바 접기/펼치기
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'feedback_log', // 문서의 ID
+        path: './docs/feedback_log', // 문서가 위치한 디렉토리
+        routeBasePath: 'feedback_log', // 라우트의 기본 경로
+        sidebarPath: require.resolve('./sidebars.ts'), // 사이드바 구성 파일
+        editUrl: 'https://github.com/effozen/fantasmith/tree/main/', // 문서 편집 링크
+        showLastUpdateTime: true, // 마지막 업데이트 시간 표시
+        sidebarCollapsible: false, // 사이드바 접기/펼치기
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'development', // 문서의 ID
+        path: './docs/development', // 문서가 위치한 디렉토리
+        routeBasePath: 'development', // 라우트의 기본 경로
         sidebarPath: require.resolve('./sidebars.ts'), // 사이드바 구성 파일
         editUrl: 'https://github.com/effozen/fantasmith/tree/main/', // 문서 편집 링크
         showLastUpdateTime: true, // 마지막 업데이트 시간 표시
@@ -92,23 +120,30 @@ const config: Config = {
       },
     ],
     [
-      '@docusaurus/plugin-content-blog',
+      '@docusaurus/plugin-content-docs',
       {
-        id: 'feedback_log', // 새로운 블로그의 고유 ID
-        path: './feedback_log', // 새로운 블로그 디렉토리 경로
-        routeBasePath: 'feedback_log', // 새로운 블로그의 URL 경로 (예: /blog2)
-        blogTitle: '🏃 습관 기록', // 새로운 블로그의 제목
-        blogDescription: '성장을 위해 꾸준하게 실천한 내용을 기록합니다.',
-        showReadingTime: true,
-        feedOptions: {
-          type: ['rss', 'atom'],
-          xslt: true,
-        },
-        editUrl: 'https://github.com/effozen/fantasmith/tree/main/', // 편집 URL
-        blogSidebarTitle: '📝 Posts', // 사이드바 제목 (필요한 경우)
-        // 필요에 따라 추가 설정 가능
+        id: 'frontEnd', // 문서의 ID
+        path: './docs/frontEnd', // 문서가 위치한 디렉토리
+        routeBasePath: 'frontEnd', // 라우트의 기본 경로
+        sidebarPath: require.resolve('./sidebars.ts'), // 사이드바 구성 파일
+        editUrl: 'https://github.com/effozen/fantasmith/tree/main/', // 문서 편집 링크
+        showLastUpdateTime: true, // 마지막 업데이트 시간 표시
+        sidebarCollapsible: false, // 사이드바 접기/펼치기
       },
     ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'challenge', // 문서의 ID
+        path: './docs/challenge', // 문서가 위치한 디렉토리
+        routeBasePath: 'challenge', // 라우트의 기본 경로
+        sidebarPath: require.resolve('./sidebars.ts'), // 사이드바 구성 파일
+        editUrl: 'https://github.com/effozen/fantasmith/tree/main/', // 문서 편집 링크
+        showLastUpdateTime: true, // 마지막 업데이트 시간 표시
+        sidebarCollapsible: false, // 사이드바 접기/펼치기
+      },
+    ],
+    'docusaurus-plugin-image-zoom',
     '@docusaurus/theme-live-codeblock',
   ],
 
@@ -116,6 +151,45 @@ const config: Config = {
   themeConfig: {
     // 사이트의 기본 Open Graph 및 Twitter 카드 이미지를 설정합니다.
     image: 'img/social-card.jpg', // 원하는 이미지로 변경
+    prism: {
+      additionalLanguages: [
+        'java',
+        'latex',
+        'haskell',
+        'matlab',
+        'PHp',
+        'powershell',
+        'bash',
+        'diff',
+        'json',
+        'scss',
+      ],
+      magicComments: [
+        {
+          className: 'theme-code-block-highlighted-line',
+          line: 'highlight-next-line',
+          block: {start: 'highlight-start', end: 'highlight-end'},
+        },
+        {
+          className: 'code-block-error-line',
+          line: 'This will error',
+        },
+      ],
+      theme: PrismLight,
+      darkTheme: PrismDark,
+    },
+    zoom: {
+      selector: '.markdown :not(em) > img',
+      background: {
+        light: 'rgb(255, 255, 255)',
+        dark: 'rgb(50, 50, 50)'
+      },
+      config: {
+        // options you can specify via https://github.com/francoischalifour/medium-zoom#usage
+        margin: 24,
+        scrollOffset: 600,
+      }
+    },
     docs: {
       sidebar: {
         hideable: true, // 사용자가 숨기거나 펼칠 수 있도록 함
@@ -123,94 +197,46 @@ const config: Config = {
       },
     },
     navbar: {
-      title: `Zen's Atelier`,
+      hideOnScroll: true,
       logo: {
         alt: '사이트 로고',
-        src: 'img/logo.webp',
+        src: 'img/logo_black.webp',
+        srcDark: 'img/logo_white.webp',
+        width: 32,
+        height: 32,
       },
       items: [
-        {to: '/blog', label: '🚀 성장 이야기', position: 'left'},
+        {to: '/about', label: 'About', position: 'left'},
         {
-          to: '/feedback_log', // 새로운 블로그 경로
-          label: '🏃 습관 기록', // 새로운 블로그 라벨
-          position: 'left',
+          to: '/blog', type: 'dropdown', label: 'Blog', position: 'left', items: [
+            {to: '/blog', label: 'Blog'},
+            {to: '/feedback_log', label: 'Habbit'},
+          ]
         },
         {
-          href: 'https://github.com/effozen',
-          label: 'GitHub',
+          to: '/development', type: 'dropdown', label: 'Development', position: 'left', items: [
+            {to: '/development', label: 'Development'},
+            {to: '/react-lab', label: 'React-Lab'},
+            {to: '/frontEnd', label: 'Front-End'},
+            {to: '/challenge', label: 'Challenge'},
+          ]
+        },
+        {to: '/project', label: 'Project', position: 'left'},
+        {
+          href: 'https://github.com/effozen/fantasmith',
           position: 'right',
-        },
-        {
-          type: 'doc',
-          sidebarId: 'generalSidebar',
-          position: 'left',
-          label: '🔬 Dev-Lab ',
-          docsPluginId: 'dev-lab',
-          docId: 'index',
-        },
-        {
-          type: 'doc',
-          sidebarId: 'generalSidebar',
-          position: 'left',
-          label: ' 🧪 React-Lab ',
-          docsPluginId: 'react-lab',
-          docId: 'index',
+          className: 'header-github-link',
+          'aria-label': 'GitHub repository',
         },
       ],
     },
     footer: {
-      style: 'dark',
-      links: [
-        {
-          title: 'Docs',
-          items: [
-            {
-              label: '🔬 Dev-Lab',
-              to: '/dev-lab',
-            },
-            {
-              label: '🧪 React-Lab',
-              to: '/react-lab',
-            },
-          ],
-        },
-        {
-          title: 'Community',
-          items: [
-            {
-              label: 'linkedin',
-              href: 'https://www.linkedin.com/in/effozen/',
-            },
-            {
-              label: 'X',
-              href: 'https://x.com/effozen',
-            },
-          ],
-        },
-        {
-          title: 'More',
-          items: [
-            {
-              label: '🚀 성장이야기',
-              to: '/blog',
-            },
-            {
-              label: '🏃 습관 기록', // 새로운 블로그 링크
-              to: '/feedback_log',
-            },
-            {
-              label: 'GitHub',
-              href: 'https://github.com/effozen',
-            },
-          ],
-        },
-      ],
-      copyright: `Copyright © ${new Date().getFullYear()} Zen's Atelier. Built with Docusaurus.`,
+      copyright: `Copyright © ${new Date().getFullYear()} Zen. Built with Docusaurus.`,
     },
-    prism: {
-      theme: prismThemes.github,
-      darkTheme: prismThemes.dracula,
-    },
+    // prism: {
+    //   theme: prismThemes.github,
+    //   darkTheme: prismThemes.dracula,
+    // },
     liveCodeBlock: {
       /**
        * 라이브 플레이그라운드의 위치를 지정합니다. 에디터 위나 아래에 배치할 수 있습니다.
@@ -221,7 +247,7 @@ const config: Config = {
     // SEO 및 링크 미리보기를 위한 메타데이터 설정
     metadata: [
       {name: 'author', content: 'Zen'},
-      { name: 'keywords', content: '프론트엔드 개발, 동기화, Zen, 블로그, 프로그래밍' },
+      {name: 'keywords', content: '프론트엔드 개발, 동기화, Zen, 블로그, 프로그래밍, 몰입'},
       {name: 'twitter:card', content: 'summary_large_image'},
       // 전역 타이틀 및 설명을 설정하되, 개별 페이지에서 덮어쓸 수 있도록 합니다.
       {name: 'twitter:url', content: 'https://fantasmith.com'},
@@ -269,7 +295,7 @@ const config: Config = {
           'https://x.com/effozen',
         ],
         jobTitle: '프론트엔드 개발자',
-        description: '동기화를 바탕으로 몰입을 이끌어내는 개발자',
+        description: '생각의 동기화를 통해 몰입을 이끌어내는 개발자',
       }),
     },
   ],

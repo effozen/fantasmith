@@ -1,0 +1,240 @@
+---
+slug: 2024-membership-early-4week
+title: '불편함을 개선하면서 나만의 템플릿 엔진을 만들다'
+img: './img/img1_수료증.webp'
+description: '부스트캠프 9기 멤버십 초반 4주차를 진행하면서, 나만의 템플릿 엔진을 구현하게 된 이야기입니다.'
+tags: [boostcamp]
+---
+
+## 📝 개요
+
+네이버 부스트캠프 9기 멤버십에 합격하고, 처음으로 마주한 미션이다.<br/>
+
+4주차의 후기를 담고 있으며, 이 과정에서 나는 "개발에서의 불편함을 직접 몸소 느끼면서, 이런 요소를 어떻게 개선할 수 있는 지 느껴보자"라는 목표를 세웠다.<br/>
+
+그리고 끝내, 미숙하게나마 `atomic css`에 기반한 유사 `tailwind css`와 `web component`에 기반한 나만의 템플릿 엔진을 만들게 되었다.<br/>
+
+본 글은 그 과정을 담고 있다. <br/>
+
+<!-- truncate -->
+
+## 😁 챌린지가 시작할 때의 나의 상태
+
+챌린지가 끝나고 나의 상태는 “무엇이든 할 수 있다.”였다.<br/>
+
+[부스트캠프 챌린지 후기](/blog/2024-boostcamp-challenge) 에서 확인이 가능하지만, 당시에 나는 온갖 시도를 했었고, 나만의 개발 철학을 이루었다고 생각했다.<br/>
+
+이렇다보니, 시작할 때 “문제를 깊게 탐구하고, 근본적인 원인을 찾아서 해결 및 개선하는 역량”을 키워보자고 생각하게 되었다.<br/>
+
+import dev_philosophy from './img/dev_philosophy.webp'
+
+<figure>
+  <img src={dev_philosophy} alt="내 코딩 철학" />
+  <figcaption>내 코딩 철학</figcaption>
+</figure>
+
+그리고 위와 같이 당시에 이런 개발 철학을 가지고 있었다.<br/>
+
+현재도 크게 변한것은 없다. 단지 그 내용이 조금 더 자세해졌고, 근거가 명확해졌을 뿐.<br/>
+
+이런 생각들을 바탕으로 그렇기에 문제의 근본적인 원인을 탐구하고자 했고, 그걸 바탕으로 하나씩 개선을 해보고자 했다.<br/>
+
+## 🤔 학습 스프린트 초반 4주는 어떤 활동을 했는가?
+
+챌린지에서 1일마다 주어졌던 미션과는 다르게, 4주 동안 진행되는 긴 호흡의 미션이 주어졌다.<br/>
+
+바닐라 HTML/CSS/JS를 이용해서 간단한 웹 풀스택 개발을 진행했다.<br/>
+
+세부적인 미션은 공개하지 못하지 못하기에 비유를 들면, 리액트의 대표적인 예시 중 하나인 투두리스트나, 카운터라던지, 백앤드 개발에서 처음 배우는 개인서버 구축하기 라던지 하는 것처럼 하나의 예제를 주고, 이를 순수하게 바닐라 HTML/CSS/JS를 사용해서 개발하는 방식이다.<br/>
+
+당연하게도 라이브러리, 프레임워크 등을 사용하는 것은 금지였다.<br/>
+
+이 과정에서 깃이나 여러가지 기본기를 확실하게 배울 수 있었다.<br/>
+
+## 🤔 나는 무엇에 집중하고자 했는가?
+
+주어진 미션과는 별개로, 본질적인 문제를 탐구하고 싶어졌다. 당시에는 주어졌던 미션은 부캠에 들어오기 전에 만들었던 프로그램과 비슷하기도 했고, 좀 더 본질적으로 내가 키우고 싶은 역량에 집중하고 싶었다.<br/>
+
+그래서 4주간의 컨셉으로 잡았던 것은 “제일 무식한 방법에서 시작해서 하나씩 개발해보며, 내가 지금 편하게 쓰는 것들이 어떤 문제를 해결하기 위해서 등장했는지를 익히자.”였다.<br/>
+
+당시에 템플릿 엔진을 써보길 부스트캠프에서 권장했었는데, 그게 아니라 그냥 A부터 Z까지 프론트앤드 관점에서 불편함을 겪어보고 싶었다.<br/>
+
+그래서 궁극적으로는 “생산성 최악의 불편함을 겪어보자.”라는 것이었고, 어떻게 보면 AJAX 나오기 전의 웹 개발을 체험하는 것에 가까웠다.<br/>
+
+import feel_uncomfortable from './img/feel_uncomfortable.webp'
+
+<figure>
+  <img src={feel_uncomfortable} alt="불편함을 직접 느껴보려는 이유" />
+  <figcaption>불편함을 느껴보려한 이유</figcaption>
+</figure>
+
+당시에 적었던 내용인데, 요약하면 "문제 해결력"이라는게 부스트캠프의 전체 키워드고, 챌린지 과정에서 이를 배웠는데.. 생각해보니 지금까지의 나는 너무 도구에만 매몰되어 있는게 아닌가 싶었다.<br/>
+
+그래서, 이를 탈피하고자 무식해보이는 도전을 하게 되었다.<br/>
+
+## 🧑‍💻 첫 번째 시도 : 막 짜여진 HTML과 특정 태그에 종속된 CSS
+
+첫 시도는 아무 생각 없이 하나의 파일에 모든 것을 담는 것이었다.<br/>
+
+처음 프론트앤드 개발을 배울 때 HTML/CSS/JS를 배우지 않는가? 그리고 아무런 지식이 없을 경우에는 하나의 파일에 모든 코드를 담으면서 개발을 진행하지 않은가? <br/>
+
+이에 착안해서, 이 시절의 기억을 되살려서 이렇게 개발을 진행하고자 했다.<br/>
+
+```html title="운동 계획을 예시로 짠 코드"
+<head>
+ <meta charset="UTF-8">
+ <title>운동 계획</title>
+ <link rel="stylesheet" href="main.css" >
+</head>
+<body>
+ <header class="header">
+   <nav class="flex-box navbar">
+     <div class="display-bold24">
+       운동 계획
+     </div>
+     <button>
+       <img class="button--img" src="../../assets/icons/clock.svg" alt="clock icon">
+     </button>
+   </nav>
+ </header>
+ <main>
+   <section class="column-list">
+     <section class="column-list__container">
+       <header class="column-list__header">
+         <h2 class="display-bold16">오늘 해야하는 루틴</h2>
+         <div class="column-list__header__counter size-l border-default display-medium12"><output>0</output></div>
+         <button class="column-list__header__plus-button size-l">
+           <img class="button--img" src="../../assets/icons/plus.svg" alt="">
+         </button>
+         <button class="column-list__header__cancel-button size-l">
+           <img class="button--img" src="../../assets/icons/close.svg" alt="">
+         </button>
+       </header>
+     </section>
+
+     <section class="column-list__container">
+       <header class="column-list__header">
+         <h2 class="display-bold16">어제 했던 루틴</h2>
+         <div class="column-list__header__counter size-l border-default display-medium12"><output>0</output></div>
+         <button class="column-list__header__plus-button size-l">
+           <img class="button--img" src="../../assets/icons/plus.svg" alt="">
+         </button>
+         <button class="column-list__header__cancel-button size-l">
+           <img class="button--img" src="../../assets/icons/close.svg" alt="">
+         </button>
+       </header>
+     </section>
+
+     <section class="column-list__container">
+       <header class="column-list__header">
+         <h2 class="display-bold16">완료한 루틴</h2>
+         <div class="column-list__header__counter size-l border-default display-medium12"><output>0</output></div>
+         <button class="column-list__header__plus-button size-l">
+           <img class="button--img" src="../../assets/icons/plus.svg" alt="">
+         </button>
+         <button class="column-list__header__cancel-button size-l">
+           <img class="button--img" src="../../assets/icons/close.svg" alt="">
+         </button>
+       </header>
+     </section>
+   </section>
+ </main>
+</body>
+</html>
+```
+
+```css title="운동 계획을 예시로 짠 CSS"
+/* General */
+
+.flex-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.flex-box__item {
+/* display: block; */
+}
+
+/* Header */
+.header {
+  height: var(--number-800);
+  margin: 0 calc(var(--number-900) + var(--number-100));
+}
+
+.navbar {
+  height: 100%;
+}
+
+/* Card ColumnItem */
+
+.column-list{
+  margin: 0 calc(var(--number-900) + var(--number-100));;
+  display: flex;
+}
+
+.column-list__container {
+  width:320px;
+}
+
+.column-list__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.column-list__header:nth-child(3) {
+  flex: 1 1 auto;
+}
+
+.column-list__header__counter {
+  margin-left: var(--number-100);
+  border-radius: var(--number-100);
+  display:flex;
+  align-items: center;
+  justify-content: center;
+}
+```
+
+
+최근에 헬스에 빠져서, 내가 사용하는 헬스앱을 기준으로 예시 코드를 작성했다.<br/>
+
+## 😵‍💫 문제 혹은 불편한 상황
+
+> 반복적으로 사용되는 CSS 구문이 있는데, 이를 매번 새롭게 작성해주어야 했다.
+
+```css title="예시"
+	display:flex;
+	align-items: center;
+	justify-content: center;
+```
+
+기존의 나는 `scss`를 적극적으로 활용하여 개발을 진행해왔었다.<br/>
+
+보통은 이런 반복적인 구문을 함수로 빼고, 그 함수를 활용해서 재사용성을 높이곤 했다.<br/>
+
+그러나 순수한 `css`는 그런 함수를 만들 수 없었다. 기본 제공되는 몇 가지 함수 외에는 별 다른 방법이 없었다.<br/>
+
+이런 상황에서 어떻게 코드의 `재사용성`을 높일 지 고민하게 되었고, 동시에 `가독성`을 높이는 방법도 고민하게 되었다.<br/>
+
+### 🏃 첫번째 시도 : 직접 `scss`와 같은 `css` 전처리기를 만들자.
+
+#### 🤔 발상
+`js`로 `scss`와 같은 양식으로 나만의 전처리기 프로그램을 만들어서 사용하면 어떨까 싶었다.<br/>
+
+그리고 내가 만든 함수를 전처리해서 최종적으로 `.css`파일로 만들면 되는게 아닐까? 하는 생각이 있었다.<br/>
+
+다만, 이는 내가 겪은 문제의 해결 방법은 아닌 것 같았다.<br/>
+
+`tailwind css`를 사용해본 경험이 있었고, 구조적으로 해결 방법이 있을 것 같았다.<br/>
+
+좀 더 본질적으로 들어가서, `css`가 왜 사용하기 불편하지에 대한 문제를 고려해보게 되었다.<br/>
+
+사실 이 과정에서 `불편한 상황 2`에 대해서도 고려를 하고 있었다. <br/>
+
+전처리기를 만드는 방법은 지금 고려중인 `불편한 상황 1`에 대한 해결책은 될 수 있지만, `불편한 상황 2`에 대한 문제 해결은 아니라고 생각했다.<br/>
+
+핵심은 `css` 자체의 `재사용성이 떨어져서 생기는 문제`라고 판단을 했고, 다음과 같은 방법을 시도하게 되었다.<br/>
+
+### 🏃 두번째 시도 : `atomic css`라고 하는 방법론이 있다. 그냥 각 기능을 모두 분리해서 재조립하는 방식으로 사용하자
+

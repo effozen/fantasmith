@@ -1,8 +1,0 @@
-{
-  "label": "버전 관리",
-  "position": 3,
-  "link": {
-    "type": "generated-index",
-    "description": "소스 코드의 버전 관리를 위한 도구에 대한 내용을 다룹니다. Git, SVN 등 버전 관리 시스템의 사용법과 모범 사례를 소개합니다."
-  }
-}

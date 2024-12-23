@@ -1,21 +1,25 @@
 ---
-slug: composition-pattern
 title: '합성 패턴(Composition pattern)으로 살펴보는 리액트 컴포넌트 설계 핵심'
-image: '/img/zen-social-card.jpeg'
+image: '/media/react-lab/principles/base/composition-pattern/img/component_composition_pattern_img1.webp'
+description: '리액트에서 쓰이는 합성이라는 개념의 핵심이기에 자주 접했고, 함수를 바탕으로 한 리액트를 통해 일상적으로 사용했으면서도 크게 와닿지 않았던 것 같다. 이번에 프로젝트를 진행하면서 몇가지 컴포넌트들을 직접 구현하면서 이 개념의 의미가 받아들여지게 되었다. 지금부터 내가 이해했던 개념을 정리할 겸, 정리한번 해보고자 한다.'
 tags: [designPattern, principles]
+keywords: ['Frontend', 'intro', 'composition pattern', '복합체 패턴', '디자인 패턴', 'design pattern']
 sidebar_position: 1
 sidebar_label: '합성 패턴(Composition pattern)으로 살펴보는 리액트 컴포넌트 설계 핵심'
-keywords: ['Frontend', 'intro', 'composition pattern', '복합체 패턴', '디자인 패턴', 'design pattern']
+sidebar_custom_props:
+  img: '/media/react-lab/principles/base/composition-pattern/img/index.webp'
 last_update:
   date: 2024-11-16
   author: zen
 ---
 
+import {Figure} from "@site/src/components/utils/Figure/index";
+
 ## 🎯 글을 읽고 났을 때의 상태
 
-> ▸ `Composition Pattern`이 뭔지 깨달았다.<br/>
-> ▸ `Composition Pattern`이 왜 리액트의 핵심 개발 원리인지 이해했다.<br/>
-> ▸ `Composition Pattern`이 어떻게 리액트에서 활용되는지 파악했다.<br/>
+- `Composition Pattern`이 뭔지 깨달았다.<br/>
+- `Composition Pattern`이 왜 리액트의 핵심 개발 원리인지 이해했다.<br/>
+- `Composition Pattern`이 어떻게 리액트에서 활용되는지 파악했다.<br/>
 
 ## 🚀 들어가며
 
@@ -25,7 +29,7 @@ last_update:
 
 리액트에서 쓰이는 `합성`이라는 개념의 핵심이기에 자주 접했고, 함수를 바탕으로 한 리액트를 통해 일상적으로 사용했으면서도 크게 와닿지 않았던 것 같다.<br/>
 
-이번에 [복합 컴포넌트 패턴으로 컴포넌트 재사용 높이기](/react-lab/dev-log/component_making/component_composition_pattern_with_header/component_composition_pattern_with_header)와 [Dropdown 컴포넌트를 구현하고 이룬 성장](/react-lab/dev-log/component_making/dropdown_and_growth/dropdown_and_growth)에 적힌 컴포넌트들을 구현하면서 이 개념의 의미가 💡! 하고 받아들여지게 되었다.<br/>
+이번에 프로젝트를 진행하면서 몇가지 컴포넌트들을 직접 구현하면서 이 개념의 의미가 💡! 하고 받아들여지게 되었다.<br/>
 
 지금부터 내가 이해했던 개념을 정리할 겸, 정리한번 해보고자 한다. <br/>
 
@@ -37,12 +41,7 @@ last_update:
 
 설명보다 예시를 먼저 보는게 이해하기 쉬울 듯 하다.<br/>
 
-import img1 from './img/component_composition_pattern_img1.webp';
-
-<figure>
-  <img src={img1} alt="missing" width='60%'/>
-  <figcaption>컴포지션 패턴의 하나의 예 : 파일 시스템 구조</figcaption>
-</figure>
+<Figure fileName='component_composition_pattern_img1.webp' alt='컴포지션 패턴의 하나의 예 : 파일 시스템 구조' caption='컴포지션 패턴의 하나의 예 : 파일 시스템 구조' />
 
 컴포지션 패턴을 이야기할 때면 보통 파일 시스템 구조를 예로 많이 든다.<br/>
 
@@ -362,9 +361,6 @@ const App = () => (
 - **명확한 API 설계**: 컴포넌트 간의 상호작용이 명확해야 한다. 특히 Compound Components를 사용할 때는 부모와 자식 간의 인터페이스를 명확히 정의해야 한다.
 - **성능 고려**: 합성 패턴을 사용할 때 불필요한 리렌더링이 발생하지 않도록 최적화가 필요할 수 있다. `React.memo`나 `useCallback` 등을 활용하여 성능을 최적화할 수 있다.
 
-[복합 컴포넌트 패턴으로 컴포넌트 재사용 높이기](/react-lab/dev-log/component_making/component_composition_pattern_with_header/component_composition_pattern_with_header) <br/>
-
-위 글은 내가 `Compound Components`를 구현한 내용을 담고 있다. 이를 통해서 좀 더 구체적인 예시를 살펴볼 수 있다. <br/>
 
 ## 📚 마무리
 

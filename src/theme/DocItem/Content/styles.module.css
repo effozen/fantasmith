@@ -1,0 +1,30 @@
+.timestamp {
+	font-weight: 400;
+	font-size: 0.75rem;  /* 12px */
+	line-height: 1.4;
+	color: var(	--color-text-secondary);
+}
+
+.titleHeader {
+	font-weight: 700;
+	line-height: 1.4;   /* 가독성을 위한 임의 값 */
+	margin-bottom: 3rem;
+}
+
+.tags {
+	display: inline;
+	margin-top: 0.15rem;
+	padding: 0;
+}
+
+.tag {
+	margin: 0 0.4rem 0.5rem 0;
+	display: inline-block;
+	font-size: 0.7rem;
+}
+
+.titleCol {
+	display:flex;
+	flex-direction: column;
+	margin-top: 0.6rem;
+}
