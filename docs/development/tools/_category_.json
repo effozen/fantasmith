@@ -1,8 +1,0 @@
-{
-  "label": "도구",
-  "position": 8,
-  "link": {
-    "type": "generated-index",
-    "description": "개발에 필요한 다양한 도구와 관련된 내용을 모아놓은 공간입니다. 버전 관리, 에디터, 테스트 도구 등을 다룹니다."
-  }
-}
