@@ -140,6 +140,7 @@ const config: Config = {
         sidebarCollapsible: false, // 사이드바 접기/펼치기
       },
     ],
+    'docusaurus-plugin-image-zoom',
     '@docusaurus/theme-live-codeblock',
   ],
 
@@ -147,6 +148,18 @@ const config: Config = {
   themeConfig: {
     // 사이트의 기본 Open Graph 및 Twitter 카드 이미지를 설정합니다.
     image: 'img/social-card.jpg', // 원하는 이미지로 변경
+    zoom: {
+      selector: '.markdown :not(em) > img',
+      background: {
+        light: 'rgb(255, 255, 255)',
+        dark: 'rgb(50, 50, 50)'
+      },
+      config: {
+        // options you can specify via https://github.com/francoischalifour/medium-zoom#usage
+        margin: 24,
+        scrollOffset: 600,
+      }
+    },
     docs: {
       sidebar: {
         hideable: true, // 사용자가 숨기거나 펼칠 수 있도록 함

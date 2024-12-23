@@ -38,7 +38,8 @@ html[data-theme="light"] {
 html[data-theme="dark"] {
 	--color-bg: #191919;
 	--color-bg-secondary: #373737;
-	--color-text-primary: #E0E0E0;
+	/* --color-text-primary: #E0E0E0; */
+	--color-text-primary: white;
 	--color-text-secondary: #B0B0B0;
 	--color-link: #DEB887;
 	--color-button-bg: #D2691E;

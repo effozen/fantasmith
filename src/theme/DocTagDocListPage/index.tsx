@@ -76,7 +76,7 @@ function DocTagDocListPageContent({
                                     tag,
                                     title
                                   }: Props & { title: string }): JSX.Element {
-  console.log(tag.items);
+  // console.log(tag.items);
 
   // const img= tag
 
@@ -102,7 +102,7 @@ function DocTagDocListPageContent({
             <section className={clsx('row')}>
               {tag.items.map((doc, index) => (
                 <article key={doc.id} className={clsx("col col--6", styles.tagList)}>
-                  <DocItem doc={doc} docImg={tag.items[index]["permalink"]}/>
+                  <DocItem doc={doc} docImg={`/media${tag.items[index]["permalink"]}img/index.webp`}/>
                 </article>
               ))}
             </section>

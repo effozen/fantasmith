@@ -1,3 +1,7 @@
-h1 {
+.markdown h1 {
 	margin-bottom: 0.4rem !important;
+}
+
+.markdown p {
+	line-height: 1.7rem;
 }
