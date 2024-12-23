@@ -2,6 +2,9 @@ import {themes as prismThemes} from 'prism-react-renderer';
 import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
+import PrismLight from './src/utils/prismLight';
+import PrismDark from './src/utils/prismDark';
+
 // 이 파일은 Node.js에서 실행됩니다 - 여기에서는 클라이언트 사이드 코드(브라우저 API, JSX 등)를 사용하지 마세요.
 
 const config: Config = {
@@ -148,6 +151,33 @@ const config: Config = {
   themeConfig: {
     // 사이트의 기본 Open Graph 및 Twitter 카드 이미지를 설정합니다.
     image: 'img/social-card.jpg', // 원하는 이미지로 변경
+    prism: {
+      additionalLanguages: [
+        'java',
+        'latex',
+        'haskell',
+        'matlab',
+        'PHp',
+        'powershell',
+        'bash',
+        'diff',
+        'json',
+        'scss',
+      ],
+      magicComments: [
+        {
+          className: 'theme-code-block-highlighted-line',
+          line: 'highlight-next-line',
+          block: {start: 'highlight-start', end: 'highlight-end'},
+        },
+        {
+          className: 'code-block-error-line',
+          line: 'This will error',
+        },
+      ],
+      theme: PrismLight,
+      darkTheme: PrismDark,
+    },
     zoom: {
       selector: '.markdown :not(em) > img',
       background: {
@@ -203,10 +233,10 @@ const config: Config = {
     footer: {
       copyright: `Copyright © ${new Date().getFullYear()} Zen. Built with Docusaurus.`,
     },
-    prism: {
-      theme: prismThemes.github,
-      darkTheme: prismThemes.dracula,
-    },
+    // prism: {
+    //   theme: prismThemes.github,
+    //   darkTheme: prismThemes.dracula,
+    // },
     liveCodeBlock: {
       /**
        * 라이브 플레이그라운드의 위치를 지정합니다. 에디터 위나 아래에 배치할 수 있습니다.

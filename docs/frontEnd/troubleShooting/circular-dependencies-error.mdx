@@ -1,14 +1,18 @@
 ---
-slug: circular-dependencies
 title: '자바스크립트에서의 순환 참조 문제'
-tags: ['Frontend']
-sidebar_position: 3
-sidebar_label: '자바스크립트에서의 순환 참조 문제'
+image: '/img/zen-social-card.jpeg'
+description: '자바스크립트에서 순환 참조 문제가 무엇인지, 이를 해결하는 방법을 알아보자.'
+tags: ['Frontend', 'TroubleShooting']
 keywords: ['Frontend', 'TroubleShooting', 'JavaScript', 'Circular Dependencies', '순환 참조', '순환 참조 문제', '버그', '에러', '해결 방법']
+sidebar_position: 1
+sidebar_label: '자바스크립트에서의 순환 참조 문제'
 last_update:
   date: 2024-11-18
   author: zen
 ---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
 
 ## 🎯 이 문서를 읽고 난 후의 상태
 
@@ -18,7 +22,7 @@ last_update:
 
 ## 😭 문제 상황
 
-[스토리북의 스토리를 작성하다 마주한 순환 참조 문제](/dev-lab/frontEnd/tools/storybook/look-at-storybook)
+[스토리북의 스토리를 작성하다 마주한 순환 참조 문제](/frontEnd/tools/storybook/circular-dependency-error)
 
 위의 글에서 확인할 수 있는데, 스토리북에서 스토리를 작성하다가 순환 참조 문제를 마주하게 되었다.<br/>
 
@@ -50,25 +54,31 @@ graph LR
 
 ### 📝 직접 순환 참조 예시
 
-```javascript title="ModuleA.js"
-// moduleA.js
-import { functionB } from './moduleB.js';
+<Tabs>
+  <TabItem label='ModuleA' value='ModuleA'>
+    ```javascript title="ModuleA.js"
+    // moduleA.js
+    import { functionB } from './moduleB.js';
 
-export function functionA() {
-  console.log('Function A');
-  functionB();
-}
-```
+    export function functionA() {
+      console.log('Function A');
+      functionB();
+    }
+    ```
+  </TabItem>
+  <TabItem label='ModuleB' value='ModuleB'>
+    ```javascript title="ModuleB.js"
+    // moduleB.js
+    import { functionA } from './moduleA.js';
 
-```javascript title="ModuleB.js"
-// moduleB.js
-import { functionA } from './moduleA.js';
+    export function functionB() {
+      console.log('Function B');
+      functionA();
+    }
+    ```
+  </TabItem>
+</Tabs>
 
-export function functionB() {
-  console.log('Function B');
-  functionA();
-}
-```
 
 위의 코드에서 `ModuleA`와 `ModuleB`가 서로를 참조하고 있다.<br/>
 
@@ -80,39 +90,45 @@ export function functionB() {
 
 순환 참조는 두 개 이상의 모듈이 직접 참조하는 것 뿐만 아니라, 간접적으로 참조하는 경우에도 발생할 수 있다.<br/>
 
-```javascript title="ModuleA.js"
-// moduleA.js
-import { functionC } from './moduleC.js';
+<Tabs>
+  <TabItem label='ModuleA' value='ModuleA'>
+    ```javascript title="ModuleA.js"
+    // moduleA.js
+    import { functionC } from './moduleC.js';
 
-export function functionA() {
-  console.log('Function A');
-  functionC();
-}
-```
+    export function functionA() {
+      console.log('Function A');
+      functionC();
+    }
+    ```
+  </TabItem>
+  <TabItem label='ModuleB' value='ModuleB'>
+    ```javascript title="ModuleB.js"
+    // moduleB.js
+    import { functionA } from './moduleA.js';
 
-```javascript title="ModuleB.js"
-// moduleB.js
-import { functionA } from './moduleA.js';
+    export function functionB() {
+      console.log('Function B');
+      functionA();
+    }
+    ```
+  </TabItem>
+  <TabItem label='ModuleC' value='ModuleC'>
+    ```javascript title="ModuleC.js"
+    // moduleC.js
+    import { functionB } from './moduleB.js';
 
-export function functionB() {
-  console.log('Function B');
-  functionA();
-}
-```
-
-```javascript title="ModuleC.js"
-// moduleC.js
-import { functionB } from './moduleB.js';
-
-export function functionC() {
-  console.log('Function C');
-  functionB();
-}
-```
+    export function functionC() {
+      console.log('Function C');
+      functionB();
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 위의 코드에서 `ModuleA`는 `ModuleC`를 참조하고, `ModuleC`는 `ModuleB`를 참조하고, `ModuleB`는 `ModuleA`를 참조하고 있다.<br/>
 
-여기서 `moduleA` → `moduleC` → `moduleB` → `moduleA` 순으로 순환 참조가 발생합니다. <br/>
+여기서 `moduleA` → `moduleC` → `moduleB` → `moduleA` 순으로 순환 참조가 발생한다. <br/>
 
 ## 🤔 순환 참조는 왜 문제가 되는가?
 
@@ -129,35 +145,40 @@ export function functionC() {
 
 간단한 `React` 컴포넌트를 사용하는 예시를 통해서, 순환 참조 문제를 확인해보자.<br/>
 
-```tsx title="ComponentA.tsx"
-// ComponentA.tsx
-import React from 'react';
-import { ComponentB } from './ComponentB';
+<Tabs>
+  <TabItem label='ComponentA' value='ComponentA'>
+    ```tsx title="ComponentA.tsx"
+    // ComponentA.tsx
+    import React from 'react';
+    import { ComponentB } from './ComponentB';
 
-export const ComponentA: React.FC = () => {
-  return (
-    <div>
-      <h1>Component A</h1>
-      <ComponentB />
-    </div>
-  );
-};
-```
+    export const ComponentA: React.FC = () => {
+      return (
+        <div>
+          <h1>Component A</h1>
+          <ComponentB />
+        </div>
+      );
+    };
+    ```
+  </TabItem>
+  <TabItem label='ComponentB' value='ComponentB'>
+    ```tsx title="ComponentB.tsx"
+    // ComponentB.tsx
+    import React from 'react';
+    import { ComponentA } from './ComponentA';
 
-```tsx title="ComponentB.tsx"
-// ComponentB.tsx
-import React from 'react';
-import { ComponentA } from './ComponentA';
-
-export const ComponentB: React.FC = () => {
-  return (
-    <div>
-      <h1>Component B</h1>
-      <ComponentA />
-    </div>
-  );
-};
-```
+    export const ComponentB: React.FC = () => {
+      return (
+        <div>
+          <h1>Component B</h1>
+          <ComponentA />
+        </div>
+      );
+    };
+    ```
+  </TabItem>
+</Tabs>
 
 `moduleA` → `moduleB` → `moduleA` → `moduleB` → `moduleA` → `moduleB` → `moduleA` → ... 와 같은 참조가 일어난다.<br/>
 
@@ -265,7 +286,7 @@ npx madge --image graph.svg src
 
 이에 대한 해결과정은 아래에서 참고할 수 있다.<br/>
 
-[스토리북 작성 중 발생한 순환 참조 에러 해결하기: Dropdown 컴포넌트 사례 분석](/dev-lab/frontEnd/tools/storybook/circular-dependency-error)
+[스토리북 작성 중 발생한 순환 참조 에러 해결하기: Dropdown 컴포넌트 사례 분석](/frontEnd/tools/storybook/circular-dependency-error)
 
 ## 📚 정리
 

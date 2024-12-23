@@ -1,8 +1,0 @@
-{
-  "label": "성능 최적화",
-  "position": 4,
-  "link": {
-    "type": "generated-index",
-    "description": "프론트엔드 애플리케이션의 성능을 최적화하는 방법에 대해 다룹니다. 성능 분석 도구와 최적화 기법을 설명합니다."
-  }
-}

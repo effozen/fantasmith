@@ -31,6 +31,7 @@
 	max-height: 25rem; /* 최대 높이 설정 */
 	object-fit: contain;
 	transition: box-shadow 0.3s ease; /* 부드러운 전환 효과 추가 */
+	border-radius: 0.5rem;
 }
 
 .imgLight {
@@ -38,6 +39,6 @@
 }
 
 .imgDark {
-	box-shadow: 2px 2px 10px rgba(255, 255, 255, 0.3); /* 밝은 그림자 또는 다른 시각적 요소 */
+	box-shadow: 0 0 5px rgba(255, 255, 255, 0.2); /* 밝은 그림자 또는 다른 시각적 요소 */
 	filter: brightness(1.2); /* 이미지 밝기 증가 */
 }

@@ -1,0 +1,120 @@
+---
+slug: how-to-use-useContext-on-storybook
+title: '스토리북에서 useContext 사용하기'
+image: './img/Storybook-Relationship.webp'
+tags: ['Frontend', 'Storybook']
+sidebar_position: 3
+sidebar_label: '004 스토리북에서 useContext 사용하기'
+keywords: ['Frontend', 'Storybook', 'Framework', 'useContext']
+last_update:
+  date: 2024-11-18
+  author: zen
+---
+
+## 🎯 이 문서를 읽고 난 후의 상태
+
+- 스토리북에서 `useContext`를 사용하는 방법을 이해한다.
+- 스토리 작성시 `decroator`가 무엇인지 이해한다.
+
+## 🤔 상황
+
+[스토리북 작성 중 발생한 순환 참조 에러 해결하기: Dropdown 컴포넌트 사례 분석](/dev-lab/frontEnd/tools/storybook/circular-dependency-error)
+
+위의 글에서 순환 참조 문제를 해결하고, 이제 진짜로 스토리를 작성하는 일만 남게 되었다.<br/>
+
+`DropdownTrigger`는 `useContext`를 사용하고 있었는데, 이를 스토리북에서 어떻게 사용해야 할지 감이 잡히지 않았다.<br/>
+
+그래서 이걸 어떻게 해결했는지 서술하고자 한다.<br/>
+
+## 🤔 `decorator`란?
+
+스토리북(Storybook)에서 데코레이터(Decorator)는 특정 스토리에 대해 추가적인 설정이나 스타일링, 또는 컨텍스트를 제공할 때 사용되는 기능이다.<br/>
+
+주로 컴포넌트의 렌더링을 제어하거나, 공통된 UI 요소를 모든 스토리에 적용하고 싶을 때 사용된다. <br/>
+
+## 🤔 데코레이터는 언제 사용하는가?
+
+| 상황 | 설명 |
+|---|---|
+|**공통 환경 설정**|컴포넌트를 테스트할 때 필요한 특정 컨텍스트나 전역 설정을 적용할 때 사용할 수 있다..<br/>예를 들어, `ThemeProvider`, `Redux Provider`, 또는 `Router`와 같은 전역 상태 제공자를 모든 스토리에 일괄적으로 적용할 때 사용할 수 있다.<br/>이렇게 데코레이터를 작성하면 모든 스토리에서 동일한 환경을 만들기 때문에 개별 스토리마다 중복 설정을 할 필요가 없어진다.|
+|**스타일 적용**|특정 스타일이나 레이아웃을 모든 스토리에 적용하는 데에도 사용할 수 있다.<br/>예를 들어, `padding`, `margin` 등을 전역으로 설정하거나, 특정 컴포넌트의 배경색을 설정하여 시각적으로 더 보기 좋게 만들 수 있다.|
+|**Wrapper로 활용**|컴포넌트를 특정 Wrapper로 감싸는 방식으로 렌더링하는 데 사용할 수 있따.<br/>예를 들어, `div`로 감싸서 컴포넌트를 정렬하거나, `Box`와 같은 레이아웃 컴포넌트로 감싸서 일정한 간격을 제공하는 데 사용할 수 있다.|
+
+## 📝 예시 코드
+
+```tsx title="ThemeProvider"
+import { ThemeProvider } from 'styled-components';
+import { theme } from '../path/to/theme';
+
+// 데코레이터 설정
+export const decorators = [
+  (Story) => (
+    <ThemeProvider theme={theme}>
+      <Story />
+    </ThemeProvider>
+  ),
+];
+```
+
+위의 코드는 `ThemeProvider`를 사용하여 스토리에 테마를 적용하는 예시이다.<br/>
+
+위 예제에서는 `ThemeProvider`로 `Story`를 감싸 모든 스토리가 `ThemeProvider`의 영향을 받도록 한다.<br/>`Story`는 현재 스토리에 대한 렌더링을 의미하며, 이처럼 데코레이터를 사용해 모든 스토리에 동일한 테마를 적용할 수 있다.<br/>
+
+지난 글에서 봤던 `DropdownTrigger.stories.tsx` 파일로 살펴본다면 다음과 같이 작성할 수 있다.<br/>
+
+```tsx title="DropdownTrigger.stories.tsx"
+// DropdownTrigger.stories.tsx
+import type { Meta, StoryObj } from '@storybook/react';
+import { DropdownTrigger } from '@/component/common/dropdown/DropdownTrigger';
+import { ToggleProvider } from '@/component/common/dropdown/DropdownContext';
+
+const meta = {
+  title: 'Component/Common/Dropdown',
+  component: DropdownTrigger,
+  parameters: {
+    layout: 'centered',
+  },
+  tags: ['autodocs'],
+  decorators: [
+    (Story) => (
+      <ToggleProvider>
+        <Story />
+      </ToggleProvider>
+    ),
+  ],
+  argTypes: {
+    // backgroundColor: { control: 'color' },
+  },
+  args: {},
+} satisfies Meta<typeof DropdownTrigger>;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Default: Story = {
+  args: {
+    children: 'test',
+  },
+};
+```
+
+## 🚧 데코레이터 사용 시 주의사항
+
+| 주의사항 | 설명 |
+|---|---|
+|**순서를 잘 고려해야 한다**|데코레이터는 스토리의 렌더링 순서에 영향을 미친다.<br/>따라서 먼저 적용할 데코레이터가 앞쪽에 위치하도록 해야 한다.|
+|**성능을 고려해야 한다**|데코레이터는 모든 스토리에 적용되기 때문에, 불필요한 렌더링을 유발할 수 있다.<br/>따라서 불필요한 렌더링을 유발하지 않도록 주의해야 한다.|
+
+## 📚 결론
+
+- 스토리북에서 `useContext`를 사용하려면 `decorator`를 사용하면 된다.
+- `decorator`는 스토리에 대한 추가 설정이나 스타일링, 컨텍스트를 제공할 때 사용된다.
+- 데코레이터는 모든 스토리에 적용되기 때문에, 순서와 성능을 고려해야 한다.
+
+확실히 이렇게 공부하는 방법이 좋은 것 같다.<br/>
+
+실제 예시를 분석하여 빠르게 필요한 지식을 터득하고, 이제 하나씩 개발하고 적용하면서 배워가는 방식.<br/>
+
+물론 `bottom-up` 방식도 좋지만, `top-down` 방식도 나쁘지 않은 것 같다.<br/>
+
+적절하게 잘 섞어서 사용해야겠다.<br/>

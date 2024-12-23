@@ -1,13 +1,19 @@
 ---
 title: 'z-index와 스택 컨텍스트(쌓임 맥락)'
-tags: ['Frontend', 'BoostCamp']
+image: '/media/frontEnd/fundamental/css/z-index_and_stack_context/img/index.png'
+description: 'z-index와 스택 컨텍스트(쌓임 맥락)에 대해서 알아보고, 이를 활용하여 요소들을 어떻게 배치할 수 있는지 알아봅니다.'
+tags: ['Frontend']
+keywords: ['Frontend', 'BoostCamp', 'CSS', 'z-index', 'stack context']
 sidebar_position: 1
 sidebar_label: 'z-index와 스택 컨텍스트(쌓임 맥락)'
-keywords: ['Frontend', 'BoostCamp', 'CSS', 'z-index', 'stack context']
+sidebar_custom_props:
+  img: '/media/frontEnd/fundamental/css/z-index_and_stack_context/img/index.png'
 last_update:
   date: 2024-12-01
   author: zen
 ---
+
+import {Figure} from "@site/src/components/utils/Figure/index";
 
 ## 🎯 이 문서를 읽고 난 후의 상태
 
@@ -94,8 +100,6 @@ last_update:
 - `쌓임 맥락`에서 **쌓임을 고려하는 것은 오직 자식 요소에 대해서 만이다.**
 
 이에 대해서 좀 더 자세히 알기 위해서 다음의 예제를 참고하자 <br/>
-
-import stacking_context_example from './img/stacking_context_example.png'
 
 <details>
 
@@ -232,10 +236,7 @@ import stacking_context_example from './img/stacking_context_example.png'
 
     <summary>✅ 결과</summary>
 
-  <figure>
-    <img src={stacking_context_example} alt='z-index 이미지'/>
-    <figcaption>[이미지 출처 : MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_positioned_layout/Understanding_z-index/Stacking_context) </figcaption>
-  </figure>
+  <Figure fileName='stacking_context_example.png' alt='z-index 이미지' caption='이미지 출처 : MDN' href='https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_positioned_layout/Understanding_z-index/Stacking_context'/>
 
   </details>
 
@@ -287,12 +288,7 @@ import stacking_context_example from './img/stacking_context_example.png'
 
 쌓임 맥락을 형성하는 요소가 아무것도 없다고 했을 경우 그림의 우선순위로 쌓이게 된다. <br/>
 
-import z_index_axes from './img/z_index_axes.png'
-
-<figure>
-  <img src={z_index_axes} alt='z-index 이미지'/>
-  <figcaption>[이미지 출처 : codrops](https://tympanus.net/codrops/css_reference/z-index/) </figcaption>
-</figure>
+<Figure fileName='z_index_axes.png' alt='z-index 이미지' caption='이미지 출처 : codrops' href='https://tympanus.net/codrops/css_reference/z-index/'/>
 
 브라우저는 자연스러운 흐름에 따라 페이지에 요소를 배치한다.<br/>
 
@@ -323,12 +319,8 @@ import z_index_axes from './img/z_index_axes.png'
 
 ## 🤔임의로 순서를 바꾸려면 어떻게 해야하는가?
 
-import default_stacking_order from './img/default_stacking_order.png'
 
-<figure>
-  <img src={default_stacking_order} alt='z-index 이미지'/>
-  <figcaption>[이미지 출처 : codrops](https://tympanus.net/codrops/css_reference/z-index/) </figcaption>
-</figure>
+<Figure fileName='default_stacking_order.png' alt='z-index 이미지' caption='이미지 출처 : codrops' href='https://tympanus.net/codrops/css_reference/z-index/'/>
 
 브라우저는 기본적으로 위와 같은 기본 스태킹 순서를 갖는다.<br/>
 
@@ -356,12 +348,7 @@ import default_stacking_order from './img/default_stacking_order.png'
 
 위를 유의한 채로, `z-index`를 지정하면 다음의 순서대로 보이게 된다. <br/>
 
-import new_stacking_order from './img/new_stacking_order.png'
-
-<figure>
-  <img src={new_stacking_order} alt='z-index 이미지'/>
-  <figcaption>[이미지 출처 : codrops](https://tympanus.net/codrops/css_reference/z-index/) </figcaption>
-</figure>
+<Figure fileName='new_stacking_order.png' alt='z-index 이미지' caption='이미지 출처 : codrops' href='https://tympanus.net/codrops/css_reference/z-index/'/>
 
 
 |요소의 순서|설명|

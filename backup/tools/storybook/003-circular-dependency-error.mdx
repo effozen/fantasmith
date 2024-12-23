@@ -1,0 +1,498 @@
+---
+slug: circular-dependency-error
+title: '스토리북 작성 중 발생한 순환 참조 에러 해결하기: Dropdown 컴포넌트 사례 분석'
+image: './img/storybook_error_circular_dependency_error.webp'
+tags: ['Frontend', 'TroubleShooting', 'Storybook']
+sidebar_position: 3
+sidebar_label: '003 스토리 작성 중 순환 참조 에러 해결기'
+keywords: ['Frontend', 'Storybook', 'Framework', 'TroubleShooting', '순환참조', '순환참조 문제', '에러', '버그', '해결 방법', 'useContext']
+last_update:
+  date: 2024-11-17
+  author: zen
+---
+
+## 🎯 이 문서를 읽고 난 후의 상태
+
+- 스토리북의 실제 사용 사례를 알았다.
+- 스토리북 작성시 마주한 순환 참조 문제를 해결하는 방법을 알았다. 또한 주의사항까지도.
+- 코드를 짤 때 순환 참조 문제가 발생하지 않으려면 어떻게 해야하는 지 알았다.
+
+## 😭 스토리북 사용 중 만난 에러
+
+import storybook_error_circular_dependency_error from './img/storybook_error_circular_dependency_error.webp'
+
+<figure>
+  <img src={storybook_error_circular_dependency_error} alt='스토리북 이미지'/>
+  <figcaption>스토리북 사용 중 만난 에러</figcaption>
+</figure>
+
+앞에서 탐구한 내용을 바탕으로 스토리를 작성하다가 위와 같은 문제를 만나게 되었다. <br/>
+
+무엇이 문제일까 싶어서 트러블 슈팅을 한 내용을 정리하고자 한다. <br/>
+
+## 🤔 배경
+
+문제를 탐구하기에 앞서서 하나씩 내가 무엇을 하려고 했는지 풀어나가고자 한다. <br/>
+
+```markdown title="dropdown 디렉토리 구조"
+dropdown
+├── Dropdown.tsx
+├── DropdownItem.tsx
+├── DropdownMenu.tsx
+└── DropdownTrigger.tsx
+```
+
+내가 작성한 코드의 구조는 위와 같다. 그리고 코드는 아래와 같이 쓰여졌다.<br/>
+
+```tsx title="Dropdown.tsx"
+import { createContext, ReactNode, useMemo, useState } from 'react';
+import { DropdownTrigger } from '@/component/common/dropdown/DropdownTrigger.tsx';
+import { DropdownItem } from '@/component/common/dropdown/DropdownItem.tsx';
+import { DropdownMenu } from '@/component/common/dropdown/DropdownMenu.tsx';
+
+interface IDropdownProps {
+  children: ReactNode;
+}
+
+export interface IToggleContext {
+  isOpen: boolean;
+  toggle: () => void;
+}
+
+export const ToggleContext = createContext<IToggleContext>({
+  isOpen: false,
+  toggle: () => {},
+});
+
+export const Dropdown = (props: IDropdownProps) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggle = () => setIsOpen(prevIsOpen => !prevIsOpen);
+
+  const toggleContextValue = useMemo(() => ({ isOpen, toggle }), [isOpen]);
+
+  return (
+    <aside className="relative flex w-fit flex-col">
+      <ToggleContext.Provider value={toggleContextValue}>{props.children}</ToggleContext.Provider>
+    </aside>
+  );
+};
+
+Dropdown.Trigger = DropdownTrigger;
+Dropdown.Item = DropdownItem;
+Dropdown.Menu = DropdownMenu;
+```
+
+```tsx title="DropdownTrigger.tsx"
+import { ReactNode, useContext } from 'react';
+import classNames from 'classnames';
+import { ToggleContext } from '@/component/common/dropdown/Dropdown.tsx';
+
+interface IDropdownTriggerProps {
+  /** 버튼 내부에 들어갈 컨텐츠 */
+  children: ReactNode;
+}
+
+/**
+ * 드롭다운 트리거 컴포넌트
+ * @remarks 드롭다운 트리거 컴포넌트입니다.
+ * @component
+ * @param {IDropdownTriggerProps} props.children 버튼 내부에 들어갈 컨텐츠
+ * @return {React.FunctionComponent}
+ * @example
+ * <DropdownTrigger>
+ *   <MdMenu className="h-6 w-6" />
+ *   <span>메뉴</span>
+ * </DropdownTrigger>
+ *
+ */
+
+export const DropdownTrigger = (props: IDropdownTriggerProps) => {
+  const { toggle } = useContext(ToggleContext);
+
+  const handleOnClick = () => {
+    toggle();
+  };
+
+  return (
+    <button
+      type="button"
+      className={classNames(
+        'flex',
+        'justify-center',
+        'items-center',
+        'bg-transparent',
+        'w-fit',
+        'h-fit',
+      )}
+      data-component="DropdownTrigger"
+      onClick={handleOnClick}
+    >
+      {props.children}
+    </button>
+  );
+};
+```
+
+```tsx title="DropdownMenu.tsx"
+import { ReactNode, useContext, useRef, useEffect } from 'react';
+import classNames from 'classnames';
+import { ToggleContext } from '@/component/common/dropdown/Dropdown.tsx';
+
+interface IDropdownMenuProps {
+  children: ReactNode | ReactNode[];
+}
+
+export const DropdownMenu = (props: IDropdownMenuProps) => {
+  const { isOpen, toggle } = useContext(ToggleContext);
+  const ref = useRef<HTMLUListElement | null>(null);
+
+  const handleOutSideClick = (event: MouseEvent) => {
+    const { target } = event;
+
+    if (!(target instanceof HTMLElement)) {
+      return;
+    }
+
+    if (
+      ref.current &&
+      target &&
+      !ref.current.contains(target) &&
+      target.dataset.component !== 'DropdownTrigger'
+    ) {
+      toggle();
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('click', handleOutSideClick);
+    return () => {
+      document.removeEventListener('click', handleOutSideClick);
+    };
+  }, []);
+
+  return (
+    isOpen && (
+      <ul
+        ref={ref}
+        className={classNames(
+          // 추후 애니메이션 조건부 적용을 위해서 classNames 사용
+          'align-center',
+          'animate-smoothAppear',
+          'absolute',
+          'right-0',
+          'top-8',
+          'z-10',
+          'flex',
+          'flex-col',
+          'justify-center',
+          'gap-2.5',
+          'rounded-xl',
+          'p-2.5',
+          'shadow-2xl',
+          'w-fit',
+          'bg-white',
+        )}
+      >
+        {props.children}
+      </ul>
+    )
+  );
+};
+```
+
+```tsx title="DropdownItem.tsx"
+import { ReactNode } from 'react';
+
+interface IDropdownItemProps {
+  children: ReactNode;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
+}
+
+export const DropdownItem = (props: IDropdownItemProps) => {
+  // undefined는 react에서 랜더링 하지 않음
+  return (
+    <li className="px-3 py-1.5 text-base">
+      <button
+        type="button"
+        className="flex w-full items-center justify-between whitespace-nowrap bg-transparent"
+        onClick={props.onClick}
+      >
+        {props.children}
+      </button>
+    </li>
+  );
+};
+```
+
+내가 작성한 코드가 좋은 코드인지는 모르겠지만, 일단은 이렇게 작성을 했다. <br/>
+
+그리고 문제는 `DropdownTrigger`에 대한 스토리를 작성하는 과정에서 발생했다. <br/>
+
+```tsx title="DropdownTrigger.stories.tsx"
+import type { Meta, StoryObj } from '@storybook/react';
+
+import { DropdownTrigger } from '@/component/common/dropdown/DropdownTrigger.tsx';
+
+const meta = {
+  title: 'Component/Common/Dropdown',
+  component: DropdownTrigger,
+  parameters: {
+    layout: 'centered',
+  },
+  tags: ['autodocs'],
+  argTypes: {
+    // backgroundColor: { control: 'color' },
+  },
+  args: {},
+} satisfies Meta<typeof DropdownTrigger>;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Default: Story = {
+  args: {
+    children: 'test',
+  },
+};
+```
+
+이게 내가 작성한 `DropdownTrigger`에 대한 스토리이다. <br/>
+
+## 🤔 문제 상황
+이렇게 하고보니 다음과 같은 에러가 발생을 했다. <br/>
+
+<figure>
+  <img src={storybook_error_circular_dependency_error} alt='스토리북 이미지'/>
+  <figcaption>스토리북 사용 중 만난 에러</figcaption>
+</figure>
+
+```markdown title='에러 메시지'
+Cannot access 'DropdownTrigger' before initialization
+The component failed to render properly, likely due to a configuration issue in Storybook. Here are some common causes and how you can address them:
+
+Missing Context/Providers: You can use decorators to supply specific contexts or providers, which are sometimes necessary for components to render correctly. For detailed instructions on using decorators, please visit the Decorators documentation.
+Misconfigured Webpack or Vite: Verify that Storybook picks up all necessary settings for loaders, plugins, and other relevant parameters. You can find step-by-step guides for configuring Webpack or Vite with Storybook.
+Missing Environment Variables: Your Storybook may require specific environment variables to function as intended. You can set up custom environment variables as outlined in the Environment Variables documentation.
+ReferenceError: Cannot access 'DropdownTrigger' before initialization
+    at http://localhost:6006/src/component/common/dropdown/Dropdown.tsx?t=1731852387546:47:20
+
+```
+
+## 🧑‍💻 문제에 대한 접근
+
+에러가 발생했으면 제일 먼저 해야하는 것은 명확하다.<br/>
+
+바로 에러메세지를 읽고 분석하는 것. 이를 읽고 하나씩 분석을 해보았다.<br/>
+
+```markdown title='에러 메시지'
+Cannot access 'DropdownTrigger' before initialization
+```
+
+이 부분을 보면 `DropdownTrigger`를 초기화하기 전에 접근할 수 없다고 한다. <br/>
+
+```markdown title='에러 메시지'
+The component failed to render properly, likely due to a configuration issue in Storybook. Here are some common causes and how you can address them:
+
+Missing Context/Providers: You can use decorators to supply specific contexts or providers, which are sometimes necessary for components to render correctly. For detailed instructions on using decorators, please visit the Decorators documentation.
+Misconfigured Webpack or Vite: Verify that Storybook picks up all necessary settings for loaders, plugins, and other relevant parameters. You can find step-by-step guides for configuring Webpack or Vite with Storybook.
+Missing Environment Variables: Your Storybook may require specific environment variables to function as intended. You can set up custom environment variables as outlined in the Environment Variables documentation.
+ReferenceError: Cannot access 'DropdownTrigger' before initialization
+    at http://localhost:6006/src/component/common/dropdown/Dropdown.tsx?t=1731852387546:47:20
+```
+
+그리고 이 내용을 번역하면 다음과 같다. <br/>
+
+```markdown title='에러 메시지'
+누락된 컨텍스트/프로바이더: 데코레이터를 사용하여 특정 컨텍스트나 공급자를 제공할 수 있으며, 이는 컴포넌트가 올바르게 렌더링하는 데 필요한 경우가 있습니다.
+데코레이터 사용에 대한 자세한 지침은 데코레이터 문서를 참조하세요.
+잘못 구성된 웹팩 또는 Vite: 스토리북이 로더, 플러그인 및 기타 관련 매개변수에 대해 필요한 모든 설정을 선택했는지 확인합니다.
+스토리북으로 Webpack 또는 Vite를 구성하는 단계별 가이드를 찾을 수 있습니다.
+누락된 환경 변수: 스토리북이 의도한 대로 작동하려면 특정 환경 변수가 필요할 수 있습니다.
+환경 변수 문서에 설명된 대로 사용자 지정 환경 변수를 설정할 수 있습니다.
+참조 오류: http://localhost:6006/src/component/common/dropdown/Dropdown.tsx?t=1731852387546:47:20 에서 초기화하기 전에 '드롭다운 트리거'에 액세스할 수 없습니다.
+```
+
+번역은 `deepL`을 사용했다. <br/>
+
+조금 더 뜯어서 살펴보기로 했다.<br/>
+
+## 📝 본질적인 접근
+
+```markdown title='에러 메시지'
+Cannot access 'DropdownTrigger' before initialization
+```
+
+시작은 이 메세지를 이해하는 것부터 였다.<br/>
+
+관련해서 찾아보니 이 에러는 `Javascript` 모듈 시스템에서 `호이스팅(hosting)`과 `순환 참조(circular dependencies)` 문제로 인해 발생한다고 한다.<br/>
+
+메세지 그대로, `DropdownTrigger`를 초기화하기 전에 접근하려고 해서 발생한 문제라는 것이다.<br/>
+
+## 📝 호이스팅과 순환 참조란?
+
+`호이스팅(hoisting)`은 과거에 했었던 스터디에서 친구가 정리한 글이 있어서 첨부한다. <br/>
+
+[렉시컬 환경과 호이스팅](https://refactor-js.vercel.app/javascript%20basic/chapter2/2-2)
+
+`순환 참조(circular dependencies)`는 두 개 이상의 모듈이 서로를 참조하는 상황을 말한다. <br/>
+
+이런 상황에서는 모듈이 초기화되기 전에 다른 모듈을 참조하려고 하기 때문에 문제가 발생한다. <br/>
+
+이와 관련된 자세한 내용은 아래를 참고하자. <br/>
+
+[자바스크립트에서의 순환 참조 문제](/dev-lab/frontEnd/troubleShooting/circular-dependencies)
+
+<br/>
+
+## 📝원인 분석
+
+원초부터 `Dropdown` 컴포넌트 관련 코드에서 문제가 있었다.<br/>
+
+### 🔄 순환 참조 문제
+- `DropdownTrigger.tsx` 파일에서 `ToggleContext`를 `Dropdown.tsx`로부터 임포트하고 있다.
+- 반대로, `Dropdown.tsx` 파일 내에서 `DropdownTrigger`를 임포트하고 있다.
+- 이 경우, 두 파일이 서로를 참조하게 되어 순환 참조가 발생했다. JavaScript 모듈 시스템은 이러한 순환 참조를 처리하지 못해 초기화 전에 접근하려는 시도가 발생하였기에 위와 같은 에러를 발생시켰다.
+
+<br/>
+
+또한, `eventHandler` 관련해서도 `mocking`이 필요한 이슈가 있었다.<br/>
+
+### 📝 컨텍스트 제공 문제
+- `DropdownTrigger` 컴포넌트는 `ToggleContext`를 사용하고 있다. Storybook에서 이 컴포넌트를 렌더링할 때 `ToggleContext`를 제공하지 않으면 컴포넌트가 제대로 동작하지 않을 수 있었다.
+
+하지만 현재 에러는 주로 순환 참조로 인한 초기화 문제이므로, 우선적으로 순환 참조 문제를 해결하면 될 것 같았다.<br/>
+
+## 🤔 처음의 의도
+
+처음 위 코드를 짤 때, 나는 `Dropdown` 컴포넌트를 최상위 컴포넌트로 두고, `DropdownTrigger`, `DropdownItem`, `DropdownMenu` 컴포넌트를 하위 컴포넌트로 두고 싶었다. <br/>
+
+그리고, `Context` 와 같은 경우도 아주 단순한 생각으로 `Dropdown` 컴포넌트 내부에서만 사용하면 되겠다고 생각했다. <br/>
+
+하지만, 이러한 생각이 순환 참조 문제를 발생시키는 원인이 되었다. <br/>
+
+## 📝 해결 방법
+
+해결 방법은 아주 단순했다. 그냥 `useContext` 때문에 이를 별도의 모듈로 분리시키기만 하면 되었다.<br/>
+
+```tsx title="DropdownContext.tsx"
+import { createContext, ReactNode, useMemo, useState } from 'react';
+
+export interface IToggleContext {
+  isOpen: boolean;
+  toggle: () => void;
+}
+
+interface IToggleProviderProps {
+  children: ReactNode;
+}
+
+export const ToggleContext = createContext<IToggleContext>({
+  isOpen: false,
+  toggle: () => {},
+});
+
+export const ToggleProvider = (props: IToggleProviderProps) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const toggle = () => setIsOpen(prevIsOpen => !prevIsOpen);
+  const toggleContextValue = useMemo(() => ({ isOpen, toggle }), [isOpen]);
+
+  return (
+    <ToggleContext.Provider value={toggleContextValue}>{props.children}</ToggleContext.Provider>
+  );
+};
+```
+
+위와 같이 `context`를 별도의 모듈로 분리시켰다.<br/>
+
+```tsx title="Dropdown.tsx"
+import { ReactNode } from 'react';
+import { DropdownTrigger } from '@/component/common/dropdown/DropdownTrigger.tsx';
+import { DropdownItem } from '@/component/common/dropdown/DropdownItem.tsx';
+import { DropdownMenu } from '@/component/common/dropdown/DropdownMenu.tsx';
+import { ToggleProvider } from '@/component/common/dropdown/DropdownContext.tsx';
+
+interface IDropdownProps {
+  children: ReactNode;
+}
+
+export const Dropdown = (props: IDropdownProps) => {
+  return (
+    <aside className="relative flex w-fit flex-col">
+      <ToggleProvider>{props.children}</ToggleProvider>
+    </aside>
+  );
+};
+
+Dropdown.Trigger = DropdownTrigger;
+Dropdown.Item = DropdownItem;
+Dropdown.Menu = DropdownMenu;
+```
+
+그리고 `Dropdown` 컴포넌트에서는 `ToggleProvider`로 감싸주게 수정하였다.<br/>
+
+```tsx title="DropdownTrigger.tsx"
+import { ReactNode, useContext } from 'react';
+import classNames from 'classnames';
+import { ToggleContext } from '@/component/common/dropdown/DropdownContext';
+
+interface IDropdownTriggerProps {
+  /** 버튼 내부에 들어갈 컨텐츠 */
+  children: ReactNode;
+}
+
+export const DropdownTrigger = (props: IDropdownTriggerProps) => {
+  const { toggle } = useContext(ToggleContext);
+
+  const handleOnClick = () => {
+    toggle();
+  };
+
+  return (
+    <button
+      type="button"
+      className={classNames(
+        'flex',
+        'justify-center',
+        'items-center',
+        'bg-transparent',
+        'w-fit',
+        'h-fit',
+      )}
+      data-component="DropdownTrigger"
+      onClick={handleOnClick}
+    >
+      {props.children}
+    </button>
+  );
+};
+```
+
+`DropdownTrigger` 컴포넌트에서는 `ToggleContext`를 `DropdownContext`로부터 임포트하게 수정하였다.<br/>
+
+이렇게 하면 순환 참조 문제가 해결되고, `Context`를 제공하는 문제도 해결되었다. <br/>
+
+또한 스토리도 정상적으로 출력되는 것을 볼 수 있다. <br/>
+
+import storybook_error_circular_dependency_solved from './img/storybook_error_circular_dependency_solved.webp'
+
+<figure>
+  <img src={storybook_error_circular_dependency_solved} alt='스토리북 이미지'/>
+  <figcaption>에러가 해결된 모습</figcaption>
+</figure>
+
+## 📝 번외 : 스토리북에서 Context 제공하기
+
+`DropdownTrigger`를 스토리북에서 사용하려면 `ToggleProvider`를 데코레이터로 추가하여 컨텍스트를 제공해야 한다.<br/>
+
+이에 대해서는 아래에 정리해두었으니 참고하자.<br/>
+
+[스토리북에서 useContext 사용하기](/dev-lab/frontEnd/tools/storybook/how-to-use-useContext-on-storybook)
+
+## 📚 정리
+
+- 순환 참조 문제는 JavaScript 모듈 시스템에서 발생하는 문제이다.
+- 순환 참조 문제는 모듈이 초기화되기 전에 다른 모듈을 참조하려는 시도로 인해 발생한다.
+- 순환 참조 문제를 해결하려면 모듈을 재구성하거나, 필요한 경우 모듈을 분리하여 순환 참조를 방지해야 한다.
+- 스토리북에서 컨텍스트를 제공하려면 데코레이터를 사용하여 컨텍스트를 제공해야 한다.
+
