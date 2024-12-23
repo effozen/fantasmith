@@ -1,15 +1,18 @@
 ---
-slug: circular-dependency-error
 title: '스토리북 작성 중 발생한 순환 참조 에러 해결하기: Dropdown 컴포넌트 사례 분석'
-image: './img/storybook_error_circular_dependency_error.webp'
+image: '/media/frontEnd/tools/storybook/circular_dependency_error/img/index.webp'
 tags: ['Frontend', 'TroubleShooting', 'Storybook']
-sidebar_position: 3
-sidebar_label: '003 스토리 작성 중 순환 참조 에러 해결기'
 keywords: ['Frontend', 'Storybook', 'Framework', 'TroubleShooting', '순환참조', '순환참조 문제', '에러', '버그', '해결 방법', 'useContext']
+sidebar_position: 3
+sidebar_label: '스토리 작성 중 순환 참조 에러 해결기'
+sidebar_custom_props:
+  img: '/media/frontEnd/tools/storybook/circular_dependency_error/img/index.webp'
 last_update:
   date: 2024-11-17
   author: zen
 ---
+
+import {Figure} from "@site/src/components/utils/Figure/index";
 
 ## 🎯 이 문서를 읽고 난 후의 상태
 
@@ -19,12 +22,7 @@ last_update:
 
 ## 😭 스토리북 사용 중 만난 에러
 
-import storybook_error_circular_dependency_error from './img/storybook_error_circular_dependency_error.webp'
-
-<figure>
-  <img src={storybook_error_circular_dependency_error} alt='스토리북 이미지'/>
-  <figcaption>스토리북 사용 중 만난 에러</figcaption>
-</figure>
+<Figure fileName='storybook_error_circular_dependency_error.webp' alt='스토리북 사용 중 만난 에러' caption='스토리북 사용 중 만난 에러' />
 
 앞에서 탐구한 내용을 바탕으로 스토리를 작성하다가 위와 같은 문제를 만나게 되었다. <br/>
 
@@ -262,10 +260,7 @@ export const Default: Story = {
 ## 🤔 문제 상황
 이렇게 하고보니 다음과 같은 에러가 발생을 했다. <br/>
 
-<figure>
-  <img src={storybook_error_circular_dependency_error} alt='스토리북 이미지'/>
-  <figcaption>스토리북 사용 중 만난 에러</figcaption>
-</figure>
+<Figure fileName='storybook_error_circular_dependency_error.webp' alt='스토리북 사용 중 만난 에러' caption='스토리북 사용 중 만난 에러' />
 
 ```markdown title='에러 메시지'
 Cannot access 'DropdownTrigger' before initialization
@@ -341,7 +336,7 @@ Cannot access 'DropdownTrigger' before initialization
 
 이와 관련된 자세한 내용은 아래를 참고하자. <br/>
 
-[자바스크립트에서의 순환 참조 문제](/dev-lab/frontEnd/troubleShooting/circular-dependencies)
+[자바스크립트에서의 순환 참조 문제](/frontEnd/troubleShooting/circular-dependencies-error)
 
 <br/>
 
@@ -474,20 +469,13 @@ export const DropdownTrigger = (props: IDropdownTriggerProps) => {
 
 또한 스토리도 정상적으로 출력되는 것을 볼 수 있다. <br/>
 
-import storybook_error_circular_dependency_solved from './img/storybook_error_circular_dependency_solved.webp'
-
-<figure>
-  <img src={storybook_error_circular_dependency_solved} alt='스토리북 이미지'/>
-  <figcaption>에러가 해결된 모습</figcaption>
-</figure>
+<Figure fileName='storybook_error_circular_dependency_solved.webp' alt='에러가 해결된 모습' caption='에러가 해결된 모습' />
 
 ## 📝 번외 : 스토리북에서 Context 제공하기
 
 `DropdownTrigger`를 스토리북에서 사용하려면 `ToggleProvider`를 데코레이터로 추가하여 컨텍스트를 제공해야 한다.<br/>
 
-이에 대해서는 아래에 정리해두었으니 참고하자.<br/>
-
-[스토리북에서 useContext 사용하기](/dev-lab/frontEnd/tools/storybook/how-to-use-useContext-on-storybook)
+이에 대해서는 다음 글에 정리해두었으니 참고하자.<br/>
 
 ## 📚 정리
 
