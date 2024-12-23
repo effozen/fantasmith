@@ -51,11 +51,11 @@ function DocItem({doc, docImg}: { doc: Props['tag']['items'][number], docImg:str
     <article className={clsx('card', styles.tagContainer)}>
       <Link to={doc.permalink}>
         <Heading as="h2">{doc.title}</Heading>
-      </Link>
       <div className={styles.docImgContainer}>
         <img src={docImg} className={styles.docImg}/>
       </div>
       {doc.description && <p>{doc.description}</p>}
+      </Link>
     </article>
   );
 }
