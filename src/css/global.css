@@ -1,8 +1,7 @@
-
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
 
 html {
-	font-family: 'Pretendard', sans-serif;
+  font-family: "Pretendard", sans-serif;
 }
 
 /* ================================
@@ -15,22 +14,27 @@ html {
    우리가 정의한 색상값으로 덮어쓰기
    ===================================== */
 html[data-theme="light"] {
-	/* Docusaurus 기본 변수 맵핑 */
-	--ifm-background-color: var(--color-bg);
-	--ifm-background-color-alt: var(--color-bg-emphasis);
-	--ifm-font-color-base: var(--color-text-primary);
-	--ifm-font-color-secondary: var(--color-text-secondary);
-	--ifm-color-primary: var(--color-link);
-	--ifm-color-primary-dark: var(--color-button-bg); /* 필요하다면 더 어두운 톤으로 조정 가능 */
-	--ifm-color-success: var(--color-success);
-	--ifm-color-info: var(--color-info);
-	--ifm-color-warning: var(--color-warning);
-	--ifm-color-danger: var(--color-error);
-	--ifm-link-color: var(--color-link);
-	--ifm-color-emphasis-100: var(--color-divider);
-	--ifm-button-background-color: var(--color-button-bg);
-	--ifm-button-color: var(--color-button-text);
-	--ifm-button-hover-background-color: var(--color-hover);
+  /* Docusaurus 기본 변수 맵핑 */
+  --ifm-background-color: var(--color-bg);
+  --ifm-background-color-alt: var(--color-bg-emphasis);
+  --ifm-font-color-base: var(--color-text-primary);
+  --ifm-font-color-secondary: var(--color-text-secondary);
+  --ifm-color-primary: var(--color-link);
+  --ifm-color-primary-dark: var(
+    --color-button-bg
+  ); /* 필요하다면 더 어두운 톤으로 조정 가능 */
+  --ifm-color-success: var(--color-success);
+  --ifm-color-info: var(--color-info);
+  --ifm-color-warning: var(--color-warning);
+  --ifm-color-danger: var(--color-error);
+  --ifm-link-color: var(--color-link);
+  --ifm-color-emphasis-100: var(--color-divider);
+  --ifm-button-background-color: var(--color-button-bg);
+  --ifm-button-color: var(--color-button-text);
+  --ifm-button-hover-background-color: var(--color-hover);
+  --docusaurus-highlighted-code-line-bg: rgba(105, 113, 134, 0.147);
+  /* --docsearch-muted-color: var(--color-bg);
+  --docsearch-modal-background: var(--color-bg-secondary); */
 }
 
 /* =====================================
@@ -38,22 +42,30 @@ html[data-theme="light"] {
    기존 --color-* 다크 모드 값 유지
    ===================================== */
 html[data-theme="dark"] {
-	/* Docusaurus 기본 변수 맵핑 */
-	--ifm-background-color: var(--color-bg);
-	--ifm-background-color-alt: var(--color-bg-emphasis);
-	--ifm-font-color-base: var(--color-text-primary);
-	--ifm-font-color-secondary: var(--color-text-secondary);
-	--ifm-color-primary: var(--color-link);
-	--ifm-color-primary-dark: var(--color-button-bg); /* 필요하다면 다크한 톤을 조정 가능 */
-	--ifm-color-success: var(--color-success);
-	--ifm-color-info: var(--color-info);
-	--ifm-color-warning: var(--color-warning);
-	--ifm-color-danger: var(--color-error);
-	--ifm-link-color: var(--color-link);
-	--ifm-color-emphasis-100: var(--color-divider);
-	--ifm-button-background-color: var(--color-button-bg);
-	--ifm-button-color: var(--color-button-text);
-	--ifm-button-hover-background-color: var(--color-hover);
+  /* Docusaurus 기본 변수 맵핑 */
+  --ifm-background-color: var(--color-bg);
+  --ifm-background-color-alt: var(--color-bg-emphasis);
+  --ifm-font-color-base: var(--color-text-primary);
+  --ifm-font-color-secondary: var(--color-text-secondary);
+  --ifm-color-primary: var(--color-link);
+  --ifm-color-primary-dark: var(
+    --color-button-bg
+  ); /* 필요하다면 다크한 톤을 조정 가능 */
+  --ifm-color-success: var(--color-success);
+  --ifm-color-info: var(--color-info);
+  --ifm-color-warning: var(--color-warning);
+  --ifm-color-danger: var(--color-error);
+  --ifm-link-color: var(--color-link);
+  --ifm-color-emphasis-100: var(--color-divider);
+  --ifm-button-background-color: var(--color-button-bg);
+  --ifm-button-color: var(--color-button-text);
+  --ifm-button-hover-background-color: var(--color-hover);
+  --docusaurus-highlighted-code-line-bg: rgba(169, 168, 168, 0.078);
+  /* --docsearch-muted-color: var(--color-bg); */
+  --docsearch-modal-background: var(--color-bg) !important;
+  --docsearch-footer-background: var(--color-bg) !important;
+  /* --docSearch-hit-color: var(--color-text-primary) !important; */
+  --docsearch-muted-color: var(--color-text-primary) !important;
 }
 
 /* ================================
@@ -64,71 +76,71 @@ html[data-theme="dark"] {
 
 /* 배경 관련 */
 .bg-default {
-	background-color: var(--color-bg);
+  background-color: var(--color-bg);
 }
 
 .bg-emphasis {
-	background-color: var(--color-bg-emphasis);
+  background-color: var(--color-bg-emphasis);
 }
 
 /* 텍스트 관련 */
 .text-primary {
-	color: var(--color-text-primary);
+  color: var(--color-text-primary);
 }
 
 .text-secondary {
-	color: var(--color-text-secondary);
+  color: var(--color-text-secondary);
 }
 
 .text-link {
-	color: var(--color-link);
+  color: var(--color-link);
 }
 
 /* 버튼 관련 */
 .button-primary {
-	background-color: var(--color-button-bg);
-	color: var(--color-button-text);
-	border: none;
-	padding: 0.5rem 1rem;
-	cursor: pointer;
+  background-color: var(--color-button-bg);
+  color: var(--color-button-text);
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
 }
 
 .button-primary:hover {
-	background-color: var(--color-hover);
+  background-color: var(--color-hover);
 }
 
 /* 상태 표시 관련 */
 .text-success {
-	color: var(--color-success);
+  color: var(--color-success);
 }
 
 .text-warning {
-	color: var(--color-warning);
+  color: var(--color-warning);
 }
 
 .text-error {
-	color: var(--color-error);
+  color: var(--color-error);
 }
 
 .text-info {
-	color: var(--color-info);
+  color: var(--color-info);
 }
 
 /* 구분선 관련 */
 .divider {
-	border-bottom: 1px solid var(--color-divider);
+  border-bottom: 1px solid var(--color-divider);
 }
 
 /* 아이콘 관련 */
 .icon-default {
-	fill: var(--color-icon);
-	stroke: var(--color-icon);
+  fill: var(--color-icon);
+  stroke: var(--color-icon);
 }
 
 /* 호버 테스트용 (링크나 인터랙티브 요소) */
 .hover-test:hover {
-	background-color: var(--color-hover);
-	color: var(--color-bg);
+  background-color: var(--color-hover);
+  color: var(--color-bg);
 }
 
 /* Typography Guide
@@ -147,65 +159,65 @@ html[data-theme="dark"] {
 
 /* Heading Styles */
 .typography-h1 {
-	font-weight: 700;
-	font-size: 2rem;    /* 32px */
-	line-height: 1.4;   /* 가독성을 위한 임의 값 */
-	margin: 1.2em 0;    /* 필요 시 여백 조정 */
+  font-weight: 700;
+  font-size: 2rem; /* 32px */
+  line-height: 1.4; /* 가독성을 위한 임의 값 */
+  margin: 1.2em 0; /* 필요 시 여백 조정 */
 }
 
 .typography-h2 {
-	font-weight: 700;
-	font-size: 1.5rem;  /* 26px */
-	line-height: 1.4;
-	margin: 1em 0;
+  font-weight: 700;
+  font-size: 1.5rem; /* 26px */
+  line-height: 1.4;
+  margin: 1em 0;
 }
 
 .typography-h3 {
-	font-weight: 700;
-	font-size: 1.25rem; /* 22px */
-	line-height: 1.4;
-	margin: 0.8em 0;
+  font-weight: 700;
+  font-size: 1.25rem; /* 22px */
+  line-height: 1.4;
+  margin: 0.8em 0;
 }
 
 .typography-h4 {
-	font-weight: 700;
-	font-size: 1.125rem; /* 20px */
-	line-height: 1.4;
-	margin: 0.8em 0;
+  font-weight: 700;
+  font-size: 1.125rem; /* 20px */
+  line-height: 1.4;
+  margin: 0.8em 0;
 }
 
 /* Body Text */
 .typography-body {
-	font-weight: 400;
-	font-size: 1rem;     /* 16px */
-	line-height: 1.5;     /* 본문은 조금 넉넉한 line-height */
-	margin: 0.8em 0;
+  font-weight: 400;
+  font-size: 1rem; /* 16px */
+  line-height: 1.5; /* 본문은 조금 넉넉한 line-height */
+  margin: 0.8em 0;
 }
 
 /* Strong Text */
 .typography-strong {
-	font-weight: 600;
-	font-size: 1rem;     /* 16px */
-	line-height: 1.5;
+  font-weight: 600;
+  font-size: 1rem; /* 16px */
+  line-height: 1.5;
 }
 
 /* Weak Text (덜 강조된 텍스트) */
 .typography-weak {
-	font-weight: 200;
-	font-size: 1rem;     /* 16px */
-	line-height: 1.5;
+  font-weight: 200;
+  font-size: 1rem; /* 16px */
+  line-height: 1.5;
 }
 
 /* Small Text (캡션, 부가 정보 등) */
 .typography-small {
-	font-weight: 400;
-	font-size: 0.875rem; /* 14px */
-	line-height: 1.4;
+  font-weight: 400;
+  font-size: 0.875rem; /* 14px */
+  line-height: 1.4;
 }
 
 /* Extra Small (각주, 매우 작은 정보) */
 .typography-extra-small {
-	font-weight: 400;
-	font-size: 0.75rem;  /* 12px */
-	line-height: 1.4;
+  font-weight: 400;
+  font-size: 0.75rem; /* 12px */
+  line-height: 1.4;
 }
