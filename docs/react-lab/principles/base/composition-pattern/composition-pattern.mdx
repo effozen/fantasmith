@@ -1,27 +1,35 @@
 ---
-title: '합성 패턴(Composition pattern)으로 살펴보는 리액트 컴포넌트 설계 핵심'
-image: '/media/react-lab/principles/base/composition-pattern/img/component_composition_pattern_img1.webp'
-description: '리액트에서 쓰이는 합성이라는 개념의 핵심이기에 자주 접했고, 함수를 바탕으로 한 리액트를 통해 일상적으로 사용했으면서도 크게 와닿지 않았던 것 같다. 이번에 프로젝트를 진행하면서 몇가지 컴포넌트들을 직접 구현하면서 이 개념의 의미가 받아들여지게 되었다. 지금부터 내가 이해했던 개념을 정리할 겸, 정리한번 해보고자 한다.'
+title: "합성 패턴(Composition pattern)으로 살펴보는 리액트 컴포넌트 설계 핵심"
+image: "/media/react-lab/principles/base/composition-pattern/img/component_composition_pattern_img1.webp"
+description: "리액트에서 쓰이는 합성이라는 개념의 핵심이기에 자주 접했고, 함수를 바탕으로 한 리액트를 통해 일상적으로 사용했으면서도 크게 와닿지 않았던 것 같다. 이번에 프로젝트를 진행하면서 몇가지 컴포넌트들을 직접 구현하면서 이 개념의 의미가 받아들여지게 되었다. 지금부터 내가 이해했던 개념을 정리할 겸, 정리한번 해보고자 한다."
 tags: [designPattern, principles]
-keywords: ['Frontend', 'intro', 'composition pattern', '복합체 패턴', '디자인 패턴', 'design pattern']
+keywords:
+  [
+    "Frontend",
+    "intro",
+    "composition pattern",
+    "복합체 패턴",
+    "디자인 패턴",
+    "design pattern",
+  ]
 sidebar_position: 1
-sidebar_label: '합성 패턴(Composition pattern)으로 살펴보는 리액트 컴포넌트 설계 핵심'
+sidebar_label: "합성 패턴(Composition pattern)으로 살펴보는 리액트 컴포넌트 설계 핵심"
 sidebar_custom_props:
-  img: '/media/react-lab/principles/base/composition-pattern/img/index.webp'
+  img: "/media/react-lab/principles/base/composition-pattern/img/index.webp"
 last_update:
   date: 2024-11-16
   author: zen
 ---
 
-import {Figure} from "@site/src/components/utils/Figure/index";
+import { Figure } from "@site/src/components/utils/Figure/index";
 
-## 🎯 글을 읽고 났을 때의 상태
+## 글을 읽고 났을 때의 상태
 
 - `Composition Pattern`이 뭔지 깨달았다.<br/>
 - `Composition Pattern`이 왜 리액트의 핵심 개발 원리인지 이해했다.<br/>
 - `Composition Pattern`이 어떻게 리액트에서 활용되는지 파악했다.<br/>
 
-## 🚀 들어가며
+## 들어가며
 
 어떤 지식을 공부할 때 처음부터 와닿으면 좋겠지만, 뒤늦게 와닿는 경우가 많은 듯 하다.<br/>
 
@@ -33,7 +41,7 @@ import {Figure} from "@site/src/components/utils/Figure/index";
 
 지금부터 내가 이해했던 개념을 정리할 겸, 정리한번 해보고자 한다. <br/>
 
-## 🤔 Composition pattern이란?
+## Composition pattern이란?
 
 `컴포지션 패턴(Composition Pattern)`은 다른 말로 `합성 패턴`이라고도 부른다.<br/>
 
@@ -41,7 +49,11 @@ import {Figure} from "@site/src/components/utils/Figure/index";
 
 설명보다 예시를 먼저 보는게 이해하기 쉬울 듯 하다.<br/>
 
-<Figure fileName='component_composition_pattern_img1.webp' alt='컴포지션 패턴의 하나의 예 : 파일 시스템 구조' caption='컴포지션 패턴의 하나의 예 : 파일 시스템 구조' />
+<Figure
+  fileName="component_composition_pattern_img1.webp"
+  alt="컴포지션 패턴의 하나의 예 : 파일 시스템 구조"
+  caption="컴포지션 패턴의 하나의 예 : 파일 시스템 구조"
+/>
 
 컴포지션 패턴을 이야기할 때면 보통 파일 시스템 구조를 예로 많이 든다.<br/>
 
@@ -98,15 +110,15 @@ classDiagram
 - **Leaf** : 단일 객체, 파일처럼 단순하게 내용물을 표시하는 역할
   - Component의 인터페이스인 operate는 Leaf에서 실행 시 적절한 값을 반환
 
-<br/>
+<br />
 
 핵심은 `Component` 라는 추상메서드를 정의하고, `Composition`에서 이를 구현하는 구현체들을 배열로 받아서 `재귀(Recursive)`적으로 관리하는 것이다.<br/>
 
 간단하게 정리한 글인데, 이와 관련해서 좀 더 자세하게 설명된 글이 있어서 추가적인 학습이 필요하면 아래의 글을 보면 좋을 것 같다.<br/>
 
-[💠 복합체(Composite) 패턴 - 완벽 마스터하기](https://inpa.tistory.com/entry/GOF-%F0%9F%92%A0-%EB%B3%B5%ED%95%A9%EC%B2%B4Composite-%ED%8C%A8%ED%84%B4-%EC%99%84%EB%B2%BD-%EB%A7%88%EC%8A%A4%ED%84%B0%ED%95%98%EA%B8%B0)<br/>
+[복합체(Composite) 패턴 - 완벽 마스터하기](https://inpa.tistory.com/entry/GOF-%F0%9F%92%A0-%EB%B3%B5%ED%95%A9%EC%B2%B4Composite-%ED%8C%A8%ED%84%B4-%EC%99%84%EB%B2%BD-%EB%A7%88%EC%8A%A4%ED%84%B0%ED%95%98%EA%B8%B0)<br/>
 
-## 🤔 대표적인 합성 컴포넌트의 사용 예시
+## 대표적인 합성 컴포넌트의 사용 예시
 
 앞서, 합성 패턴이란 무엇인지 이해하였다.<br/>
 
@@ -116,7 +128,7 @@ classDiagram
 
 최근의 프론트앤드 트렌드에서 리액트는 정말 뺴놓을 수 없는 존재가 되었으므로... 한번 살펴보자. <br/>
 
-## ⚙️ 리액트와 합성 컴포넌트
+## 리액트와 합성 컴포넌트
 
 리액트는 실제로 컴포넌트의 합성을 통해 복잡한 UI/UX를 구현할 수 있도록 설계하고 구현이 되었다.<br/>
 
@@ -130,7 +142,7 @@ classDiagram
 
 이는 비교적 최신 문서인데, 여기서도 합성 컴포넌트 방식을 바탕으로 튜토리얼을 진행하는 것을 볼 수 있다.<br/>
 
-## ⚙️ 구체적인 사례
+## 구체적인 사례
 
 리액트에서 합성 컴포넌트 패턴이 쓰인다는 것도 알았으니, 이제는 좀 더 구체적인 요소를 살펴보자. <br/>
 
@@ -141,11 +153,11 @@ classDiagram
 3. Higher-Order Components (HOC)
 4. Compound Components
 
-<br/>
+<br />
 
 1번은 `class` 문법과 관련해서 이야기하고자 하고, 2, 3, 4번은 `function` 문법에 기반해서 이야기하고자 한다.<br/>
 
-## 🚀 1. Render Props
+## 1. Render Props
 
 Render Props는 컴포넌트가 함수 형태의 prop을 통해 렌더링 내용을 제어할 수 있게 하는 패턴이다.<br/>
 
@@ -159,8 +171,8 @@ class DataFetcher extends React.Component {
   componentDidMount() {
     // 데이터 fetching 예시
     fetch(this.props.url)
-      .then(response => response.json())
-      .then(data => this.setState({ data }));
+      .then((response) => response.json())
+      .then((data) => this.setState({ data }));
   }
 
   render() {
@@ -172,12 +184,11 @@ class DataFetcher extends React.Component {
 const App = () => (
   <DataFetcher
     url="https://api.example.com/data"
-    render={(data) => (
+    render={(data) =>
       data ? <div>Data: {data.value}</div> : <div>Loading...</div>
-    )}
+    }
   />
 );
-
 ```
 
 Render Props 패턴을 사용하여 DataFetcher 컴포넌트가 데이터를 가져오는 로직을 캡슐화한 모습이다. <br/>
@@ -200,7 +211,7 @@ Render Props 패턴을 사용하여 DataFetcher 컴포넌트가 데이터를 가
 
 이에 관한 이야기는 2번에서 하도록 하겠다.<br/>
 
-## 🚀 2. Children Props
+## 2. Children Props
 
 리액트 컴포넌트는 `children prop`을 통해 다른 컴포넌트를 포함할 수 있다.<br/>
 
@@ -209,11 +220,7 @@ Render Props 패턴을 사용하여 DataFetcher 컴포넌트가 데이터를 가
 ```jsx
 // 부모 컴포넌트
 const Card = ({ children }) => {
-  return (
-    <div className="card">
-      {children}
-    </div>
-  );
+  return <div className="card">{children}</div>;
 };
 
 // 자식 컴포넌트
@@ -227,7 +234,6 @@ const App = () => (
     <CardBody content="This is the card body." />
   </Card>
 );
-
 ```
 
 이 예시에서 `Card` 컴포넌트는 `CardHeader`와 `CardBody` 컴포넌트를 포함하여 하나의 카드 UI를 구성한다.<br/>
@@ -236,7 +242,7 @@ const App = () => (
 
 사실 이것도 따지고 보면 1번과 큰 차이가 없다. 구조분해 할당으로 `{children}`으로 표기해서 그렇지 원래는 `props.children`으로 표현해서 사용가능하기 때문이다.<br/>
 
-## 🚀3. Higher-Order Components (HOC)
+## 3. Higher-Order Components (HOC)
 
 HOC는 컴포넌트를 인자로 받아 새로운 컴포넌트를 반환하는 함수이다.<br/>
 
@@ -260,7 +266,7 @@ const Button = ({ label }) => <button>{label}</button>;
 const ButtonWithLogging = withLogging(Button);
 
 // 렌더링 시 콘솔에 로그가 출력됨
-<ButtonWithLogging label="Click Me" />
+<ButtonWithLogging label="Click Me" />;
 ```
 
 사용 예시는 위와 같다. <br/>
@@ -271,33 +277,34 @@ HOC를 사용하면 Button 컴포넌트의 기능은 유지한 채로, 로깅 �
 
 <details>
 
-  <summary> 🚀 에러 처리 HOC 예시</summary>
+{" "}
 
-  ```jsx
-  // HOC 정의
-  const withErrorBoundary = (WrappedComponent) => {
-    return (props) => {
-      try {
-        return <WrappedComponent {...props} />;
-      } catch (error) {
-        return <div>Error: {error.message}</div>;
-      }
-    };
+<summary> 에러 처리 HOC 예시</summary>
+
+```jsx
+// HOC 정의
+const withErrorBoundary = (WrappedComponent) => {
+  return (props) => {
+    try {
+      return <WrappedComponent {...props} />;
+    } catch (error) {
+      return <div>Error: {error.message}</div>;
+    }
   };
+};
 
-  // 사용 예
-  const ErrorComponent = () => {
-    throw new Error('Error occurred');
-  };
-  const ErrorComponentWithBoundary = withErrorBoundary(ErrorComponent);
-  ```
+// 사용 예
+const ErrorComponent = () => {
+  throw new Error("Error occurred");
+};
+const ErrorComponentWithBoundary = withErrorBoundary(ErrorComponent);
+```
 
-  이 예시에서 ErrorComponent는 에러를 발생시키는 컴포넌트이며, ErrorComponentWithBoundary는 에러 처리 HOC를 적용한 컴포넌트이다.<br/> 에러가 발생하면 HOC에서 에러를 처리하고, 에러 메시지를 출력한다.<br/> 이를 통해 컴포넌트의 에러 처리 로직을 재사용할 수 있다.<br/>
+이 예시에서 ErrorComponent는 에러를 발생시키는 컴포넌트이며, ErrorComponentWithBoundary는 에러 처리 HOC를 적용한 컴포넌트이다.<br/> 에러가 발생하면 HOC에서 에러를 처리하고, 에러 메시지를 출력한다.<br/> 이를 통해 컴포넌트의 에러 처리 로직을 재사용할 수 있다.<br/>
 
 </details>
 
-## 🚀 4. Compound Components
-
+## 4. Compound Components
 
 Compound Components 패턴은 관련된 여러 컴포넌트를 조합하여 하나의 복합 컴포넌트를 구성하는 방법이다.<br/>
 
@@ -318,18 +325,13 @@ const Tabs = ({ children }) => {
           })
         )}
       </div>
-      <div className="tab-content">
-        {children[activeIndex].props.children}
-      </div>
+      <div className="tab-content">{children[activeIndex].props.children}</div>
     </div>
   );
 };
 
 const Tab = ({ isActive, onClick, title }) => (
-  <button
-    className={isActive ? 'active' : ''}
-    onClick={onClick}
-  >
+  <button className={isActive ? "active" : ""} onClick={onClick}>
     {title}
   </button>
 );
@@ -361,8 +363,7 @@ const App = () => (
 - **명확한 API 설계**: 컴포넌트 간의 상호작용이 명확해야 한다. 특히 Compound Components를 사용할 때는 부모와 자식 간의 인터페이스를 명확히 정의해야 한다.
 - **성능 고려**: 합성 패턴을 사용할 때 불필요한 리렌더링이 발생하지 않도록 최적화가 필요할 수 있다. `React.memo`나 `useCallback` 등을 활용하여 성능을 최적화할 수 있다.
 
-
-## 📚 마무리
+## 마무리
 
 지금까지 `Composition Pattern`이 무엇인지 원리를 파악하고, 이게 리액트에서 어떻게 적용되는지를 살펴보았다.<br/>
 

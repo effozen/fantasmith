@@ -1,0 +1,1290 @@
+---
+title: "리액트 훅이란?"
+image: "/media/react-lab/hooks/what_is_hook/img/index.webp"
+description: "리액트 훅이 무엇인지 이해하고, 리액트 훅이 어떤 문제를 해결하고자 하는지 알아봅니다."
+tags: [hooks, react]
+keywords: ["react", "react-lab", "overview", "hooks"]
+sidebar_position: 2
+sidebar_label: "리액트 훅이란?"
+sidebar_custom_props:
+  img: "/media/react-lab/hooks/what_is_hook/img/index.webp"
+last_update:
+  date: 2024-12-30
+  author: zen
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import { VideoPlayer, Figure } from "@site/src/components/utils";
+
+## 글을 통해 전하고 싶은 메세지
+
+- 리액트 훅은 "리액트 기능을 활용할 수 있는 함수"이다.
+- 리액트 훅은 "함수형 컴포넌트에서만 사용할 수 있다."
+- 리액트 훅은 "클래스형 컴포넌트의 단점을 보완하고자 만들어졌다."
+- 리액트 훅은 "make it easier build great UI" 라는 철학을 바탕으로 만들어졌다.
+
+## 동기
+
+리액트를 사용하면서 핵심 기능 중 하나인 `Hooks`에 대해서 제대로 고민을 해본 적이 없었다.
+
+항해플러스를 진행하면서, 리액트 훅의 원리를 깊게 이해하고, 직접 구현해볼 기회가 생겼고, 다음과 같은 영상을 보게 되었다.
+
+<VideoPlayer url="https://youtu.be/dpw9EHDh2bM?feature=shared" />
+
+학습을 시작하면서 위의 영상을 보게 되었고, 이번 기회에 제대로 정리를 해보고자 한다.
+
+## 리액트의 개발 철학
+
+<Figure
+  fileName="react_philosophy.webp"
+  alt="2018 REACT CONF 발표내용"
+  caption="2018 REACT CONF 발표내용"
+/>
+
+리액트는 "make it easier build great UI" 라는 철학을 바탕으로 만들어졌다.
+
+그리고, 이러한 철학을 바탕으로 리액트 팀은 리액트의 기능을 계속해서 발전시켜왔다.
+
+이런 배경을 먼저 언급하는 이후는, 이런 철학에서 개발된 기능이 바로 `Hooks`이기 때문이다.
+
+## 내가 생각하는 훅
+
+나는 훅을 "리액트 기능을 활용할 수 있는 함수"라고 생각한다.
+
+리액트 기능을 사용하기에 몇가지 제약이 있고, Lint 등의 사용 때문에 `use` 접두사를 붙여야하는 컨벤션이 존재하지만, 그럼에도 결국 리액트 차원에서의 함수라고 생각한다.
+
+그렇기에 함수로 코드를 분리했을 때의 장점을 일부 공유한다.
+
+## 훅(Hooks)의 어원
+
+> "함수라고 표현하면 되는거 아닌가요? 훅이라고 표현한 데에는 이유가 있지 않을까요?"
+
+전문가로서 용어를 명확하게 하는 것은 중요하다고 생각한다.
+
+그리고, 리액트 팀은 훅을 "Hooks"라고 표현하고 있다.
+
+그 이유는 무엇일까?
+
+> Hooks are functions that let you “hook into” React state and lifecycle features from function components.
+>
+> [React 공식 문서](https://legacy.reactjs.org/docs/hooks-overview.html)
+
+리액트 공식 문서에서는 위와 같이 이야기하고 있다.
+
+> Hook은 함수 컴포넌트에서 React 상태 및 생명주기 기능을 "연결"할 수 있는 함수입니다.
+
+즉, <strong>갈고리를 걸다.</strong> 라는 의미에서 "Hooks"라는 용어를 사용하고 있는 것이다.
+
+<Figure fileName="hook.webp" alt="갈고리를 걸다" caption="갈고리를 걸다" />
+
+## 훅이 해결하고자 하는 문제
+
+말이 와닿지 않을 수 있는데, 훅이 어떤 문제를 해결하고자 했는지 살펴보면 도움이 될 것이라 생각한다.
+
+리액트 훅은 클래스형에서 함수형으로 리액트 작성의 페러다임이 넘어가는 과도기에 등장했다.
+
+기존의 클래스 문법에서는 리액트 생명주기와 관련된 다음의 기능을 갖고 있었다.
+
+<Figure
+  fileName="react_lifecycle.webp"
+  alt="리액트 생명주기"
+  caption="리액트 생명주기"
+  href="https://projects.wojtekmaj.pl/react-lifecycle-methods-diagram/"
+/>
+
+리액트 컴포넌트와 관련해서 보다 세밀하게 상태에 개입할 수 있다는 장점이 있지만, 이러한 장점은 동시에 단점이 되기도 했다.
+
+- 컴포넌트 사이에서 상태 로직을 재사용하기 어렵다.
+- 복잡한 컴포넌트들은 이해하기 어렵다.
+- 클래스는 사람과 기계를 혼동시킨다.
+
+[출처 : 리액트 공식문서 - Hook의 개요](https://ko.legacy.reactjs.org/docs/hooks-intro.html#ts-hard-to-reuse-stateful-logic-between-components)
+
+이 외에도, 복잡한 상태 주기로 인해 불필요한 코드가 많아진다는 문제도 있었다.
+
+[리액트의 개발 철학](#리액트의-개발-철학)에서 언급했듯이, 리액트 팀은 이러한 문제를 해결하고자 훅을 도입했다.
+
+코드를 통해서 살펴보자
+
+## 코드를 바라본 문제 - 1
+
+[동기](#동기)에서 선보인 Demo 코드를 바탕으로 문제를 살펴보자.
+
+여기서는 클래스형과 함수형으로 사용할 때의 차이점, 그리고 훅이 어떻게 사용되는지를 볼 것이다.
+
+<Tabs>
+
+<TabItem value="Code" name="Code">
+
+```jsx
+import React from "react";
+import Row from "./Row";
+
+export default function Greeting(props) {
+  return (
+    <section>
+      <Row label="Name">{props.name}</Row>
+    </section>
+  );
+}
+```
+
+</TabItem>
+
+<TabItem value="결과" name="결과">
+  <Figure fileName="result1.webp" alt="결과" caption="결과" />
+</TabItem>
+
+</Tabs>
+
+이 코드를 바탕으로 설명할 예정이다.
+
+여기서의 목표는 "Mary"라는 이름을 내가 직접 화면 상의 입력으로 바꿔주는 것이다.
+
+지금과 같이 함수형 컴포넌트가 보편화 되지 않았고, `class`가 대부분이던 시기에는 다음과 같이 코드를 작성했다.
+
+<Tabs>
+
+<TabItem value="Code" name="Code">
+
+```jsx
+import React from "react";
+import Row from "./Row";
+
+export default class Greeting extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: "Mary",
+    };
+    this.handleNameChange = this.handleNameChange.bind(this);
+  }
+
+  handleNameChange = (e) => {
+    this.setState({ name: e.target.value });
+  };
+
+  render() {
+    return (
+      <section>
+        <Row label="Name">
+          <input value={this.state.name} onChange={this.handleNameChange} />
+        </Row>
+      </section>
+    );
+  }
+}
+```
+
+</TabItem>
+
+<TabItem value="결과" name="결과">
+  <Figure fileName="result2.gif" alt="결과" caption="결과" />
+</TabItem>
+
+</Tabs>
+
+만약, 이 상황에서 `class`를 사용하지 않고, `state` 사용을 원한다면 어떻게 할까?
+
+> 우리는 너무나도 당연하게 `useState`를 이야기하겠지만, 잊지말자. 이건 \*\*`useState`가 등장하기 전, 혹은 그 순간의 이야기이다.
+
+<Tabs>
+
+<TabItem value="함수형 Code" name="함수형 Code">
+
+```jsx
+import React, { useState } from "react";
+import Row from "./Row";
+
+export default function Greeting(props) {
+  const [name, setName] = useState("Mary");
+
+  function handleNameChange(e) {
+    setName(e.target.value);
+  }
+
+  return (
+    <section>
+      <Row label="Name">
+        <input value={name} onChange={handleNameChange} />
+      </Row>
+    </section>
+  );
+}
+```
+
+</TabItem>
+
+<TabItem value="클래스형 Code" name="클래스형 Code">
+
+```jsx
+import React from "react";
+import Row from "./Row";
+
+export default class Greeting extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: "Mary",
+    };
+    this.handleNameChange = this.handleNameChange.bind(this);
+  }
+
+  handleNameChange = (e) => {
+    this.setState({ name: e.target.value });
+  };
+
+  render() {
+    return (
+      <section>
+        <Row label="Name">
+          <input value={this.state.name} onChange={this.handleNameChange} />
+        </Row>
+      </section>
+    );
+  }
+}
+```
+
+</TabItem>
+
+<TabItem value="결과" name="결과">
+  <Figure fileName="result2.gif" alt="결과" caption="결과" />
+</TabItem>
+
+</Tabs>
+
+같은 기능을 함수형 코드로 작성을 했다. 이때, `useState`라는 `hook`을 사용했다.
+
+비교를 위해서 Tab에 클래스형 코드도 함께 작성했다. 두 가지 접근을 비교하자.
+
+클래스형 함수의 경우 다음과 같은 특징이 있다.
+
+- `state`가 객체로 선언된다. 그리고 관련 요소들은 객체의 속성으로 존재한다.
+- `eventHandler`의 경우 `state` 접근을 위해 `this`에 바인드가 되어야 한다.
+- 상태의 값에 접근하기 위해서는 `this.state.name`과 같이 사용해야 한다.
+
+반면 `hooks`에 기반한 함수형을 사용할 경우 복잡한 과정이 필요 없다.
+
+`useState`를 통해 `state`를 선언하고, `setState`를 통해 상태를 변경할 수 있다.
+
+> A Hook is a function provided by react that lets you hook into react features from your function component.
+
+초반에 [훅(Hooks)의 어원](#훅hooks의-어원)에서 언급했듯이, 훅은 리액트의 기능을 함수형 컴포넌트에서 사용할 수 있게 해주는 함수이다.
+
+`useState` 역시 리액트가 제공하는 함수라고 보면 된다.
+
+이제, `surname`이라는 항목이 추가되었다고 생각해보자.
+
+<Tabs>
+
+<TabItem value="클래스형 Code" name="클래스형 Code">
+
+```jsx
+import React from "react";
+import Row from "./Row";
+
+export default class Greeting extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: "Mary",
+      // highlight-next-line
+      surname: "Poppins",
+    };
+    this.handleNameChange = this.handleNameChange.bind(this);
+    this.handleSurnameChange = this.handleSurnameChange.bind(this);
+  }
+
+  handleNameChange = (e) => {
+    this.setState({ name: e.target.value });
+  };
+
+  // highlight-start
+  handleSurnameChange = (e) => {
+    this.setState({ name: e.target.value });
+  };
+  // highlight-end
+
+  render() {
+    return (
+      <section>
+        <Row label="Name">
+          <input value={this.state.name} onChange={this.handleNameChange} />
+        </Row>
+        // highlight-start
+        <Row label="Surname">
+          <input
+            value={this.state.surname}
+            onChange={this.handleSurnameChange}
+          />
+        </Row>
+        // highlight-end
+      </section>
+    );
+  }
+}
+```
+
+</TabItem>
+
+<TabItem value="함수형 Code" name="함수형 Code">
+
+```jsx
+import React, { useState } from "react";
+import Row from "./Row";
+
+export default function Greeting(props) {
+  const [name, setName] = useState("Mary");
+  // highlight-next-line
+  const [surname, setSurname] = useState("Poppins");
+
+  function handleNameChange(e) {
+    setName(e.target.value);
+  }
+
+  // highlight-start
+  function handleSurnameChange(e) {
+    setSurname(e.target.value);
+  }
+  // highlight-end
+
+  return (
+    <section>
+      <Row label="Name">
+        <input value={name} onChange={handleNameChange} />
+      </Row>
+      // highlight-start
+      <Row label="Surname">
+        <input value={name} onChange={handleSurnameChange} />
+      </Row>
+      // highlight-end
+    </section>
+  );
+}
+```
+
+</TabItem>
+
+<TabItem value="결과" name="결과">
+  <Figure fileName="result3.gif" alt="결과" caption="결과" />
+</TabItem>
+
+</Tabs>
+
+DX적으로 함수형이 좀 더 간편하게 수정이 되는 것이 느껴지는가?
+
+여기서, 클래스형의 가장 큰 문제는 관심사가 완전히 분리되지 않는다는 것이다.
+
+`state` 객체 안에 `name`과 `surname`이라는 두 가지 상태가 섞여있는 것이다.
+
+## 코드로 바라본 문제 - 2
+
+이번엔 `context`로 살펴볼 것이다.
+
+> context, it's like kind of like global variables for a subtree so it's useful for things like read the current theme like visual theme or current language that the user is using and it's useful to avoid passing everything through props if you need all components to be able to read some value.
+
+영상에 나온 내용으로, `subtree`에 대한 전역 변수로 쉽게 표현이 가능하다.
+
+다른말로 <strong>전역상태</strong>로도 표현할 수 있다.
+
+<Tabs>
+
+<TabItem value="클래스형 Code" name="클래스형 Code">
+
+```jsx
+import React from "react";
+import Row from "./Row";
+// highlight-next-line
+import { ThemeContext, LocaleContext } from "./context";
+
+export default class Greeting extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: "Mary",
+      surname: "Poppins",
+    };
+    this.handleNameChange = this.handleNameChange.bind(this);
+    this.handleSurnameChange = this.handleSurnameChange.bind(this);
+  }
+
+  handleNameChange = (e) => {
+    this.setState({ name: e.target.value });
+  };
+
+  handleSurnameChange = (e) => {
+    this.setState({ name: e.target.value });
+  };
+
+  render() {
+    return (
+      // highlight-next-line
+      <ThemeContext.Consumer>
+        // highlight-next-line
+        {(theme) => (
+          <section className={theme}>
+            <Row label="Name">
+              <input value={this.state.name} onChange={this.handleNameChange} />
+            </Row>
+            <Row label="Surname">
+              <input
+                value={this.state.surname}
+                onChange={this.handleSurnameChange}
+              />
+            </Row>
+          </section>
+        )}
+        // highlight-start
+        <LocaleContext.Consumer>
+          {(locale) => <Row label="Language">{locale}</Row>}
+        </LocaleContext.Consumer>
+      </ThemeContext.Consumer>
+      // highlight-end
+    );
+  }
+}
+```
+
+</TabItem>
+
+<TabItem value="함수형 Code" name="함수형 Code">
+
+```jsx
+// highlight-next-line
+import React, { useState, useContext } from "react";
+import Row from "./Row";
+// highlight-next-line
+import { ThemeContext, LocaleContext } from "./context";
+
+export default function Greeting(props) {
+  const [name, setName] = useState("Mary");
+  const [surname, setSurname] = useState("Poppins");
+  // highlight-start
+  const theme = useContext(ThemeContext);
+  const locale = useContext(LocaleContext);
+  // highlight-end
+
+  function handleNameChange(e) {
+    setName(e.target.value);
+  }
+
+  function handleSurnameChange(e) {
+    setSurname(e.target.value);
+  }
+
+  return (
+    // highlight-next-line
+    <section className={theme}>
+      <Row label="Name">
+        <input value={name} onChange={handleNameChange} />
+      </Row>
+      <Row label="Surname">
+        <input value={name} onChange={handleSurnameChange} />
+      </Row>
+      // highlight-next-line
+      <Row label="Language">{locale}</Row>
+    </section>
+  );
+}
+```
+
+</TabItem>
+
+<TabItem value="클래스형 결과" name="클래스형 결과">
+  <Figure fileName="result4.webp" alt="결과" caption="결과" />
+</TabItem>
+
+<TabItem value="함수형 결과" name="함수형 결과">
+  <Figure fileName="result5.webp" alt="결과" caption="결과" />
+</TabItem>
+
+</Tabs>
+
+작성된 코드는 위와 같으며, 클래스형과 함수형을 비교해보자.
+
+| 클래스형                                                 | 함수형                                                 |
+| -------------------------------------------------------- | ------------------------------------------------------ |
+| 어떤 과정을 수행해야 하는 지 명확하게 작성된다. (명령형) | 무엇을 하는 지 명확하게 작성된다. (선언형)             |
+| 다소 복잡하게 로직이 얽혀있다. (nested)                  | 보다 간단하게 서술되어 있다. (flat)                    |
+| 출력부에 상태 처리 로직이 같이 포함되어 있다.            | 출력부와 상태 처리 로직이 보다 명확하게 분리되어 있다. |
+
+## 훅(hooks)의 규칙
+
+클래스형과 다르게 함수형에서는 `state`가 분리되어 있는데, 이게 어떻게 가능한 것인지 의문을 던질 수 있다.
+
+함수형에서는 선언형으로 어떤 결과가 될거야! 라고 말을 해주고, 과정을 명확히 지정을 해주지 않는데 어떻게 매끄럽게 동작하는 지에 대한 의문이다.
+
+리액트는 함수 호출 순서에 의존한다.
+
+조금 생소한 말일 수 있는데, 쉽게 생각하면, `훅(hoos)`을 사용하기 위해서는 지켜야하는 규칙이 있다고 볼 수 있다.
+
+1. 훅은 컴포넌트의 최상위에서만 호출되어야 한다.
+2. 훅은 함수형 컴포넌트 내에서만 호출되어야 한다.
+
+이 규칙을 지키지 않으면, 리액트가 예상치 못한 동작을 할 수 있다.
+
+```jsx title="에러 상황 예시"
+import React, { useState, useContext } from "react";
+import Row from "./Row";
+import { ThemeContext, LocaleContext } from "./context";
+
+export default function Greeting(props) {
+  // highlight-start
+  if (props.condition) {
+    const [name, setName] = useState("Mary");
+    const [surname, setSurname] = useState("Poppins");
+  }
+  // highlight-end
+
+  ...
+
+  return (
+    <section className={theme}>
+      <Row label="Name">
+        <input value={name} onChange={handleNameChange} />
+      </Row>
+      <Row label="Surname">
+        <input value={name} onChange={handleSurnameChange} />
+      </Row>
+      <Row label="Language">{locale}</Row>
+    </section>
+  );
+}
+```
+
+위와 같이 `if`문 안에서 `useState`와 같은 훅의 호출을 허용하지 않는다.
+
+이를 예방하기 위해 리액트팀은 `Lint Plugin`을 제공하고 있다.
+
+## 코드로 살펴보는 생명 주기 관리
+
+[훅이 해결하고자 하는 문제](#훅이-해결하고자-하는-문제)에서 다룬 생명주기와 관련된 문제를 코드를 바탕으로 살펴보자.
+
+<Tabs>
+
+<TabItem value="클래스형 Code" name="클래스형 Code">
+
+```jsx
+import React from "react";
+import Row from "./Row";
+import { ThemeContext, LocaleContext } from "./context";
+
+export default class Greeting extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: "Mary",
+      surname: "Poppins",
+    };
+    this.handleNameChange = this.handleNameChange.bind(this);
+    this.handleSurnameChange = this.handleSurnameChange.bind(this);
+  }
+
+  // highlight-start
+  componentDidMount() {
+    document.title = this.state.name + " " + this.state.surname;
+  }
+
+  componentDidUpdate() {
+    document.title = this.state.name + " " + this.state.surname;
+  }
+  // highlight-end
+
+  handleNameChange = (e) => {
+    this.setState({ name: e.target.value });
+  };
+
+  handleSurnameChange = (e) => {
+    this.setState({ name: e.target.value });
+  };
+
+  render() {
+    return (
+      <ThemeContext.Consumer>
+        {(theme) => (
+          <section className={theme}>
+            <Row label="Name">
+              <input value={this.state.name} onChange={this.handleNameChange} />
+            </Row>
+            <Row label="Surname">
+              <input
+                value={this.state.surname}
+                onChange={this.handleSurnameChange}
+              />
+            </Row>
+          </section>
+        )}
+        <LocaleContext.Consumer>
+          {(locale) => <Row label="Language">{locale}</Row>}
+        </LocaleContext.Consumer>
+      </ThemeContext.Consumer>
+    );
+  }
+}
+```
+
+</TabItem>
+
+<TabItem value="함수형 Code" name="함수형 Code">
+
+```jsx
+// highlight-next-line
+import React, { useState, useContext, useEffect } from "react";
+import Row from "./Row";
+import { ThemeContext, LocaleContext } from "./context";
+
+export default function Greeting(props) {
+  const [name, setName] = useState("Mary");
+  const [surname, setSurname] = useState("Poppins");
+  const theme = useContext(ThemeContext);
+  const locale = useContext(LocaleContext);
+
+  // highlight-start
+  useEffect(() => {
+    document.title = name + " " + surname;
+  });
+  // highlight-end
+
+  function handleNameChange(e) {
+    setName(e.target.value);
+  }
+
+  function handleSurnameChange(e) {
+    setSurname(e.target.value);
+  }
+
+  return (
+    <section className={theme}>
+      <Row label="Name">
+        <input value={name} onChange={handleNameChange} />
+      </Row>
+      <Row label="Surname">
+        <input value={name} onChange={handleSurnameChange} />
+      </Row>
+      <Row label="Language">{locale}</Row>
+    </section>
+  );
+}
+```
+
+</TabItem>
+
+<TabItem value="코드 수정 전 모습" name="코드 수정 전 모습">
+  <Figure fileName="before6.webp" alt="결과" caption="결과" />
+</TabItem>
+
+<TabItem value="코드 수정 후 모습" name="코드 수정 후 모습">
+  <Figure fileName="result6.webp" alt="결과" caption="결과" />
+</TabItem>
+
+</Tabs>
+
+컴포넌트가 렌더링 될 때 `document.title`을 변경하도록 코드를 수정했다. (탭의 제목 수정)
+
+클래스형에서는 `componentDidMount`와 `componentDidUpdate`를 사용했지만, 함수형에서는 `useEffect`를 사용했다.
+
+`useEffect`는 함수형 컴포넌트에서 `side effect`를 수행할 수 있게 해준다.
+
+여기서 핵심적으로 봐야할 게 클래스형에서는 생명주기에 따른 메서드명을 모두 고려해줘야했지만, 함수형에서는 `useEffect` 하나로 모든 것을 해결할 수 있는 점이다.
+
+즉, 훅을 사용함으로써 과정이 굉장히 간단해졌다.
+
+반응형 웹처럼 컴포넌트의 상태가 변할 때마다 `document.title`을 변경해야하는 경우도 살펴보자.
+
+<Tabs>
+
+<TabItem value="클래스형 Code" name="클래스형 Code">
+
+```jsx
+import React from "react";
+import Row from "./Row";
+import { ThemeContext, LocaleContext } from "./context";
+
+export default class Greeting extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: "Mary",
+      surname: "Poppins",
+      // highlight-next-line
+      width: window.innerWidth,
+    };
+    this.handleNameChange = this.handleNameChange.bind(this);
+    this.handleSurnameChange = this.handleSurnameChange.bind(this);
+    // highlight-next-line
+    this.handleResize = this.handleResize.bind(this);
+  }
+
+  componentDidMount() {
+    document.title = this.state.name + " " + this.state.surname;
+    // highlight-next-line
+    window.addEventListener("resize", this.handleResize);
+  }
+
+  componentDidUpdate() {
+    document.title = this.state.name + " " + this.state.surname;
+  }
+
+  // highlight-start
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.handleResize);
+  }
+
+  handleResize = () => {
+    this.setState({ width: window.innerWidth });
+  };
+  // highlight-end
+
+  handleNameChange = (e) => {
+    this.setState({ name: e.target.value });
+  };
+
+  handleSurnameChange = (e) => {
+    this.setState({ name: e.target.value });
+  };
+
+  render() {
+    return (
+      <ThemeContext.Consumer>
+        {(theme) => (
+          <section className={theme}>
+            <Row label="Name">
+              <input value={this.state.name} onChange={this.handleNameChange} />
+            </Row>
+            <Row label="Surname">
+              <input
+                value={this.state.surname}
+                onChange={this.handleSurnameChange}
+              />
+            </Row>
+          </section>
+        )}
+        <LocaleContext.Consumer>
+          {(locale) => <Row label="Language">{locale}</Row>}
+        </LocaleContext.Consumer>
+        // highlight-next-line
+        <Row label="Width">{this.state.width}</Row>
+      </ThemeContext.Consumer>
+    );
+  }
+}
+```
+
+</TabItem>
+
+<TabItem value="함수형 Code" name="함수형 Code">
+
+```jsx
+import React, { useState, useContext, useEffect } from "react";
+import Row from "./Row";
+import { ThemeContext, LocaleContext } from "./context";
+
+export default function Greeting(props) {
+  const [name, setName] = useState("Mary");
+  const [surname, setSurname] = useState("Poppins");
+  const theme = useContext(ThemeContext);
+  const locale = useContext(LocaleContext);
+
+  useEffect(() => {
+    document.title = name + " " + surname;
+  });
+
+  // highlight-start
+  const [width, setWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    /* cleanup 로직 */
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  });
+  // highlight-end
+
+  function handleNameChange(e) {
+    setName(e.target.value);
+  }
+
+  function handleSurnameChange(e) {
+    setSurname(e.target.value);
+  }
+
+  return (
+    <section className={theme}>
+      <Row label="Name">
+        <input value={name} onChange={handleNameChange} />
+      </Row>
+      <Row label="Surname">
+        <input value={name} onChange={handleSurnameChange} />
+      </Row>
+      <Row label="Language">{locale}</Row>
+      // highlight-next-line
+      <Row label="Width">{width}</Row>
+    </section>
+  );
+}
+```
+
+</TabItem>
+
+<TabItem value="클래스형 결과" name="클래스형 결과">
+  <Figure fileName="result7.gif" alt="결과" caption="결과" />
+</TabItem>
+
+<TabItem value="함수형 결과" name="함수형 결과">
+  <Figure fileName="result8.gif" alt="결과" caption="결과" />
+</TabItem>
+
+</Tabs>
+
+여기서 핵심적으로 봐야하는 점은 클래스형에서는 로직 추가를 위해서 코드의 여러군데를 수정해야 했다는 점이다.
+
+반면, 함수형인 경우에는 한 곳에 모아서 관리할 수 있을 뿐 아니라, 생명주기에 따른 메서드를 다 외울 필요 없이 `useEffect` 하나로 해결할 수 있다는 점이다.
+
+동시에, 관심을 가진 요소별로 `useEffect`를 생성해줌으로써, 관심사의 분리(separation of concerns)를 할 수 있다.
+
+## 커스텀 훅(Custom Hooks)
+
+> 리액트의 기능을 활용하는 함수를 훅이라고 간주할 수 있다.
+
+앞에서 비슷하게 했던 말이다.
+
+훅이 함수와 유사하다면, 리액트에서 제공되는 기본 기능 외에도 우리가 직접 구현해볼 수 있는 게 아닌가?
+
+> Hook calls, they are just function calls. <br/> > [REACT CONF 2018](https://youtu.be/dpw9EHDh2bM?feature=shared&t=2756)
+
+실제로, REACT CONF 2018에서 연사자가 훅을 공개하면서 했던 말이다.
+
+<Tabs>
+
+<TabItem value="함수형 Code 수정 후" name="함수형 Code 수정 후">
+
+```jsx
+import React, { useState, useContext, useEffect } from "react";
+import Row from "./Row";
+import { ThemeContext, LocaleContext } from "./context";
+
+export default function Greeting(props) {
+  const theme = useContext(ThemeContext);
+  const locale = useContext(LocaleContext);
+  // highlight-start
+  const name = useFormInput("Mary");
+  const surname = useFormInput("Poppins");
+  const width = useWindowWidth();
+  useDocumentTitle(name.value + " " + surname.value);
+  // highlight-end
+
+  useEffect(() => {
+    document.title = name + " " + surname;
+  });
+
+  // highlight-start
+  /* 여기에 있던 항목들을 분리 */
+  // highlight-end
+
+  return (
+    <section className={theme}>
+      // highlight-start
+      <Row label="Name">
+        <input {...name} />
+      </Row>
+      <Row label="Surname">
+        <input {...surname} />
+      </Row>
+      // highlight-end
+      <Row label="Language">{locale}</Row>
+      <Row label="Width">{width}</Row>
+    </section>
+  );
+}
+
+// highlight-start
+/* 커스텀 훅 - 함수로 분리하듯 똑같이 내부 로직 분리 */
+function useFormInput(initialValue) {
+  const [value, setValue] = useState(initialValue);
+
+  function handleChange(e) {
+    setValue(e.target.value);
+  }
+
+  return {
+    value,
+    onChange: handleChange,
+  };
+}
+
+function useDocumentTitle(title) {
+  useEffect(() => {
+    document.title = title;
+  });
+}
+
+function useWindowWidth() {
+  const [width, setWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  });
+
+  return width;
+}
+// highlight-end
+```
+
+</TabItem>
+
+<TabItem value="함수형 Code 수정 전" name="함수형 Code 수정 전">
+
+```jsx
+import React, { useState, useContext, useEffect } from "react";
+import Row from "./Row";
+import { ThemeContext, LocaleContext } from "./context";
+
+export default function Greeting(props) {
+  // highlight-start
+  const [name, setName] = useState("Mary");
+  const [surname, setSurname] = useState("Poppins");
+  // highlight-end
+  const theme = useContext(ThemeContext);
+  const locale = useContext(LocaleContext);
+
+  // highlight-start
+  useEffect(() => {
+    document.title = name + " " + surname;
+  });
+
+  const [width, setWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  });
+
+  function handleNameChange(e) {
+    setName(e.target.value);
+  }
+
+  function handleSurnameChange(e) {
+    setSurname(e.target.value);
+  }
+  // highlight-end
+
+  return (
+    <section className={theme}>
+      <Row label="Name">
+        <input value={name} onChange={handleNameChange} />
+      </Row>
+      <Row label="Surname">
+        <input value={name} onChange={handleSurnameChange} />
+      </Row>
+      <Row label="Language">{locale}</Row>
+      <Row label="Width">{width}</Row>
+    </section>
+  );
+}
+```
+
+</TabItem>
+
+<TabItem value="클래스형 Code" name="클래스형 Code">
+
+```jsx
+import React from "react";
+import Row from "./Row";
+import { ThemeContext, LocaleContext } from "./context";
+
+export default class Greeting extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: "Mary",
+      surname: "Poppins",
+      width: window.innerWidth,
+    };
+    this.handleNameChange = this.handleNameChange.bind(this);
+    this.handleSurnameChange = this.handleSurnameChange.bind(this);
+    this.handleResize = this.handleResize.bind(this);
+  }
+
+  componentDidMount() {
+    document.title = this.state.name + " " + this.state.surname;
+    window.addEventListener("resize", this.handleResize);
+  }
+
+  componentDidUpdate() {
+    document.title = this.state.name + " " + this.state.surname;
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.handleResize);
+  }
+
+  handleResize = () => {
+    this.setState({ width: window.innerWidth });
+  };
+
+  handleNameChange = (e) => {
+    this.setState({ name: e.target.value });
+  };
+
+  handleSurnameChange = (e) => {
+    this.setState({ name: e.target.value });
+  };
+
+  render() {
+    return (
+      <ThemeContext.Consumer>
+        {(theme) => (
+          <section className={theme}>
+            <Row label="Name">
+              <input value={this.state.name} onChange={this.handleNameChange} />
+            </Row>
+            <Row label="Surname">
+              <input
+                value={this.state.surname}
+                onChange={this.handleSurnameChange}
+              />
+            </Row>
+          </section>
+        )}
+        <LocaleContext.Consumer>
+          {(locale) => <Row label="Language">{locale}</Row>}
+        </LocaleContext.Consumer>
+        <Row label="Width">{this.state.width}</Row>
+      </ThemeContext.Consumer>
+    );
+  }
+}
+```
+
+</TabItem>
+
+</Tabs>
+
+위와 같이 리액트 컴포넌트의 내부 로직을 분리하는 것, 특히 훅을 분리하는 것을 커스텀 훅이라고 한다.
+
+이렇게 분리함으로써, 코드를 함수로 분리하는 것과 같이 컴포넌트의 가독성을 높일 수 있을 뿐 아니라, 재사용성을 높일 수 있다.
+
+특히, 관심사의 분리(separation of concerns)가 보다 명확하게 이루어지는 게 장점이다.
+
+커스텀 훅은 반드시 `use`로 시작해야한다.
+
+여기에는 2가지 이유가 있다.
+
+1. 자동으로 훅이 잘못 사용되는 경우를 검사하기 위한 Lint 활용 때문이다.
+2. 컴포넌트 내의 코드에서 함수와의 혼동을 피하고, 이게 훅임을 명확히 알려주기 위함이다.
+
+커스텀 훅은 리액트의 때에 따라서 기본 훅을 활용하는 함수이다.
+
+이에, 다른 개발자에게 여기에 `useState`나 `useEffect` 같이 리액트의 훅을 사용하고 있다는 것을 명확히 알려주기 위함이다.
+
+[훅(hooks)의 규칙](#훅hooks의-규칙)에서 언급했던 규칙을 지키는데 혼란 유발을 막기 위함이다.
+
+## 최종 비교 코드
+
+<Tabs>
+
+<TabItem value="함수형 Code" name="함수형 Code">
+
+```jsx
+import React, { useState, useContext, useEffect } from "react";
+import Row from "./Row";
+import { ThemeContext, LocaleContext } from "./context";
+
+export default function Greeting(props) {
+  const theme = useContext(ThemeContext);
+  const locale = useContext(LocaleContext);
+  const name = useFormInput("Mary");
+  const surname = useFormInput("Poppins");
+  const width = useWindowWidth();
+  useDocumentTitle(name.value + " " + surname.value);
+
+  useEffect(() => {
+    document.title = name + " " + surname;
+  });
+
+  return (
+    <section className={theme}>
+      <Row label="Name">
+        <input {...name} />
+      </Row>
+      <Row label="Surname">
+        <input {...surname} />
+      </Row>
+      <Row label="Language">{locale}</Row>
+      <Row label="Width">{width}</Row>
+    </section>
+  );
+}
+
+function useFormInput(initialValue) {
+  const [value, setValue] = useState(initialValue);
+
+  function handleChange(e) {
+    setValue(e.target.value);
+  }
+
+  return {
+    value,
+    onChange: handleChange,
+  };
+}
+
+function useDocumentTitle(title) {
+  useEffect(() => {
+    document.title = title;
+  });
+}
+
+function useWindowWidth() {
+  const [width, setWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  });
+
+  return width;
+}
+```
+
+</TabItem>
+
+<TabItem value="클래스형 Code" name="클래스형 Code">
+
+```jsx
+import React from "react";
+import Row from "./Row";
+import { ThemeContext, LocaleContext } from "./context";
+
+export default class Greeting extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: "Mary",
+      surname: "Poppins",
+      width: window.innerWidth,
+    };
+    this.handleNameChange = this.handleNameChange.bind(this);
+    this.handleSurnameChange = this.handleSurnameChange.bind(this);
+    this.handleResize = this.handleResize.bind(this);
+  }
+
+  componentDidMount() {
+    document.title = this.state.name + " " + this.state.surname;
+    window.addEventListener("resize", this.handleResize);
+  }
+
+  componentDidUpdate() {
+    document.title = this.state.name + " " + this.state.surname;
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.handleResize);
+  }
+
+  handleResize = () => {
+    this.setState({ width: window.innerWidth });
+  };
+
+  handleNameChange = (e) => {
+    this.setState({ name: e.target.value });
+  };
+
+  handleSurnameChange = (e) => {
+    this.setState({ name: e.target.value });
+  };
+
+  render() {
+    return (
+      <ThemeContext.Consumer>
+        {(theme) => (
+          <section className={theme}>
+            <Row label="Name">
+              <input value={this.state.name} onChange={this.handleNameChange} />
+            </Row>
+            <Row label="Surname">
+              <input
+                value={this.state.surname}
+                onChange={this.handleSurnameChange}
+              />
+            </Row>
+          </section>
+        )}
+        <LocaleContext.Consumer>
+          {(locale) => <Row label="Language">{locale}</Row>}
+        </LocaleContext.Consumer>
+        <Row label="Width">{this.state.width}</Row>
+      </ThemeContext.Consumer>
+    );
+  }
+}
+```
+
+</TabItem>
+
+</Tabs>
+
+코드 줄은 비슷하나, 관심사가 확연하게 구분되는게 느껴지는가?
+
+훅을 다른 곳에서도 쓸 수 있는 재사용성도 갖췄고 말이다.
+
+## 정리
+
+지금까지 리액트의 훅에 대해서 알아보았다.
+
+리액트 공식문서에서도 함수형 컴포넌트와 훅을 사용하는 것이 더 권장되고 있다.
+
+그럼에도 `Legacy`를 보장하기 위해서 클래스형 컴포넌트는 계속 지원이 되고 있으니 참고하면 좋을 것 같다.
+
+<Figure
+  fileName="keep_class.webp"
+  alt="리액트 공식 문서"
+  caption="리액트 공식 문서 - 클래스를 버리지 않는다는 내용"
+  href="https://ko.legacy.reactjs.org/docs/hooks-intro.html#no-breaking-changes"
+/>
+
+마지막으로 지금까지 한 내용을 요약하면 다음과 같다.
+
+| **특징**               | **클래스형 컴포넌트**                                                                            | **함수형 컴포넌트 (Hooks 사용)**                                      |
+| ---------------------- | ------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------- |
+| **상태 관리**          | `this.state`와 `this.setState`를 사용하여 상태 관리                                              | `useState` 훅을 사용하여 상태 관리                                    |
+| **생명주기 메서드**    | `componentDidMount`, `componentDidUpdate`, `componentWillUnmount` 등 다양한 생명주기 메서드 사용 | `useEffect` 훅 하나로 모든 생명주기 관리                              |
+| **코드 간결성**        | 클래스 선언, 생성자, 바인딩 등으로 인해 코드가 다소 복잡함                                       | 간결한 함수 선언으로 코드가 더 깔끔하고 이해하기 쉬움                 |
+| **재사용성**           | 상태와 로직을 재사용하기 어렵고, 고차 컴포넌트(HOC)나 렌더 프로퍼티를 사용해야 함                | 커스텀 훅을 통해 로직과 상태를 쉽게 재사용 가능                       |
+| **가독성**             | `this` 키워드 사용과 복잡한 구조로 인해 가독성이 떨어질 수 있음                                  | 명확하고 직관적인 구조로 가독성이 향상됨                              |
+| **복잡도**             | 클래스 내부의 여러 메서드와 상태 관리로 인해 컴포넌트가 복잡해질 수 있음                         | 상태와 효과를 별도의 훅으로 분리하여 컴포넌트가 단순해짐              |
+| **관심사의 분리**      | 상태 관리와 UI 로직이 동일한 클래스 내에 혼재되어 있음                                           | 훅을 사용하여 상태 관리, 사이드 이펙트, 컨텍스트 등을 명확히 분리     |
+| **`this` 바인딩 문제** | 이벤트 핸들러에서 `this` 바인딩 필요                                                             | `this` 사용이 없기 때문에 바인딩 문제 없음                            |
+| **성능 최적화**        | `shouldComponentUpdate` 등 별도의 메서드를 통해 최적화 필요                                      | `React.memo`, `useMemo`, `useCallback` 등을 통해 간편하게 최적화 가능 |
+| **테스트 용이성**      | 클래스 메서드의 복잡성으로 인해 테스트가 다소 어려울 수 있음                                     | 순수 함수 형태로 작성되어 테스트가 용이함                             |
+| **미래지향성**         | 현재는 함수형 컴포넌트와 훅이 주류이므로 클래스형은 점차 사용이 줄어듦                           | 최신 리액트 개발 패턴에 부합하며, 지속적인 업데이트와 지원을 받음     |
