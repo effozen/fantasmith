@@ -1,1 +1,2 @@
-export * from './Figure';
+export * from "./Figure";
+export * from "./VideoPlayer";
