@@ -324,6 +324,7 @@ const config: Config = {
       // 전역 타이틀 및 설명을 설정하되, 개별 페이지에서 덮어쓸 수 있도록 합니다.
       { name: "twitter:url", content: "https://fantasmith.com" },
       { property: "og:type", content: "website" },
+      { name: "og:card", content: "summary_large_image" },
       { property: "og:url", content: "https://fantasmith.com" },
     ],
   } satisfies Preset.ThemeConfig,
