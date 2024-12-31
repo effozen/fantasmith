@@ -101,7 +101,7 @@ import { VideoPlayer, Figure } from "@site/src/components/utils";
 
 [출처 : 리액트 공식문서 - Hook의 개요](https://ko.legacy.reactjs.org/docs/hooks-intro.html#ts-hard-to-reuse-stateful-logic-between-components)
 
-이 외에도, 복잡한 상태 주기로 인해 불필요한 코드가 많아진다는 문제도 있었다.
+이 외에도, 복잡한 생명 주기로 인해 불필요한 코드가 많아진다는 문제도 있었다.
 
 [리액트의 개발 철학](#리액트의-개발-철학)에서 언급했듯이, 리액트 팀은 이러한 문제를 해결하고자 훅을 도입했다.
 
@@ -187,7 +187,7 @@ export default class Greeting extends React.Component {
 
 만약, 이 상황에서 `class`를 사용하지 않고, `state` 사용을 원한다면 어떻게 할까?
 
-> 우리는 너무나도 당연하게 `useState`를 이야기하겠지만, 잊지말자. 이건 \*\*`useState`가 등장하기 전, 혹은 그 순간의 이야기이다.
+> 우리는 너무나도 당연하게 `useState`를 이야기하겠지만, 잊지말자. 이건 `useState`가 등장하기 전, 혹은 그 순간의 이야기이다.
 
 <Tabs>
 

@@ -1,0 +1,44 @@
+---
+title: 'Virtual DOM 살펴보기'
+image: '/img/zen-social-card.webp'
+description: '리액트의 핵심 기능인 Virtual DOM이 어떤 문제를 해결하기 위해서 등장하였는지, 그리고 어떻게 동작하는지 살펴보고자 합니다.'
+tags: [react, principle]
+keywords: ['react', 'virtual-dom']
+sidebar_position: 2
+sidebar_label: "Virtual DOM 살펴보기"
+sidebar_custom_props:
+  img: '/img/index.webp'
+last_update:
+  date: 2024-12-26
+  author: zen
+---
+
+## 글을 통해 전하고 싶은 메세지
+
+- 리액트의 Virtual DOM은 양방향 데이터 바인딩의 문제를 해결하기 위해 등장했다.
+- Virtual DOM은 DOM의 복사본이며, 작은 규모의 프로젝트에서는 성능상 이점이 없을 수 있다.
+- Virtual DOM의 가치는 렌더링 최적화도 있지만, DX 개선 관점에서도 의의가 있다.
+
+## 들어가기에 앞서서
+
+<p align="center">
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/8pDqJVdNa44?si=ZuLzFS817OSylaZm" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+</p>
+
+리액트 개발 팀에 대한 인터뷰가 담긴 다큐멘터리이다. 내가 작성한 글 보다도, 훨씬 좋은 참고 자료이기에 추천한다.
+
+## 초기에 Meta가 가진 문제
+
+Virtual DOM(가상 DOM)은 주로 "대규모" 웹 애플리케이션에서 발생하는 성능 문제와 복잡한 UI 상태 관리를 효율적으로 해결하기 위해 도입되었다.
+
+핵심 키워드는 "대규모"로, 당시 메타의 상황을 살펴볼 필요가 있다.
+
+### 거대해진 Facebook
+
+초기 Facebook은 복잡한 상황을 고려하지 않고 개발이 진행되었다. 그 과정에서 여러번의 코드 수정이 있었어도, 레거시로 인한 문제는 필연적으로 안고 갈 수 밖에 없었다.
+
+처음에는 큰 문제가 없었지만, 사용자가
+
+Facebook은 2012년에 10억 명 이상의 사용자를 보유하고 있었다. 이는 2008년에 1억 명이었던 사용자 수와 비교하면 엄청난 성장률이다.
