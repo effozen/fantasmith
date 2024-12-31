@@ -2,6 +2,10 @@ import { themes as prismThemes } from "prism-react-renderer";
 import type { Config } from "@docusaurus/types";
 import type * as Preset from "@docusaurus/preset-classic";
 
+// 수학식 표기
+import remarkMath from "remark-math";
+import rehypeKatex from "rehype-katex";
+
 import PrismLight from "./src/utils/prismLight";
 import PrismDark from "./src/utils/prismDark";
 
@@ -81,6 +85,8 @@ const config: Config = {
         editUrl: "https://github.com/effozen/fantasmith/tree/main/", // 문서 편집 링크
         showLastUpdateTime: true, // 마지막 업데이트 시간 표시
         sidebarCollapsible: false, // 사이드바 접기/펼치기
+        remarkPlugins: [remarkMath],
+        rehypePlugins: [rehypeKatex],
       },
     ],
     [
@@ -93,6 +99,8 @@ const config: Config = {
         editUrl: "https://github.com/effozen/fantasmith/tree/main/", // 문서 편집 링크
         showLastUpdateTime: true, // 마지막 업데이트 시간 표시
         sidebarCollapsible: false, // 사이드바 접기/펼치기
+        remarkPlugins: [remarkMath],
+        rehypePlugins: [rehypeKatex],
       },
     ],
     [
@@ -105,6 +113,8 @@ const config: Config = {
         editUrl: "https://github.com/effozen/fantasmith/tree/main/", // 문서 편집 링크
         showLastUpdateTime: true, // 마지막 업데이트 시간 표시
         sidebarCollapsible: false, // 사이드바 접기/펼치기
+        remarkPlugins: [remarkMath],
+        rehypePlugins: [rehypeKatex],
       },
     ],
     [
@@ -117,6 +127,8 @@ const config: Config = {
         editUrl: "https://github.com/effozen/fantasmith/tree/main/", // 문서 편집 링크
         showLastUpdateTime: true, // 마지막 업데이트 시간 표시
         sidebarCollapsible: false, // 사이드바 접기/펼치기
+        remarkPlugins: [remarkMath],
+        rehypePlugins: [rehypeKatex],
       },
     ],
     [
@@ -129,6 +141,8 @@ const config: Config = {
         editUrl: "https://github.com/effozen/fantasmith/tree/main/", // 문서 편집 링크
         showLastUpdateTime: true, // 마지막 업데이트 시간 표시
         sidebarCollapsible: false, // 사이드바 접기/펼치기
+        remarkPlugins: [remarkMath],
+        rehypePlugins: [rehypeKatex],
       },
     ],
     [
@@ -141,6 +155,8 @@ const config: Config = {
         editUrl: "https://github.com/effozen/fantasmith/tree/main/", // 문서 편집 링크
         showLastUpdateTime: true, // 마지막 업데이트 시간 표시
         sidebarCollapsible: false, // 사이드바 접기/펼치기
+        remarkPlugins: [remarkMath],
+        rehypePlugins: [rehypeKatex],
       },
     ],
     [
@@ -153,6 +169,8 @@ const config: Config = {
         editUrl: "https://github.com/effozen/fantasmith/tree/main/", // 문서 편집 링크
         showLastUpdateTime: true, // 마지막 업데이트 시간 표시
         sidebarCollapsible: false, // 사이드바 접기/펼치기
+        remarkPlugins: [remarkMath],
+        rehypePlugins: [rehypeKatex],
       },
     ],
     "docusaurus-plugin-image-zoom",
@@ -330,6 +348,13 @@ const config: Config = {
   } satisfies Preset.ThemeConfig,
   stylesheets: [
     "src/css/custom.css", // Tailwind CSS가 포함된 CSS 파일 경로
+    {
+      href: "https://cdn.jsdelivr.net/npm/katex@0.13.24/dist/katex.min.css",
+      type: "text/css",
+      integrity:
+        "sha384-odtC+0UGzzFL/6PNoE8rX/SPcQDXBJ+uRepguP4QkPCm2LBxH3FA3y+fKSiJ+AmM",
+      crossorigin: "anonymous",
+    },
   ],
 
   // 추가 테마 설정
