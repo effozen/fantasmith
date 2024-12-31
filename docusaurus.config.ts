@@ -146,9 +146,9 @@ const config: Config = {
     [
       "@docusaurus/plugin-content-docs",
       {
-        id: "coding_test", // 문서의 ID
-        path: "./docs/coding_test", // 문서가 위치한 디렉토리
-        routeBasePath: "coding_test", // 라우트의 기본 경로
+        id: "skills", // 문서의 ID
+        path: "./docs/skills", // 문서가 위치한 디렉토리
+        routeBasePath: "skills", // 라우트의 기본 경로
         sidebarPath: require.resolve("./sidebars.ts"), // 사이드바 구성 파일
         editUrl: "https://github.com/effozen/fantasmith/tree/main/", // 문서 편집 링크
         showLastUpdateTime: true, // 마지막 업데이트 시간 표시
@@ -287,7 +287,7 @@ const config: Config = {
             { to: "/react-lab", label: "React-Lab" },
             { to: "/frontEnd", label: "Front-End" },
             { to: "/challenge", label: "Challenge" },
-            { to: "/coding_test", label: "CodingTest" },
+            { to: "/skills", label: "개발 실력 키우기" },
           ],
         },
         { to: "/project", label: "Project", position: "left" },
