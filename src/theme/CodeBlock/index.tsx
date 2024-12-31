@@ -6,7 +6,9 @@ import type { WrapperProps } from "@docusaurus/types";
 type Props = WrapperProps<typeof CodeBlockType>;
 
 export default function CodeBlockWrapper(props: Props): JSX.Element {
-  const title = props.className?.replace("language-", "");
+  const title = props.className
+    ? props.className.replace("language-", "")
+    : undefined;
 
   return (
     <>
