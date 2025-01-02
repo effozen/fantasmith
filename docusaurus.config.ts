@@ -341,17 +341,17 @@ const config: Config = {
       { name: "twitter:card", content: "summary_large_image" },
       // 전역 타이틀 및 설명을 설정하되, 개별 페이지에서 덮어쓸 수 있도록 합니다.
       { name: "twitter:url", content: "https://fantasmith.com" },
-      { property: "og:type", content: "website" },
-      { property: "og:title", content: "Zen's Atelier" },
-      {
-        property: "og:description",
-        content: "생각의 동기화를 바탕으로 몰입을 이끌어내는 개발자",
-      },
-      {
-        property: "og:image",
-        content: "https://fantasmith.com/img/social-card.webp",
-      },
-      { property: "og:url", content: "https://fantasmith.com" },
+      // { property: "og:type", content: "website" },
+      // { property: "og:title", content: "Zen's Atelier" },
+      // {
+      //   property: "og:description",
+      //   content: "생각의 동기화를 바탕으로 몰입을 이끌어내는 개발자",
+      // },
+      // {
+      //   property: "og:image",
+      //   content: "https://fantasmith.com/img/social-card.webp",
+      // },
+      // { property: "og:url", content: "https://fantasmith.com" },
     ],
   } satisfies Preset.ThemeConfig,
   stylesheets: [
