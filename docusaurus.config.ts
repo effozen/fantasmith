@@ -333,14 +333,14 @@ const config: Config = {
     },
     // SEO 및 링크 미리보기를 위한 메타데이터 설정
     metadata: [
-      { name: "author", content: "Zen" },
-      {
-        name: "keywords",
-        content: "프론트엔드 개발, 동기화, Zen, 블로그, 프로그래밍, 몰입",
-      },
-      { name: "twitter:card", content: "summary_large_image" },
-      // 전역 타이틀 및 설명을 설정하되, 개별 페이지에서 덮어쓸 수 있도록 합니다.
-      { name: "twitter:url", content: "https://fantasmith.com" },
+      // { name: "author", content: "Zen" },
+      // {
+      //   name: "keywords",
+      //   content: "프론트엔드 개발, 동기화, Zen, 블로그, 프로그래밍, 몰입",
+      // },
+      // { name: "twitter:card", content: "summary_large_image" },
+      // // 전역 타이틀 및 설명을 설정하되, 개별 페이지에서 덮어쓸 수 있도록 합니다.
+      // { name: "twitter:url", content: "https://fantasmith.com" },
       // { property: "og:type", content: "website" },
       // { property: "og:title", content: "Zen's Atelier" },
       // {
