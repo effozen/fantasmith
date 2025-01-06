@@ -1,44 +1,44 @@
 .figureContainer {
-	width: 100%;
-	/* 고정된 높이 제거 */
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	margin-top: 1rem;
-	margin-bottom: 1rem;
-	padding: 0;
+  width: 100%;
+  /* 고정된 높이 제거 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  padding: 0;
 }
 
 .figure {
-	width: 80%;
-	/* 고정된 높이 제거 */
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
+  width: 80%;
+  /* 고정된 높이 제거 */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .figcaption {
-	margin-top: 0.8rem;
-	font-weight: 600;
-	font-size: 1.125rem;
-	line-height: 1.4;
+  margin-top: 0.8rem;
+  font-weight: 600;
+  font-size: 1.125rem;
+  line-height: 1.4;
 }
 
 .img {
-	box-shadow: 0 1.5px 3px 0 rgb(0 0 0 / 15%);
-	max-width: 100%;
-	max-height: 25rem; /* 최대 높이 설정 */
-	object-fit: contain;
-	transition: box-shadow 0.3s ease; /* 부드러운 전환 효과 추가 */
-	border-radius: 0.5rem;
+  box-shadow: 0 1.5px 3px 0 rgb(0 0 0 / 15%);
+  max-width: 100%;
+  max-height: 25rem; /* 최대 높이 설정 */
+  object-fit: contain;
+  transition: box-shadow 0.3s ease; /* 부드러운 전환 효과 추가 */
+  border-radius: 0.5rem;
 }
 
 .imgLight {
-	box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.5); /* 우측 하단으로 진한 그림자 */
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.5); /* 우측 하단으로 진한 그림자 */
 }
 
 .imgDark {
-	box-shadow: 0 0 5px rgba(255, 255, 255, 0.2); /* 밝은 그림자 또는 다른 시각적 요소 */
-	filter: brightness(1.2); /* 이미지 밝기 증가 */
+  box-shadow: 0 0 5px rgba(255, 255, 255, 0.2); /* 밝은 그림자 또는 다른 시각적 요소 */
+  /* filter: brightness(1.2); 이미지 밝기 증가 */
 }
