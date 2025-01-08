@@ -1,0 +1,455 @@
+---
+title: '다시 정리하는 클로저'
+image: '/media/feedback_log/2025/january/1week/img/index.webp'
+description: '함수형 프로그래밍의 특징 중 하나인 클로저. 잘못 이해하고 있던 부분을 다시 정리하고자 합니다.'
+tags: [javascript, closure]
+keywords: ['javascript', 'closure', 'functional programming']
+sidebar_position: 3
+sidebar_label: '다시 정리하는 클로저'
+sidebar_custom_props:
+  img: '/media/feedback_log/2025/january/1week/img/index.webp'
+last_update:
+  date: 2024-01-07
+  author: zen
+---
+
+import { Figure, VideoPlayer } from '@site/src/components/utils';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+## 정리하게 된 계기
+
+최근에 네이버 웹툰 체험형 인턴 면접을 보았다.
+
+첫 면접이었고, 긴장해서 그런가.. CS와 관련된 질문에서 어버버하면서 대답을 했었다.
+
+그 중 하나가 클로저에 대한 질문이었다.
+
+그래서, 집에 와서 생각을 해보니 클로저에 대한 오개념을 대답했음을 알았다.
+
+두 번 다시 같은 실수를 하지 않도록 클로저에 대해 다시 정리하고자 한다.
+
+## 클로저(Closure)의 어원
+
+영어에서 `클로저(Closure)`라는 말은 정말 다양하게 쓰인다.
+
+네이버 사전에서 검색을 하면 다음과 같은 뜻이 있다.
+
+:::info[Closure - 출처 네이버 사전]
+
+1. **명사** (공장, 학교, 병원 등의 영구적인) 폐쇄(되는 상황)<br/>
+2. **명사** (도로·교량의 일시적) 폐쇄 <br/>
+3. **명사** (힘든 일의) 종료\[종결\]
+   :::
+
+Close의 명사형으로써 <strong>폐쇄, 종료, 끝, 닫힘</strong> 등의 의미로 쓰인다.
+
+다만, 이렇게 사전적 의미로만 정의하면 혼란이 생기기 쉽다.
+
+JS에서 클로저의 어원은 위에 기반한 것이 아니라, 수학과 컴퓨터 과학에서 <strong>폐합</strong>을 의미하는 `Closure`에서 유래되었기 때문이다.
+
+<strong>폐합</strong>은 보통 <strong>~에 닫혀있다.</strong>이라는 표현으로 많이 쓰인다.
+
+예를 들어서, <strong>정수 집합은 덧셈 연산에 대해 닫혀있다.</strong> 혹은 <strong>정수 집합은 덧셈 연산에 대해 폐합을 가진다.</strong>과 같은 표현으로 쓰인다.
+
+<Figure fileName="closure_mean.webp" alt="폐합 그림 1" caption="폐합 그림 1" />
+
+<Figure fileName="closure_mean_2.webp" alt="폐합 그림 2" caption="폐합 그림 2" />
+
+`정수(Integer)` 연산의 경우, `사칙연산(+, -, *, /)`을 해도 그 결과 값은 정수 집합에 다시 해당한다.
+
+어떤 행위의 결과가 자신의 집합으로 귀결되는 것을 `Closure`라고 한다.
+
+## JS에서 클로저는 어떻게 표현되는가?
+
+<Figure fileName="closure_graph_1.webp" alt="클로저 표현 그림" caption="클로저 표현 그림" />
+
+JS에서 클로저를 위와 같이 표현할 수 있다.
+
+`outer`함수 내부에 있는 `inner`함수가 `outer`함수 외부에서 `outer`함수 `범위(scope)` 안에 있는 `변수 a`를 참조하는 것이다.
+
+## 클로저에 대한 다양한 표현
+
+`클로저(Closure)`는 자바스크립트의 고유 개념이 아니다.
+
+`함수형 프로그래밍 언어`에서 등장하는 `보편적인 특성`이다.
+
+<Figure
+  fileName="rust_closure.webp"
+  alt="Rust에서의 클로저"
+  caption="Rust에서의 클로저"
+  href="https://doc.rust-lang.org/book/ch13-01-closures.html"
+/>
+
+러스트 공식 가이드에서 캡쳐한 내용이다.
+
+러스트에서도 보다시피 클로저를 다루는 것을 볼 수 있다.
+
+자바스크립트의 고유 개념이 아니다보니, `ECMAScript` 명세에서도 클로저의 정의를 다루고 있지 않다.
+
+굳이 이것 때문은 아니지만, 다양한 문헌에서 클로저를 제각각 정의하고 있다.
+
+:::info[클로저에 대한 다양한 표현]
+
+- 자신을 내포하는 함수의 컨텍스트에 접근할 수 있는 함수 - 더글라스 크록포드, \<\<자바스크립트 핵심 가이드\>\>, 한빛미디어\(p68\) <br/>
+- 함수가 특정 스코프에 접근할 수 있도록 의도적으로 그 스코프에서 정의하는 것 - 에단 브라운, \<\<러닝 자바스크립트\>\>, 한빛미디어\(p196\) <br/>
+- 함수를 선언할 때 만들어지는 유효범위가 사라진 후에도 호출할 수 있는 함수 - 존 레식, \<\<자바스크립트 닌자 비급\>\>, 인사이트\(p116\) <br/>
+- 이미 생명 주기상 끝난 외부 함수의 변수를 참조하는 함수 - 송형주 고현준, \<\<인사이드 자바스크립트\>\>, 한빛미디어\(p157\) <br/>
+- 자유변수가 있는 함수와 자유변수를 알 수 있는 환경의 결합 - 에릭 프리먼, \<\<Head First Javascript Programming\>\>, 한빛미디어\(p534\) <br/>
+- 로컬 변수를 참조하고 있는 함수 내의 함수 - 야마다 요시히로, \<\<자바스크립트 마스터북\>\>, 제이펍\(p180\) <br/>
+- 자신이 생성될 때의 스코프에서 알 수 있었던 변수들 중 언젠가 자신이 실행될 때 사용할 변수들만을 기억하여 유지시키는 함수 - 유인동, \<\<함수형 자바스크립트 프로그래밍\>\>, 인사이트\(p31\)
+  :::
+
+## MDN의 정의를 통해 살펴보기
+
+:::info[MDN(Mozilla Developer Network)에서의 정의]
+"A closure is the combination of a function and the lexical environment within which that function was declared." <br/>
+"클로저는 함수와 그 함수가 선언될 당시의 lexical environment의 상호관계에 따른 현상"
+:::
+
+MDN에서는 클로저를 위와 같이 정의하고 있다.
+
+여기에서 `lexical environment`라고 함은 실행 컨텍스트의 구성 요소 중 하나인 `outerEnvironmentReference`를 말한다.
+
+`LexicalEnvironment의` `environmentRecord와` `outerEnvironmentReference`에 의해 변수의 유효범위인 스코프가 결정되고 스코프 체인이 가능해진다.
+
+어떤 컨텍스트 A에서 선언한 내부함수 B의 실행 컨텍스트가 활성화 된 시점을 생각하자.
+
+<Tabs>
+
+<TabItem label="Lexical Environment 예제" value="Lexical Environment 예제">
+
+```javascript
+var A = function () {
+  var a = 0;
+  var B = function () {
+    let b = 0;
+  };
+};
+```
+
+</TabItem>
+
+<TabItem label="Lexical Environment 예제 그림" value="Lexical Environment 예제 그림">
+
+<Figure
+  fileName="closure_graph_2.webp"
+  alt="Lexical Environment 예제 그림"
+  caption="Lexical Environment 예제 그림"
+/>
+
+</TabItem>
+
+</Tabs>
+
+위와 같은 코드가 있을 때, `함수 A`에서 `변수 b`에 접근하지 못핮미나, `함수 B`에서 `변수 a`에 접근할 수 있다.
+
+이는 `함수 B`의 `outerEnvironmentReference`가 `함수 A`를 참조하고 있기 때문이다.
+
+이게 곧 `상호관계(combination)`의 의미이다.
+
+다만, 내부의 `함수 B`가 `함수 A`의 `LexicalEnvironment`를 언제나 참조하는 것은 아니다.
+
+내부 함수에서 외부 변수를 참조하지 않는다면 `combination`이라고 할 수 없다.
+
+내부함수에서 외부 변수를 참조하는 경우에 한해서만 `combination`, 즉 <strong>선언될 당시의 `lexicalEnvironoment`와의 상호 관계</strong>가 의미있다.
+
+<Figure fileName="closure_graph_1.webp" alt="클로저 표현 그림" caption="클로저 표현 그림" />
+
+다시 위의 그림을 보자.
+
+지금까지 파악한 내용에 따르면, <strong>`클로저(Closure)`란 "어떤 함수에서 선언한 변수를 참조하는 내부 함수에서만 발생하는 현상"</strong>이라고 볼 수 있다.
+
+## 코드를 통해 살펴보기
+
+코드를 통해 좀 더 살펴보자.
+
+### 일반적인 상황에서의 콜스택 흐름
+
+<Tabs>
+
+<TabItem value="코드" label="코드">
+
+```javascript
+var outer = function () {
+  var a = 1;
+  var inner = function () {
+    console.log(++a);
+  };
+  inner();
+};
+outer();
+```
+
+</TabItem>
+
+<TabItem value="결과" label="결과">
+
+```javascript
+var outer = function () {
+  var a = 1;
+  var inner = function () {
+    // highlight-next-line
+    console.log(++a);
+  };
+  inner();
+};
+// highlight-next-line
+outer();
+```
+
+</TabItem>
+
+</Tabs>
+
+4번째 줄에 있는 `console.log(++a);`의 결과인 `2`가 최종적으로 출력된다.
+
+`outer`함수의 실행 컨텍스트가 종료되면 `LexicalEnvironment`에 저장된 `식별자들(a, inner)`에 대한 참조를 지운다.
+
+이에 따라, 각 주소에 저장되어 있던 값들은 자신을 참조하는 변수가 하나도 없게 되므로 가비지 컬렉터의 수집 대상이 된다.
+
+<Tabs>
+
+<TabItem value="1. 초기 상태" label="1. 초기 상태">
+
+<Figure fileName="context_empty.webp" alt="초기 상태" caption="초기 상태" />
+
+</TabItem>
+
+<TabItem value="2. Global Context" label="2. Global Context">
+
+<Figure fileName="context_global.webp" alt="Global Context" caption="Global Context" />
+
+</TabItem>
+
+<TabItem value="3. Outer Context" label="3. Outer Context">
+
+<Figure fileName="context_outer_1_1.webp" alt="Outer Context" caption="Outer Context" />
+
+</TabItem>
+
+<TabItem value="4. Inner Context" label="4. Inner Context">
+
+<Figure fileName="context_inner_1_1.webp" alt="Inner Context" caption="Inner Context" />
+
+</TabItem>
+
+<TabItem value="5. 바뀐 Outer Context" label="5. 바뀐 Outer Context">
+
+<Figure fileName="context_outer_1_2.webp" alt="바뀐 Outer Context" caption="바뀐 Outer Context" />
+
+</TabItem>
+
+<TabItem value="6. 가비지 컬렉팅 1" label="6. 가비지 컬렉팅 1">
+
+<Figure fileName="context_global.webp" alt="가비지 컬렉팅 1" caption="가비지 컬렉팅 1" />
+
+</TabItem>
+
+<TabItem value="7. 가비지 컬렉팅 2" label="7. 가비지 컬렉팅 2">
+
+<Figure fileName="context_empty.webp" alt="가비지 컬렉팅 2" caption="가비지 컬렉팅 2" />
+
+</TabItem>
+
+</Tabs>
+
+`VariableEnvrionment` 및 `ThisBinding`은 생략한 콜스택 및 실행 컨텍스트를 도식화한 그림이다.
+
+일반적인 함수 내부에서의 동작이며, 별 다른 특별한 현상은 보이지 않는다.
+
+### 클로저가 발생하는 상황에서의 콜스택 흐름
+
+<Tabs>
+
+<TabItem value="코드" label="코드">
+
+```javascript
+var outer = function () {
+  var a = 1;
+  var inner = function () {
+    console.log(++a);
+  };
+  return inner();
+};
+
+outer();
+```
+
+</TabItem>
+
+<TabItem value="결과" label="결과">
+
+```javascript
+var outer = function () {
+  var a = 1;
+  var inner = function () {
+    // highlight-next-line
+    console.log(++a);
+  };
+  // highlight-next-line
+  return inner();
+};
+
+// highlight-next-line
+console.log(outer()); // 2
+```
+
+</TabItem>
+
+</Tabs>
+
+6번째 줄에서 `inner 함수`를 실행한 결과를 리턴하고 있다.
+
+결과적으로 `outer 함수`의 실행 컨텍스트가 종료된 시점에서는 `a 변수`를 참조하는 대상이 없어진다.
+
+앞선 예제와 마찬가지로 `a, inner` 변수의 값들은 언젠가 가비지 컬렉터에 의해 소멸한다.
+
+지금까지는 `outer 함수`의 실행 컨텍스트가 종료되기 이전에 `inner 함수`의 실행 컨텍스트가 종료된다.
+
+이에 따라, 별도로 `inner 함수`를 호출할 수 없다.
+
+inner 함수의 실행 컨텍스트의 `environmentRecord`에는 수집할 정보가 없다.
+
+`outer environmentReference`에는 `inner 함수`가 선언된 위치의 `LexicalEnvironment`가 참조 복사된다.
+
+`inner 함수`는 `outer 함수` 내부에서 선언되었으므로, `outer 함수`의 `LexicalEnvironment`가 담긴다.
+
+`스코프 체이닝(Scope Chaining)`에 따라서 `outer 함수`에서 선언한 변수 `a`에 접근해서 `1`만큼 증가시킨 후 그 값인 `2`를 반환하고, `inner 함수`의 컨텍스트가 종료된다.
+
+10번째 줄도 마찬가지 방식으로 3을 반환한다.
+
+### 가비지 컬렉터의 원리
+
+:::info[가비지 컬렉터(Garbage Collector)의 원리]
+가비지 컬렉터는 어떤 값을 참조하는 변수가 하나라도 있다면 그 값은 수집 대상에 포함시키지 않는다.
+:::
+
+`inner 함수`의 실행 컨텍스트가 활성화되면 `outerEnvironmentReference`가 `outer 함수`의 `LexicalEnvrionment`를 필요로 하기에 수집 대상에서 제외된다.
+
+그 덕분에 `inner 함수`가 `변수 a`에 접근할 수 있다.
+
+## 콜스택 흐름을 그림으로 이해하기
+
+<Tabs>
+
+<TabItem value="1. 초기 상태" label="1. 초기 상태">
+
+<Figure fileName="context_empty.webp" alt="초기 상태" caption="초기 상태" />
+
+</TabItem>
+
+<TabItem value="2. Global Context" label="2. Global Context">
+
+<Figure fileName="closure_global_2_1.webp" alt="Global Context" caption="Global Context" />
+
+</TabItem>
+
+<TabItem value="3. Outer Context" label="3. Outer Context">
+
+<Figure fileName="closure_outer_2_1.webp" alt="Outer Context" caption="Outer Context" />
+
+</TabItem>
+
+<TabItem value="4. Outer Context GC" label="4.  Outer Context GC">
+
+<Figure fileName="closure_outer_2_2.webp" alt=" Outer Context GC" caption=" Outer Context GC" />
+
+</TabItem>
+
+<TabItem value="5. Inner Context" label="5. Inner Context">
+
+<Figure
+  fileName="closure_inner_2_1.webp"
+  alt="Inner Context Return"
+  caption="Inner Context Return"
+/>
+
+</TabItem>
+
+<TabItem value="6. 가비지 컬렉팅 1" label="6. 가비지 컬렉팅 1">
+
+<Figure fileName="closure_outer_2_3.webp" alt="가비지 컬렉팅 1" caption="가비지 컬렉팅 1" />
+
+</TabItem>
+
+<TabItem value="7. 가비지 컬렉팅 2" label="7. 가비지 컬렉팅 2">
+
+<Figure fileName="context_empty.webp" alt="가비지 컬렉팅 2" caption="가비지 컬렉팅 2" />
+
+</TabItem>
+
+</Tabs>
+
+## 정리
+
+앞서서 클로저는 <strong>어떤 함수에서 선언한 변수를 참조하는 내부함수에서만 발생하는 현상</strong>이라고 했다.
+
+현상이라는 것을 잊지말자. 클로져는 함수가 아니다.
+
+마지막으로 살펴본 것을 떠올리면, 여기서는 `outer 함수`의 `LexicalEnvironment`에 속하는 것 중 `변수 a`가 대상에서 제외되었다.
+
+이처럼 함수의 실행 컨텍스트가 종료된 후 `LexicalEnvironment`가 가비지 컬렉터의 수집 대상에서 제외되는 경우는 <strong>지역변수를 참조하는 내부함수가 외부로 전달된 경우가 유일</strong>하다.
+
+<strong>"어떤 함수에서 선언한 변수를 참조하는 내부함수에서만 발생하는 현상"</strong>이란
+<strong>"외부 함수의 LexicalEnvironment가 가비지 컬렉팅되지 않는 현상"</strong>을 의미한다.
+
+이를 바탕으로 정의를 고쳐보면 아래와 같다.
+
+:::info[클로저(Closure)의 정의]
+클로저란 어떤 함수 A에서 선언한 변수 a를 참조하는 내부함수 B를 외부로 전달할 경우 A의 실행 컨텍스트가 종료된 이후에도 변수 a가 사라지지 않는 현상
+:::
+
+<Figure fileName="closure_graph_1.webp" alt="클로저 표현 그림" caption="클로저 표현 그림" />
+
+위의 개념을 가진 상태로 도식도를 다시 보자.
+
+이제는 이해가 되는가?
+
+## 주의사항
+
+> 외부로의 전달이 과연 `return` 만을 의미하는가?
+
+코드로 살펴보자.
+
+<Tabs>
+
+<TabItem value="setInterval / setTimeout" label="setInterval / setTimeout">
+
+```javascript
+(function () {
+  var a = 0;
+  var intervalId = null;
+  var inner = function () {
+    if (++a >= 10) {
+      clearInterval(intervalId);
+    }
+    console.log(a);
+  };
+  intervalId = setInterval(inner, 1000);
+})();
+```
+
+</TabItem>
+
+<TabItem value="Event Listener" label="Event Listener">
+
+```javascript
+(function () {
+  var count = 0;
+  var button = document.createElement('button');
+  button.innerText = 'click';
+  button.addEventListener('click', function () {
+    console.log(++count, 'times clicked');
+  });
+  document.body.appendChild(button);
+})();
+```
+
+</TabItem>
+
+</Tabs>
+
+별도의 외부 객체인 `DOM`의 `메서드(addEventListener)`에 등록할 `handler 함수` 내부에서 지역변수를 참조한다.
+
+두 상황 모두 <strong>지역변수를 참조하는 내부함수를 외부에 전달했기 때문에 클로저</strong>이다.
