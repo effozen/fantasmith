@@ -1,0 +1,69 @@
+.category {
+  margin-top: 1.4rem;
+  margin-bottom: 4rem;
+  padding: 2rem;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 1rem;
+  /* background-color: var(--ifm-card-background-color); */
+  background-color: transparent;
+  overflow: hidden;
+}
+
+.title {
+  font-size: 1.4rem !important;
+  font-weight: 600;
+  cursor: pointer;
+  margin: 0;
+}
+
+.details {
+  font-size: 1.1rem;
+}
+
+.content {
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  padding: 0 8px; /* 닫힌 상태에서는 수직 패딩 제거 */
+}
+
+.open {
+  padding: 8px; /* 열린 상태일 때 상하 패딩 추가 */
+}
+
+.ol {
+  font-size: 1.2rem;
+  margin-bottom: 0;
+}
+
+.li {
+  line-height: 1.8rem;
+}
+
+.a {
+  /* font-weight: 300; */
+  /* opacity: 0.8; */
+  color: white;
+}
+
+.strong {
+  font-weight: 600;
+}
+
+.strong::marker {
+  color: var(--ifm-link-color);
+}
+
+.marker {
+  font-size: 1rem;
+  font-weight: 600;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
