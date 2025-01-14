@@ -12,7 +12,12 @@ last_update:
   author: zen
 ---
 
-import { Figure } from '@site/src/components/utils';
+import { Figure, Series } from '@site/src/components/utils';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import { seriesList } from '@site/docs/frontEnd/tools/storybook/_utils_/';
+
+<Series title={seriesList.title}>{seriesList.children}</Series>
 
 ## 🎯 이 문서를 읽고 난 후의 상태
 
@@ -62,6 +67,7 @@ import { Figure } from '@site/src/components/utils';
 <details>
 
 {' '}
+
 <summary>🤖 GPT의 답변</summary>
 
 Storybook에서 **스토리**는 특정 컴포넌트의 단일 상태를 설명하는 예제입니다. 스토리는 사용자가 개별 UI 컴포넌트의 다양한 상태를 시각적으로 확인하고, 테스트하며, 문서화할 수 있도록 합니다. 스토리는 각 컴포넌트가 다양한 props를 통해 어떻게 동작하고 렌더링되는지 보여주는 일종의 "샘플"이라고 볼 수 있습니다.

@@ -1,19 +1,19 @@
 ---
-title: 'z-index와 스택 컨텍스트(쌓임 맥락)'
-image: '/media/frontEnd/fundamental/css/z-index_and_stack_context/img/index.png'
+title: 'z-index와 스태킹 컨텍스트(쌓임 맥락)'
+image: '/media/frontEnd/fundamental/css/z-index_and_stack_context/img/index.webp'
 description: 'z-index와 스택 컨텍스트(쌓임 맥락)에 대해서 알아보고, 이를 활용하여 요소들을 어떻게 배치할 수 있는지 알아봅니다.'
 tags: ['frontend']
 keywords: ['Frontend', 'BoostCamp', 'CSS', 'z-index', 'stack context']
 sidebar_position: 1
-sidebar_label: 'z-index와 스택 컨텍스트(쌓임 맥락)'
+sidebar_label: 'z-index와 스태킹 컨텍스트(쌓임 맥락)'
 sidebar_custom_props:
-  img: '/media/frontEnd/fundamental/css/z-index_and_stack_context/img/index.png'
+  img: '/media/frontEnd/fundamental/css/z-index_and_stack_context/img/index.webp'
 last_update:
   date: 2024-12-01
   author: zen
 ---
 
-import {Figure} from "@site/src/components/utils/Figure/index";
+import { Figure } from '@site/src/components/utils/Figure/index';
 
 ## 🎯 이 문서를 읽고 난 후의 상태
 
@@ -31,15 +31,16 @@ import {Figure} from "@site/src/components/utils/Figure/index";
 
 `z-index`를 이해하기 위해서는 `쌓임 맥락(Stacking Context)`를 이해해야 한다.<br/>
 
-<strong>쌓임 맥락(Stacking Context)</strong>이란 특정 요소(Parent Element)와 그 자식 요소(Child Element)들이 특정 규칙에 따라 겹쳐지는 방식을 정의하는 <strong>독립된 렌더링 계층</strong>을 `쌓임 맥락(Stacking Context)`라고 한다.<br/>
+<strong>쌓임 맥락(Stacking Context)</strong>이란 특정 요소(Parent Element)와 그 자식 요소(Child
+Element)들이 특정 규칙에 따라 겹쳐지는 방식을 정의하는 <strong>독립된 렌더링 계층</strong>을 `쌓임 맥락(Stacking
+Context)`라고 한다.
+<br />
 
 쉽게 말하면, 사용자가 모니터를 바라보는 것을 기준으로 가상의 z축을 생성하여 HTML 요소들을 3차원 개념으로 보는 것을 말한다. <br/>
 
 조금 더 쉽게 설명하면, 사용자 입장에서 모니터를 보았을 때 화면에 요소들을 어떻게 겹쳐서 배치할까..? 어떻게 쌓아서 겹친 모습을 연출할까? 하는 개념이 쌓임 맥락이라고 볼 수 있다.<br/>
 
 결국 <strong>쌓임 맥락을 형성한다</strong>는 것은 요소들을 쌓는 방법을 결정한다는 것을 의미한다. <br/>
-
-
 
 ## 🤔 쌓임 맥락(Stacking Context)는 왜 중요할까?
 
@@ -51,14 +52,13 @@ import {Figure} from "@site/src/components/utils/Figure/index";
 
 조금 더 자세하게 서술하기 위해 GPT의 힘을 빌렸다. 중요성에 대해서는 아래와 같다.<br/>
 
-|중요성|설명|
-|---|---|
-|**레이어 관리의 효율성**|웹 페이지는 수많은 요소들이 서로 겹쳐져 복잡한 레이아웃을 형성한다. <br/>이때 쌓임 맥락을 이해하면 특정 요소가 다른 요소들 위나 아래에 위치하도록 정밀하게 제어할 수 있다. <br/>예를 들어, 모달 창이나 드롭다운 메뉴와 같은 UI 컴포넌트는 다른 모든 요소들보다 앞에 표시되어야 하는데, 쌓임 맥락을 통해 이를 손쉽게 구현할 수 있다.|
-|**예상치 못한 레이아웃 문제 방지**|쌓임 맥락을 올바르게 이해하지 못하면, 의도하지 않은 요소들이 서로 겹치거나 숨겨지는 문제가 발생할 수 있다. <br/>특히 복잡한 웹 애플리케이션에서는 여러 개의 스태킹 컨텍스트가 중첩될 수 있어, 각 요소의 z-index와 포지셔닝 속성을 신중하게 관리해야 한다. <br/>이를 통해 레이아웃의 일관성과 예측 가능성을 유지할 수 있다.|
-|**CSS 속성의 효과적인 활용**|쌓임 맥락은 z-index 외에도 opacity, transform, filter 등의 다양한 CSS 속성과 밀접하게 연관되어 있다. <br/>이러한 속성들은 새로운 스태킹 컨텍스트를 생성하거나 기존의 스태킹 컨텍스트에 영향을 미친다. <br/>이를 통해 복잡한 시각 효과를 구현할 때, 각 요소가 어떻게 렌더링될지를 세밀하게 조정할 수 있다.|
-|**성능 최적화**|브라우저는 쌓임 맥락 단위로 레이어를 처리하기 때문에, 이를 적절히 활용하면 렌더링 성능을 향상시킬 수 있다. <br/>불필요한 재렌더링을 최소화하고, 복잡한 애니메이션이나 트랜지션을 부드럽게 구현하기 위해서는 스태킹 컨텍스트의 개념을 이해하고 최적화하는 것이 중요하다.|
-|**접근성과 사용자 경험 향상**|쌓임 맥락을 통해 중요한 요소를 시각적으로 강조하거나, 사용자 인터페이스의 계층 구조를 명확히 할 수 있다. <br/>이는 사용자 경험을 향상시키고, 인터페이스의 사용성을 높이는 데 기여한다. <br/>예를 들어, 경고 메시지나 알림 배너는 다른 콘텐츠 위에 표시되어 사용자의 주의를 끌 수 있어야 하는데, 이를 효과적으로 구현하기 위해 쌓임 맥락을 활용할 수 있다.|
-
+| 중요성                             | 설명                                                                                                                                                                                                                                                                                                                                                      |
+| ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **레이어 관리의 효율성**           | 웹 페이지는 수많은 요소들이 서로 겹쳐져 복잡한 레이아웃을 형성한다. <br/>이때 쌓임 맥락을 이해하면 특정 요소가 다른 요소들 위나 아래에 위치하도록 정밀하게 제어할 수 있다. <br/>예를 들어, 모달 창이나 드롭다운 메뉴와 같은 UI 컴포넌트는 다른 모든 요소들보다 앞에 표시되어야 하는데, 쌓임 맥락을 통해 이를 손쉽게 구현할 수 있다.                       |
+| **예상치 못한 레이아웃 문제 방지** | 쌓임 맥락을 올바르게 이해하지 못하면, 의도하지 않은 요소들이 서로 겹치거나 숨겨지는 문제가 발생할 수 있다. <br/>특히 복잡한 웹 애플리케이션에서는 여러 개의 스태킹 컨텍스트가 중첩될 수 있어, 각 요소의 z-index와 포지셔닝 속성을 신중하게 관리해야 한다. <br/>이를 통해 레이아웃의 일관성과 예측 가능성을 유지할 수 있다.                                |
+| **CSS 속성의 효과적인 활용**       | 쌓임 맥락은 z-index 외에도 opacity, transform, filter 등의 다양한 CSS 속성과 밀접하게 연관되어 있다. <br/>이러한 속성들은 새로운 스태킹 컨텍스트를 생성하거나 기존의 스태킹 컨텍스트에 영향을 미친다. <br/>이를 통해 복잡한 시각 효과를 구현할 때, 각 요소가 어떻게 렌더링될지를 세밀하게 조정할 수 있다.                                                 |
+| **성능 최적화**                    | 브라우저는 쌓임 맥락 단위로 레이어를 처리하기 때문에, 이를 적절히 활용하면 렌더링 성능을 향상시킬 수 있다. <br/>불필요한 재렌더링을 최소화하고, 복잡한 애니메이션이나 트랜지션을 부드럽게 구현하기 위해서는 스태킹 컨텍스트의 개념을 이해하고 최적화하는 것이 중요하다.                                                                                   |
+| **접근성과 사용자 경험 향상**      | 쌓임 맥락을 통해 중요한 요소를 시각적으로 강조하거나, 사용자 인터페이스의 계층 구조를 명확히 할 수 있다. <br/>이는 사용자 경험을 향상시키고, 인터페이스의 사용성을 높이는 데 기여한다. <br/>예를 들어, 경고 메시지나 알림 배너는 다른 콘텐츠 위에 표시되어 사용자의 주의를 끌 수 있어야 하는데, 이를 효과적으로 구현하기 위해 쌓임 맥락을 활용할 수 있다. |
 
 ## 💡 쌓임 맥락(Stacking Context)의 형성 조건
 
@@ -66,21 +66,20 @@ import {Figure} from "@site/src/components/utils/Figure/index";
 
 쌓임 맥락이 형성되는 조건은 다음과 같다. <br/>
 
-| **스태킹 컨텍스트가 형성되는 조건** | **설명** |
-|-------------------------------------|----------|
-| **루트 요소** | `<html>` 요소는 항상 기본 스태킹 컨텍스트를 형성한다. |
-| **`position` 속성** | `position` 속성이 `absolute`, `relative`이고, `z-index`가 `auto`가 아닌 경우 스태킹 컨텍스트를 형성한다. |
-|**position 속성 2**|`sticky` 또는 `fixed`가 설정된 경우, `z-index`값이 `auto`여도 스태킹 컨텍스트를 형성한다.|
-| **`opacity` 속성** | `opacity` 값이 1보다 작을 때 스태킹 컨텍스트를 형성한다. |
-| **`transform` 속성** | `transform` 속성이 적용되었을 때 스태킹 컨텍스트를 형성한다. |
-| **`filter` 속성** | `filter` 속성이 적용되었을 때 스태킹 컨텍스트를 형성한다. |
-| **`mix-blend-mode` 속성** | `mix-blend-mode` 속성이 `normal`이 아닌 경우 스태킹 컨텍스트를 형성한다. |
-| **`clip-path` 속성** | `clip-path`가 적용되었을 때 스태킹 컨텍스트를 형성한다. |
-| **`perspective` 속성** | `perspective` 속성이 설정되었을 때 스태킹 컨텍스트를 형성한다. |
-| **`isolation` 속성** | `isolation: isolate`가 설정되었을 때 스태킹 컨텍스트를 형성한다. |
+| **스태킹 컨텍스트가 형성되는 조건** | **설명**                                                                                                 |
+| ----------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| **루트 요소**                       | `<html>` 요소는 항상 기본 스태킹 컨텍스트를 형성한다.                                                    |
+| **`position` 속성**                 | `position` 속성이 `absolute`, `relative`이고, `z-index`가 `auto`가 아닌 경우 스태킹 컨텍스트를 형성한다. |
+| **position 속성 2**                 | `sticky` 또는 `fixed`가 설정된 경우, `z-index`값이 `auto`여도 스태킹 컨텍스트를 형성한다.                |
+| **`opacity` 속성**                  | `opacity` 값이 1보다 작을 때 스태킹 컨텍스트를 형성한다.                                                 |
+| **`transform` 속성**                | `transform` 속성이 적용되었을 때 스태킹 컨텍스트를 형성한다.                                             |
+| **`filter` 속성**                   | `filter` 속성이 적용되었을 때 스태킹 컨텍스트를 형성한다.                                                |
+| **`mix-blend-mode` 속성**           | `mix-blend-mode` 속성이 `normal`이 아닌 경우 스태킹 컨텍스트를 형성한다.                                 |
+| **`clip-path` 속성**                | `clip-path`가 적용되었을 때 스태킹 컨텍스트를 형성한다.                                                  |
+| **`perspective` 속성**              | `perspective` 속성이 설정되었을 때 스태킹 컨텍스트를 형성한다.                                           |
+| **`isolation` 속성**                | `isolation: isolate`가 설정되었을 때 스태킹 컨텍스트를 형성한다.                                         |
 
-
-<br/>
+<br />
 
 전부 기억하기 보다는 중요한 몇가지를 기억하자. <br/>
 
@@ -89,7 +88,7 @@ import {Figure} from "@site/src/components/utils/Figure/index";
 - `opacity` 값이 1보다 작을 때 스태킹 컨텍스트를 형성한다.
 - `transform`, `filter` 속성이 적용되었을 때 스태킹 컨텍스트를 형성한다.
 
-<br/>
+<br />
 
 ## 💡 쌓임 맥락(Stacking Context)의 특징
 
@@ -103,192 +102,204 @@ import {Figure} from "@site/src/components/utils/Figure/index";
 
 <details>
 
-  <summary>🚀 스태킹 컨텍스트 예제 🚀</summary>
+{' '}
 
-  예제는 [MDN-Stacking Context](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_positioned_layout/Understanding_z-index/Stacking_context)에서 가져왔다.<br/>
+<summary>🚀 스태킹 컨텍스트 예제 🚀</summary>
 
-  ```HTML title="스택 컨텐스트 예제"
-  <div id="div1">
-    <h1>Division Element #1</h1>
+예제는 [MDN-Stacking Context](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_positioned_layout/Understanding_z-index/Stacking_context)에서 가져왔다.<br/>
+
+```HTML title="스택 컨텐스트 예제"
+<div id="div1">
+  <h1>Division Element #1</h1>
+  <code>
+    position: relative;<br />
+    z-index: 5;
+  </code>
+</div>
+
+<div id="div2">
+  <h1>Division Element #2</h1>
+  <code>
+    position: relative;<br />
+    z-index: 2;
+  </code>
+</div>
+
+<div id="div3">
+  <div id="div4">
+    <h1>Division Element #4</h1>
     <code>
       position: relative;<br />
-      z-index: 5;
+      z-index: 6;
     </code>
   </div>
 
-  <div id="div2">
-    <h1>Division Element #2</h1>
+  <h1>Division Element #3</h1>
+  <code>
+    position: absolute;<br />
+    z-index: 4;
+  </code>
+
+  <div id="div5">
+    <h1>Division Element #5</h1>
     <code>
       position: relative;<br />
-      z-index: 2;
+      z-index: 1;
     </code>
   </div>
 
-  <div id="div3">
-    <div id="div4">
-      <h1>Division Element #4</h1>
-      <code>
-        position: relative;<br />
-        z-index: 6;
-      </code>
-    </div>
-
-    <h1>Division Element #3</h1>
+  <div id="div6">
+    <h1>Division Element #6</h1>
     <code>
       position: absolute;<br />
-      z-index: 4;
+      z-index: 3;
     </code>
-
-    <div id="div5">
-      <h1>Division Element #5</h1>
-      <code>
-        position: relative;<br />
-        z-index: 1;
-      </code>
-    </div>
-
-    <div id="div6">
-      <h1>Division Element #6</h1>
-      <code>
-        position: absolute;<br />
-        z-index: 3;
-      </code>
-    </div>
   </div>
-  ```
+</div>
+```
 
-  ```CSS title="스택 컨텍스트 예제"
-  * {
-    margin: 0;
-  }
-    html {
-    padding: 20px;
-    font:
-    12px/20px Arial,
-    sans-serif;
-  }
-    div {
-    opacity: 0.7;
-    position: relative;
-  }
-    h1 {
-    font: inherit;
-    font-weight: bold;
-  }
-    #div1,
-    #div2 {
-    border: 1px dashed #696;
-    padding: 10px;
-    background-color: #cfc;
-  }
-    #div1 {
-    z-index: 5;
-    margin-bottom: 190px;
-  }
-    #div2 {
-    z-index: 2;
-  }
-    #div3 {
-    z-index: 4;
-    opacity: 1;
-    position: absolute;
-    top: 40px;
-    left: 180px;
-    width: 330px;
-    border: 1px dashed #900;
-    background-color: #fdd;
-    padding: 40px 20px 20px;
-  }
-    #div4,
-    #div5 {
-    border: 1px dashed #996;
-    background-color: #ffc;
-  }
-    #div4 {
-    z-index: 6;
-    margin-bottom: 15px;
-    padding: 25px 10px 5px;
-  }
-    #div5 {
-    z-index: 1;
-    margin-top: 15px;
-    padding: 5px 10px;
-  }
-    #div6 {
-    z-index: 3;
-    position: absolute;
-    top: 20px;
-    left: 180px;
-    width: 150px;
-    height: 125px;
-    border: 1px dashed #009;
-    padding-top: 125px;
-    background-color: #ddf;
-    text-align: center;
-  }
-  ```
+```CSS title="스택 컨텍스트 예제"
+* {
+  margin: 0;
+}
+  html {
+  padding: 20px;
+  font:
+  12px/20px Arial,
+  sans-serif;
+}
+  div {
+  opacity: 0.7;
+  position: relative;
+}
+  h1 {
+  font: inherit;
+  font-weight: bold;
+}
+  #div1,
+  #div2 {
+  border: 1px dashed #696;
+  padding: 10px;
+  background-color: #cfc;
+}
+  #div1 {
+  z-index: 5;
+  margin-bottom: 190px;
+}
+  #div2 {
+  z-index: 2;
+}
+  #div3 {
+  z-index: 4;
+  opacity: 1;
+  position: absolute;
+  top: 40px;
+  left: 180px;
+  width: 330px;
+  border: 1px dashed #900;
+  background-color: #fdd;
+  padding: 40px 20px 20px;
+}
+  #div4,
+  #div5 {
+  border: 1px dashed #996;
+  background-color: #ffc;
+}
+  #div4 {
+  z-index: 6;
+  margin-bottom: 15px;
+  padding: 25px 10px 5px;
+}
+  #div5 {
+  z-index: 1;
+  margin-top: 15px;
+  padding: 5px 10px;
+}
+  #div6 {
+  z-index: 3;
+  position: absolute;
+  top: 20px;
+  left: 180px;
+  width: 150px;
+  height: 125px;
+  border: 1px dashed #009;
+  padding-top: 125px;
+  background-color: #ddf;
+  text-align: center;
+}
+```
 
-  한번 위의 예제를 보고 어떻게 동작할지 손으로 직접 그려보자.<br/>
+한번 위의 예제를 보고 어떻게 동작할지 손으로 직접 그려보자.<br/>
 
-  그리고나서 아래의 결과를 살펴보자.<br/>
+그리고나서 아래의 결과를 살펴보자.<br/>
 
   <details>
 
     <summary>✅ 결과</summary>
 
-  <Figure fileName='stacking_context_example.png' alt='z-index 이미지' caption='이미지 출처 : MDN' href='https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_positioned_layout/Understanding_z-index/Stacking_context'/>
+{' '}
+
+<Figure
+  fileName="stacking_context_example.png"
+  alt="z-index 이미지"
+  caption="이미지 출처 : MDN"
+  href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_positioned_layout/Understanding_z-index/Stacking_context"
+/>
 
   </details>
 
-  이 예제에서는 모든 위치가 지정된 요소가 자체 스태킹 컨텍스트를 생성한다.<br/>
+이 예제에서는 모든 위치가 지정된 요소가 자체 스태킹 컨텍스트를 생성한다.<br/>
 
-  이는 위치 지정과 z-index 값 때문이다. 스태킹 컨텍스트의 계층 구조는 다음과 같이 구성된다:
+이는 위치 지정과 z-index 값 때문이다. 스태킹 컨텍스트의 계층 구조는 다음과 같이 구성된다:
 
-  - 루트
-    - DIV #1
-    - DIV #2
-    - DIV #3
-      - DIV #4
-      - DIV #5
-      - DIV #6
+- 루트
+  - DIV #1
+  - DIV #2
+  - DIV #3
+    - DIV #4
+    - DIV #5
+    - DIV #6
 
-  DIV #4, DIV #5 및 DIV #6은 DIV #3의 자식 요소이므로, 이러한 요소들의 스태킹은 전부 DIV #3 내에서 해결된다.<br/>
+DIV #4, DIV #5 및 DIV #6은 DIV #3의 자식 요소이므로, 이러한 요소들의 스태킹은 전부 DIV #3 내에서 해결된다.<br/>
 
-  DIV #3 내에서 스태킹과 렌더링이 완료되면, 전체 DIV #3 요소는 루트 요소의 스태킹 컨텍스트 내에서 형제 요소인 DIV들과 비교되어 스태킹된다. <br/>
+DIV #3 내에서 스태킹과 렌더링이 완료되면, 전체 DIV #3 요소는 루트 요소의 스태킹 컨텍스트 내에서 형제 요소인 DIV들과 비교되어 스태킹된다. <br/>
 
-  DIV #4는 루트 요소의 스태킹 컨텍스트 내에서 z-index가 5인 DIV #1 아래에 렌더링된다. <br/>
+DIV #4는 루트 요소의 스태킹 컨텍스트 내에서 z-index가 5인 DIV #1 아래에 렌더링된다. <br/>
 
-  반면, DIV #4의 z-index는 6이지만 이는 DIV #3의 스태킹 컨텍스트 내에서 유효하다. 따라서 DIV #4는 z-index 값이 더 낮은 DIV #1 아래에 위치하게 된다.<br/>
+반면, DIV #4의 z-index는 6이지만 이는 DIV #3의 스태킹 컨텍스트 내에서 유효하다. 따라서 DIV #4는 z-index 값이 더 낮은 DIV #1 아래에 위치하게 된다.<br/>
 
-  같은 이유로, DIV #2(z-index: 2)는 DIV #3의 자식인 DIV #5(z-index: 1) 아래에 렌더링된다. 이는 DIV #5가 DIV #3의 스태킹 컨텍스트 내에 있기 때문이다.<br/>
+같은 이유로, DIV #2(z-index: 2)는 DIV #3의 자식인 DIV #5(z-index: 1) 아래에 렌더링된다. 이는 DIV #5가 DIV #3의 스태킹 컨텍스트 내에 있기 때문이다.<br/>
 
-  DIV #3의 z-index는 4이지만, 이는 DIV #4, DIV #5 및 DIV #6의 z-index와는 독립적이다. 이는 이들이 다른 스태킹 컨텍스트에 속하기 때문이다.<br/>
+DIV #3의 z-index는 4이지만, 이는 DIV #4, DIV #5 및 DIV #6의 z-index와는 독립적이다. 이는 이들이 다른 스태킹 컨텍스트에 속하기 때문이다.<br/>
 
-  z축을 따라 쌓인 요소들의 렌더링 순서를 파악하는 쉬운 방법은 이를 일종의 "버전 번호"로 생각하는 것이다. <br/>
+z축을 따라 쌓인 요소들의 렌더링 순서를 파악하는 쉬운 방법은 이를 일종의 "버전 번호"로 생각하는 것이다. <br/>
 
-  여기서 자식 요소들은 부모의 주요 버전 번호 아래의 하위(sub) 버전 번호처럼 동작한다. <br/>
+여기서 자식 요소들은 부모의 주요 버전 번호 아래의 하위(sub) 버전 번호처럼 동작한다. <br/>
 
-  이를 통해 z-index가 1인 요소(DIV #5)가 z-index가 2인 요소(DIV #2) 위에 쌓이고, z-index가 6인 요소(DIV #4)가 z-index가 5인 요소(DIV #1) 아래에 쌓이는 방식을 쉽게 이해할 수 있다.<br/><br/>
+이를 통해 z-index가 1인 요소(DIV #5)가 z-index가 2인 요소(DIV #2) 위에 쌓이고, z-index가 6인 요소(DIV #4)가 z-index가 5인 요소(DIV #1) 아래에 쌓이는 방식을 쉽게 이해할 수 있다.<br/><br/>
 
-  예제를 배경으로 하면 다음과 같다. (최종 렌더링 순서에 따라 정렬된다.):<br/>
+예제를 배경으로 하면 다음과 같다. (최종 렌더링 순서에 따라 정렬된다.):<br/>
 
-  - 루트
-    - DIV #2: (z-index: 2)
-    - DIV #3: (z-index: 4)
-      - DIV #5: (z-index: 1), 요소(z-index: 4) 아래에 쌓여 렌더링 순서가 4.1이 된다.
-      - DIV #6: (z-index: 3), 요소(z-index: 4) 아래에 쌓여 렌더링 순서가 4.3이 된다.
-      - DIV #4: (z-index: 6), 요소(z-index: 4) 아래에 쌓여 렌더링 순서가 4.6이 된다.
-    - DIV #1: (z-index: 5)
-
+- 루트
+  - DIV #2: (z-index: 2)
+  - DIV #3: (z-index: 4)
+    - DIV #5: (z-index: 1), 요소(z-index: 4) 아래에 쌓여 렌더링 순서가 4.1이 된다.
+    - DIV #6: (z-index: 3), 요소(z-index: 4) 아래에 쌓여 렌더링 순서가 4.3이 된다.
+    - DIV #4: (z-index: 6), 요소(z-index: 4) 아래에 쌓여 렌더링 순서가 4.6이 된다.
+  - DIV #1: (z-index: 5)
 
 </details>
-
 
 ## 💡 쌓임 맥락(Stacking Context)의 우선순위
 
 쌓임 맥락을 형성하는 요소가 아무것도 없다고 했을 경우 그림의 우선순위로 쌓이게 된다. <br/>
 
-<Figure fileName='z_index_axes.png' alt='z-index 이미지' caption='이미지 출처 : codrops' href='https://tympanus.net/codrops/css_reference/z-index/'/>
+<Figure
+  fileName="z_index_axes.png"
+  alt="z-index 이미지"
+  caption="이미지 출처 : codrops"
+  href="https://tympanus.net/codrops/css_reference/z-index/"
+/>
 
 브라우저는 자연스러운 흐름에 따라 페이지에 요소를 배치한다.<br/>
 
@@ -304,7 +315,9 @@ import {Figure} from "@site/src/components/utils/Figure/index";
 
 우리가 일반적으로 알고 있는 `block` 요소와 `inline` 요소 등 모두 이러한 규칙을 따른다.<br/>
 
-<br/><br/><br/>
+<br />
+<br />
+<br />
 
 하지만 항상 이렇게 배치되는 것은 아니다. <br/>
 
@@ -316,21 +329,24 @@ import {Figure} from "@site/src/components/utils/Figure/index";
 - `position` 속성을 지정 : 기본값이 아닌 `position`을 가진 요소를 `위치가 지정된 요소(positioned element)`라고 한다.
 - `float` 속성을 지정 : 요소를 떠있게 하여 흐름을 변경한다.
 
-
 ## 🤔임의로 순서를 바꾸려면 어떻게 해야하는가?
 
-
-<Figure fileName='default_stacking_order.png' alt='z-index 이미지' caption='이미지 출처 : codrops' href='https://tympanus.net/codrops/css_reference/z-index/'/>
+<Figure
+  fileName="default_stacking_order.png"
+  alt="z-index 이미지"
+  caption="이미지 출처 : codrops"
+  href="https://tympanus.net/codrops/css_reference/z-index/"
+/>
 
 브라우저는 기본적으로 위와 같은 기본 스태킹 순서를 갖는다.<br/>
 
-|요소의 순서|설명|
-|---|---|
-|**루트 요소(`html`)**|루트 요소인 `<html>`은 "글로벌" 쌓임맥락의 루트로, 페이지 내의 모든 요소들을 포함한다.|
-|**위치가 지정되지 않고 플로트되지 않은 블록 레벨 요소들**|위치가 지정되지 않았고 플로트되지 않은 블록 레벨 요소들은 문서의 흐름에 따라 자연스럽게 쌓인다.|
-|**위치가 지정되지 않았지만 플로트된 요소들**|플로트(`float`) 속성이 적용된 요소들이 위치가 지정되지 않은 상태에서 소스 코드의 등장 순서에 따라 쌓인다.|
-|**인라인 요소들**|텍스트와 이미지와 같은 인라인 요소들은 문서의 흐름 내에 있으며, 위치가 지정되지 않은 상태(`position: static`)로 배치된다.|
-|**소스 코드 순서에 따른 위치 지정 요소들**|소스 코드에서 등장하는 순서대로 위치가 지정된 요소들이 쌓인다.<br/>소스 코드에서 나중에 작성된 요소일수록 화면에서 더 위쪽에 표시된다.|
+| 요소의 순서                                               | 설명                                                                                                                                   |
+| --------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| **루트 요소(`html`)**                                     | 루트 요소인 `<html>`은 "글로벌" 쌓임맥락의 루트로, 페이지 내의 모든 요소들을 포함한다.                                                 |
+| **위치가 지정되지 않고 플로트되지 않은 블록 레벨 요소들** | 위치가 지정되지 않았고 플로트되지 않은 블록 레벨 요소들은 문서의 흐름에 따라 자연스럽게 쌓인다.                                        |
+| **위치가 지정되지 않았지만 플로트된 요소들**              | 플로트(`float`) 속성이 적용된 요소들이 위치가 지정되지 않은 상태에서 소스 코드의 등장 순서에 따라 쌓인다.                              |
+| **인라인 요소들**                                         | 텍스트와 이미지와 같은 인라인 요소들은 문서의 흐름 내에 있으며, 위치가 지정되지 않은 상태(`position: static`)로 배치된다.              |
+| **소스 코드 순서에 따른 위치 지정 요소들**                | 소스 코드에서 등장하는 순서대로 위치가 지정된 요소들이 쌓인다.<br/>소스 코드에서 나중에 작성된 요소일수록 화면에서 더 위쪽에 표시된다. |
 
 화면에 임의로 보여지는 순서를 바꾸기 위해서는 `z-index` 속성을 지정하면 된다.<br/>
 
@@ -344,22 +360,27 @@ import {Figure} from "@site/src/components/utils/Figure/index";
 
 그렇기에 꼭 `position` 속성을 지정해주어야 한다.<br/>
 
-<br/><br/>
+<br />
+<br />
 
 위를 유의한 채로, `z-index`를 지정하면 다음의 순서대로 보이게 된다. <br/>
 
-<Figure fileName='new_stacking_order.png' alt='z-index 이미지' caption='이미지 출처 : codrops' href='https://tympanus.net/codrops/css_reference/z-index/'/>
+<Figure
+  fileName="new_stacking_order.png"
+  alt="z-index 이미지"
+  caption="이미지 출처 : codrops"
+  href="https://tympanus.net/codrops/css_reference/z-index/"
+/>
 
-
-|요소의 순서|설명|
-|---|---|
-|**루트 요소(`html`)**|루트 요소인 `<html>`은 "글로벌" 쌓임맥락의 루트로, 페이지 내의 모든 요소들을 포함한다. <br/>이는 기본적인 쌓임 순서를 설정하며, 다른 쌓임맥락 내의 요소들은 이 루트 쌓임맥락을 기준으로 독립적으로 관리된다.|
-|**음의 `z-index` 값을 가진 위치 지정 요소들**|`z-index` 값이 음수인 위치 지정 요소들이다. <br/>`z-index` 값이 낮을수록 화면에서 더 뒤쪽에 배치된다. <br/>동일한 `z-index` 값을 가진 요소들끼리는 소스 코드에서 나중에 작성된 요소가 먼저 표시된다.|
-|**위치가 지정되지 않고 플로트되지 않은 블록 레벨 요소들**|위치가 지정되지 않았고 `float`되지 않은 블록 레벨 요소들이다. <br/>이 요소들은 문서의 흐름에 따라 자연스럽게 쌓이며, 일반적으로 `div`, `section` 등과 같은 블록 요소들이 포함된다.|
-|**위치가 지정되지 않았지만 플로트된 요소들**|`float` 속성이 적용된 요소들로, 위치가 지정되지 않은 상태에서 소스 코드의 등장 순서에 따라 쌓인다. <br/>플로트된 요소들은 주변 요소들을 감싸며 레이아웃에 영향을 미친다.|
-|**인라인 요소들**|텍스트와 이미지와 같은 인라인 요소들은 문서의 흐름 내에 있으며, 위치가 지정되지 않은 상태(`position: static`)로 배치된다. <br/>이러한 요소들은 주변의 블록 요소들과 함께 자연스럽게 레이아웃된다.|
-|**`z-index: 0;` 또는 `z-index: auto;`를 가진 위치 지정 요소들**|`z-index`가 `0`이거나 `auto`로 설정된 위치 지정 요소들이다. <br/>이 요소들은 기본 쌓임 순서를 따르며, 소스 코드에 나타나는 순서대로 쌓인다. <br/>특별한 `z-index` 값이 지정되지 않은 경우, 요소들은 소스 순서에 따라 쌓인다.|
-|**양의 `z-index` 값을 가진 위치 지정 요소들**|위치가 지정된 요소(`position: absolute`, `relative`, `fixed`, `sticky`) 중에서 `z-index` 값이 양수인 요소들이다. <br/>`z-index` 값이 높을수록 화면에 더 가깝게 표시된다. <br/>동일한 `z-index` 값을 가진 요소들은 소스 코드에서 나중에 작성된 요소가 먼저 표시된다.|
+| 요소의 순서                                                     | 설명                                                                                                                                                                                                                                                                |
+| --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **루트 요소(`html`)**                                           | 루트 요소인 `<html>`은 "글로벌" 쌓임맥락의 루트로, 페이지 내의 모든 요소들을 포함한다. <br/>이는 기본적인 쌓임 순서를 설정하며, 다른 쌓임맥락 내의 요소들은 이 루트 쌓임맥락을 기준으로 독립적으로 관리된다.                                                        |
+| **음의 `z-index` 값을 가진 위치 지정 요소들**                   | `z-index` 값이 음수인 위치 지정 요소들이다. <br/>`z-index` 값이 낮을수록 화면에서 더 뒤쪽에 배치된다. <br/>동일한 `z-index` 값을 가진 요소들끼리는 소스 코드에서 나중에 작성된 요소가 먼저 표시된다.                                                                |
+| **위치가 지정되지 않고 플로트되지 않은 블록 레벨 요소들**       | 위치가 지정되지 않았고 `float`되지 않은 블록 레벨 요소들이다. <br/>이 요소들은 문서의 흐름에 따라 자연스럽게 쌓이며, 일반적으로 `div`, `section` 등과 같은 블록 요소들이 포함된다.                                                                                  |
+| **위치가 지정되지 않았지만 플로트된 요소들**                    | `float` 속성이 적용된 요소들로, 위치가 지정되지 않은 상태에서 소스 코드의 등장 순서에 따라 쌓인다. <br/>플로트된 요소들은 주변 요소들을 감싸며 레이아웃에 영향을 미친다.                                                                                            |
+| **인라인 요소들**                                               | 텍스트와 이미지와 같은 인라인 요소들은 문서의 흐름 내에 있으며, 위치가 지정되지 않은 상태(`position: static`)로 배치된다. <br/>이러한 요소들은 주변의 블록 요소들과 함께 자연스럽게 레이아웃된다.                                                                   |
+| **`z-index: 0;` 또는 `z-index: auto;`를 가진 위치 지정 요소들** | `z-index`가 `0`이거나 `auto`로 설정된 위치 지정 요소들이다. <br/>이 요소들은 기본 쌓임 순서를 따르며, 소스 코드에 나타나는 순서대로 쌓인다. <br/>특별한 `z-index` 값이 지정되지 않은 경우, 요소들은 소스 순서에 따라 쌓인다.                                        |
+| **양의 `z-index` 값을 가진 위치 지정 요소들**                   | 위치가 지정된 요소(`position: absolute`, `relative`, `fixed`, `sticky`) 중에서 `z-index` 값이 양수인 요소들이다. <br/>`z-index` 값이 높을수록 화면에 더 가깝게 표시된다. <br/>동일한 `z-index` 값을 가진 요소들은 소스 코드에서 나중에 작성된 요소가 먼저 표시된다. |
 
 ## 📝 정리
 

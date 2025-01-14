@@ -13,7 +13,12 @@ last_update:
   author: zen
 ---
 
-import {Figure} from "@site/src/components/utils/Figure/index";
+import { Figure, Series } from '@site/src/components/utils';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import { seriesList } from '@site/docs/frontEnd/tools/storybook/_utils_/';
+
+<Series title={seriesList.title}>{seriesList.children}</Series>
 
 ## 🎯 이 문서를 읽고 난 후의 상태
 
@@ -23,7 +28,12 @@ import {Figure} from "@site/src/components/utils/Figure/index";
 
 ## 🤔 Storybook 이란 무엇일까?
 
-<Figure fileName='Storybook-Relationship.webp' alt='스토리북 이미지 (출처 : 스토리북)' caption='스토리북 이미지 (출처 : 스토리북)' href='https://storybook.js.org/tutorials/intro-to-storybook/react/ko/get-started/'/>
+<Figure
+  fileName="Storybook-Relationship.webp"
+  alt="스토리북 이미지 (출처 : 스토리북)"
+  caption="스토리북 이미지 (출처 : 스토리북)"
+  href="https://storybook.js.org/tutorials/intro-to-storybook/react/ko/get-started/"
+/>
 
 > Storybook is a frontend workshop for building UI components and pages in isolation. <br/>
 
@@ -37,13 +47,13 @@ import {Figure} from "@site/src/components/utils/Figure/index";
 
 조금 더 상세하게 설명하면 다음과 같다. <br/>
 
-|의미|상세|
-|---|---|
-|독립적인 컴포넌트 개발 환경|워크샵에서는 애플리케이션의 나머지 코드와는 무관하게 컴포넌트를 개발하고 테스트할 수 있다. <br/> 이는 컴포넌트가 애플리케이션 전체를 실행하지 않고도 개별적으로 확인되고 개선될 수 있음을 뜻한다.|
-|시각적 피드백 제공| 컴포넌트를 실시간으로 렌더링하고, 다양한 상태와 props를 통해 동작을 확인할 수 있다. <br/> 개발자는 코드 작성 중에 즉각적인 시각적 피드백을 받을 수 있다.|
-|컴포넌트 문서화 및 관리|워크샵은 각 컴포넌트의 상태와 사용법을 문서화하는 데 도움이 되며, 이를 통해 디자인 시스템을 구축하거나 팀원 간의 협업을 개선할 수 있다.|
+| 의미                        | 상세                                                                                                                                                                                              |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 독립적인 컴포넌트 개발 환경 | 워크샵에서는 애플리케이션의 나머지 코드와는 무관하게 컴포넌트를 개발하고 테스트할 수 있다. <br/> 이는 컴포넌트가 애플리케이션 전체를 실행하지 않고도 개별적으로 확인되고 개선될 수 있음을 뜻한다. |
+| 시각적 피드백 제공          | 컴포넌트를 실시간으로 렌더링하고, 다양한 상태와 props를 통해 동작을 확인할 수 있다. <br/> 개발자는 코드 작성 중에 즉각적인 시각적 피드백을 받을 수 있다.                                          |
+| 컴포넌트 문서화 및 관리     | 워크샵은 각 컴포넌트의 상태와 사용법을 문서화하는 데 도움이 되며, 이를 통해 디자인 시스템을 구축하거나 팀원 간의 협업을 개선할 수 있다.                                                           |
 
-<br/>
+<br />
 
 `Swagger`를 사용해본 사람이 있다면, 이를 떠올리면 얼추 비슷하게 통할 것이다.<br/>
 
@@ -65,15 +75,15 @@ import {Figure} from "@site/src/components/utils/Figure/index";
 
 몇 가지 비슷한 도구가 있긴 했다. GPT에게 정리를 시켜보니 다음과 같은 표를 얻을 수 있었다. <br/>
 
-| 도구 이름 | 장점 | 단점 | 공통점 | 차이점 |
-|-----------|------|------|--------|--------|
-| **Storybook** | 다양한 프레임워크 지원, 풍부한 애드온 생태계, 강력한 문서화 및 테스트 기능 | 초기 설정 복잡할 수 있음, 프로젝트 규모 커질수록 속도 저하 가능 | 독립적인 컴포넌트 개발 환경 제공, 문서화 기능 | 가장 널리 사용됨, 기능과 확장성 면에서 가장 풍부 |
-| **Styleguidist** | 간단한 설정, React 전용이라 React에 최적화됨 | 기능이 Storybook보다 제한적, 애드온 생태계가 부족함 | React 컴포넌트 문서화 및 테스트 | React 전용으로 다른 프레임워크 지원 안 함 |
-| **Docz** | 쉬운 설정 및 빠른 시작, MDX 지원으로 문서 작성 용이 | 유지보수가 활발하지 않을 수 있음, 커스터마이징 제한 | 문서화 및 개발 환경 제공 | 문서화에 특화되어 있음, Storybook보다 간단함 |
-| **Ladle** | 가볍고 빠른 속도, 최신 기능 지원 | 애드온이 부족할 수 있음, 커뮤니티 규모가 작음 | 컴포넌트 스토리 개발 환경 제공 | 성능과 최신 기능에 집중, 단순함 |
-| **Pattern Lab** | Atomic Design 방식 지원, 강력한 디자인 시스템 구축 | React나 Vue와의 통합이 제한적일 수 있음 | 디자인 시스템 구축 및 문서화 가능 | 디자인 시스템 구축에 초점, Atomic Design 기반 |
+| 도구 이름        | 장점                                                                       | 단점                                                            | 공통점                                        | 차이점                                           |
+| ---------------- | -------------------------------------------------------------------------- | --------------------------------------------------------------- | --------------------------------------------- | ------------------------------------------------ |
+| **Storybook**    | 다양한 프레임워크 지원, 풍부한 애드온 생태계, 강력한 문서화 및 테스트 기능 | 초기 설정 복잡할 수 있음, 프로젝트 규모 커질수록 속도 저하 가능 | 독립적인 컴포넌트 개발 환경 제공, 문서화 기능 | 가장 널리 사용됨, 기능과 확장성 면에서 가장 풍부 |
+| **Styleguidist** | 간단한 설정, React 전용이라 React에 최적화됨                               | 기능이 Storybook보다 제한적, 애드온 생태계가 부족함             | React 컴포넌트 문서화 및 테스트               | React 전용으로 다른 프레임워크 지원 안 함        |
+| **Docz**         | 쉬운 설정 및 빠른 시작, MDX 지원으로 문서 작성 용이                        | 유지보수가 활발하지 않을 수 있음, 커스터마이징 제한             | 문서화 및 개발 환경 제공                      | 문서화에 특화되어 있음, Storybook보다 간단함     |
+| **Ladle**        | 가볍고 빠른 속도, 최신 기능 지원                                           | 애드온이 부족할 수 있음, 커뮤니티 규모가 작음                   | 컴포넌트 스토리 개발 환경 제공                | 성능과 최신 기능에 집중, 단순함                  |
+| **Pattern Lab**  | Atomic Design 방식 지원, 강력한 디자인 시스템 구축                         | React나 Vue와의 통합이 제한적일 수 있음                         | 디자인 시스템 구축 및 문서화 가능             | 디자인 시스템 구축에 초점, Atomic Design 기반    |
 
-<br/>
+<br />
 
 팀에는 나를 비롯해 프론트앤드 개발이 익숙치 않은 사람들이 있었다.<br/>
 
@@ -148,8 +158,12 @@ yarn dev
 
 이를 실행시키면 다음과 같은 화면이 나온다.<br/>
 
-<Figure fileName='App-Modalities-React-Tutorial.webp' alt='스토리북 이미지 (출처 : 스토리북)' caption='스토리북 이미지 (출처 : 스토리북)' href='https://storybook.js.org/tutorials/intro-to-storybook/react/ko/get-started/'/>
-
+<Figure
+  fileName="App-Modalities-React-Tutorial.webp"
+  alt="스토리북 이미지 (출처 : 스토리북)"
+  caption="스토리북 이미지 (출처 : 스토리북)"
+  href="https://storybook.js.org/tutorials/intro-to-storybook/react/ko/get-started/"
+/>
 
 이렇게 하면 설치가 끝났다.<br/>
 
