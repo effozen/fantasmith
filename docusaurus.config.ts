@@ -120,9 +120,9 @@ const config: Config = {
     [
       '@docusaurus/plugin-content-docs',
       {
-        id: 'react-lab', // 문서의 ID
-        path: './docs/react-lab', // 문서가 위치한 디렉토리
-        routeBasePath: 'react-lab', // 라우트의 기본 경로
+        id: 'reactLab', // 문서의 ID
+        path: './docs/reactLab', // 문서가 위치한 디렉토리
+        routeBasePath: 'reactLab', // 라우트의 기본 경로
         sidebarPath: require.resolve('./sidebars.ts'), // 사이드바 구성 파일
         editUrl: 'https://github.com/effozen/fantasmith/tree/main/', // 문서 편집 링크
         showLastUpdateTime: true, // 마지막 업데이트 시간 표시
@@ -302,7 +302,7 @@ const config: Config = {
           position: 'left',
           items: [
             { to: '/development', label: 'Development' },
-            { to: '/react-lab', label: 'React-Lab' },
+            { to: '/reactLab', label: 'React-Lab' },
             { to: '/frontEnd', label: 'Front-End' },
             { to: '/challenge', label: 'Challenge' },
             { to: '/skills', label: 'Dev-Skills' },

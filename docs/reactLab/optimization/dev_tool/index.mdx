@@ -1,0 +1,321 @@
+---
+title: '리액트 개발자 도구 탐구'
+image: '/media/reactLab/optimization/dev_tool/img/index.webp'
+description: '최적화를 하기 위해서는 성능을 측정하는 방법을 알아야 한다. 동시에, 이게 어떻게 렌더링이 되며, 어떤 과정을 거쳐서 변화가 되는지도 파악할 필요가 있다. 이를 도와주는 개발자 도구에 대해서 알아보자.'
+tags: [react, performance, optimization]
+keywords: ['react', 'reactLab', 'dev-tool', 'performance', 'optimization']
+sidebar_position: 2
+sidebar_label: '리액트 개발자 도구 탐구'
+sidebar_custom_props:
+  img: '/media/reactLab/optimization/dev_tool/img/index.webp'
+last_update:
+  date: 2025-01-02
+  author: zen
+---
+
+import { Figure } from '@site/src/components/utils';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+> 포스팅은 크롬 브라우저 및 React Developer Tools 6.0.1 버전을 기준으로 작성이 되었습니다.
+
+<br />
+<br />
+<br />
+
+## 글을 통해 전하고 싶은 메세지
+
+- 개발자 도구를 활용하여 성능을 측정하고, 최적화를 진행할 수 있다.
+- 리액트 개발자 도구는 멋지다. 이를 활용하여 개발을 진행하자.
+
+## 글 작성 동기
+
+`console.log`만을 사용해서 디버깅을 하고, 과정을 분석하면서 개발을 진행했었다.
+
+그러다, `debugger`를 알게 되고, 크롬 개발자 도구를 조금씩 활용하게 되면서 개발이 편해졌다.
+
+리액트를 사용하면서, 개발자 도구가 있다는 것을 알게 되었다.
+
+최적화에 관심을 갖기 시작하면서, 이를 좀 더 제대로 활용해볼 수 있지 않을까 하는 생각이 들었다.
+
+## 개발자 도구란?
+
+<Figure fileName="chrome_dev_tool.webp" alt="크롬 개발자 도구" caption="크롬 개발자 도구" />
+
+> 개발자 도구 (또는 "개발자 도구" 또는 줄여서 "DevTools")는 개발자가 소프트웨어를 생성, 테스트 및 디버깅할 수 있게 해주는 프로그램입니다. <br/> > [MDN - 개발자 도구](https://developer.mozilla.org/ko/docs/Glossary/Developer_Tools)
+
+개발에서의 "도구"는 보통 개발자의 개발을 돕는 소프트에어를 의미한다.
+
+프로그램의 정상 동작 파악 및 디버깅을 효율적으로 수행할 수 있게 많은 기능을 제공한다. (예를 들어, 코드를 중간에 멈추고 변수의 값을 확인하거나, 코드의 실행 시간을 측정하는 등)
+
+## 리액트 개발자 도구
+
+리액트 개발의 편의성을 돕기 위해 2015년에 발표된 브라우저 확장 프로그램이다.
+
+[리액트 공식 문서 - New React Developer Tools](https://ko.legacy.reactjs.org/blog/2015/09/02/new-react-developer-tools.html)
+
+[리액트 공식 문서 - 개발자 도구 설치 방법 안내](https://react.dev/learn/react-developer-tools)
+
+위 사이트를 통해 쉽게 다운로드 받을 수 있다.
+
+<Tabs>
+  <TabItem value="Components 패널" label="Components 패널" default>
+    <Figure fileName="components.webp" alt="Components 패널" caption="Components 패널" />
+  </TabItem>
+  <TabItem value="Profiler 패널" label="Profiler 패널">
+    <Figure fileName="profiler.webp" alt="Profiler 패널" caption="Profiler 패널" />
+  </TabItem>
+</Tabs>
+
+## 리액트 개발자 도구 설정
+
+<Figure
+  fileName="highlight_option.gif"
+  alt="리액트 개발자 도구 설정"
+  caption="리액트 개발자 도구 설정"
+/>
+
+"General -> Highligh updates when components render" 옵션을 활성화하면, 컴포넌트가 렌더링 될 때마다 하이라이트가 되어서 렌더링이 되는 것을 확인할 수 있다.
+
+<Figure
+  fileName="render_highlight.gif"
+  alt="하이라이트 옵션 사용 예"
+  caption="하이라이트 옵션 사용 예"
+/>
+
+개발자 도구를 킨 상태로 조작을 해보면, 컴포넌트가 렌더링 될 때마다 하이라이트가 되어서 렌더링이 되는 것을 확인할 수 있다.
+
+## Components Tab
+
+<Figure fileName="components.webp" alt="Components 패널" caption="Components 패널" />
+
+컴포넌트 탭에서는 다음의 기능을 확인할 수 있다.
+
+- 컴포넌트의 계층 구조를 확인할 수 있다.
+- 컴포넌트의 상태를 확인할 수 있다.
+- 컴포넌트의 props를 확인할 수 있다.
+
+즉, 리액트 개발과 관련해서 `console.log`를 벗어나게 해준다.
+
+<Figure fileName="component1.gif" alt="Components 탭 사용 예" caption="Components 탭 사용 예" />
+
+우측에서 속성값을 변경하는 등의 과정을 통해서, 상태가 변경될 때 컴포넌트가 어떻게 렌더링이 되는지 확인할 수 있다.
+
+또한, 소스코드에 대한 추적 편의성도 제공한다.
+
+### Logging 기능
+
+<Figure fileName="dev_tool_loggin.gif" alt="Loggin 예" caption="Loggin 예" />
+
+단순히 `components`의 상태 조작 외에도, `console.log`를 대체할 수 있는 기능도 제공한다.
+
+`loggin` 기능이 그것인데, 우측 상단의 벌레 모양을 통해서 `loggin`을 사용할 수 있다.
+
+<Figure fileName="dev_tool_loggin2.webp" alt="Loggin 버튼" caption="Loggin 버튼" />
+
+가운데 벌레(bug) 모양을 클릭하면 콘솔에 `props`, `hooks`, `DOM에 있는 노드`, `시스템에서의 파일 위치` 등 컴포넌트와 관련된 모든 내용을 콘솔에 출력할 수 있다.
+
+### Component Filtering
+
+<Figure fileName="dev_tool_filtering.gif" alt="Filtering 예" caption="Filtering 예" />
+
+> "Components" -> "Hide Components where ..." -> "Add filter"
+
+리액트 개발자 도구 설정에서 `filtering`을 통해서, 특정 컴포넌트를 숨길 수 있다.
+
+컴포넌트 탭에서 옵션을 주면 복잡한 컴포넌트에서 내가 원하는 것만 찾아서 볼 수 있다.
+
+## Profiler Tab
+
+최적화에서 제일 중요한 것은 성능 측정이다.
+
+`Profiler` 탭을 이용하면 성능을 측정할 수 있으며, 특히, 렌더링이 어떻게 이루어지는 지 관찰할 수 있다.
+
+### Profiling 방법
+
+<Figure
+  fileName="profile_start.webp"
+  alt="Profile 시작하기 위한 버튼"
+  caption="Profiler 시작하기 위한 버튼"
+/>
+
+프로파일링 탭에서는 "🔵" 를 눌러서 기록을 시작하기 전까지는 내용을 확인할 수 없다.
+
+파란색 버튼을 눌러서 기록을 시작하면, 렌더링이 될 때 마다 성능 정보가 자동으로 수집된다.
+
+기록 중에는 평소 사용하듯이 사용하면 되며, 수집을 중단하려면 "🔴" 버튼을 클릭한다.
+
+<Figure fileName="profiling1.gif" alt="Profile 사용 예" caption="Profile 사용 예" />
+
+### Commit chart
+
+커밋차트를 보기 위해서는 리액트의 렌더링 과정을 이해할 필요가 있다.
+
+<details>
+
+<summary>리액트 렌더링 과정 요약</summary>
+
+### 리액트 렌더링 과정
+
+리액트는 기본적으로 3가지 단계를 거쳐서 렌더링을 진행한다.
+
+<Figure
+  fileName="react_render_process.webp"
+  alt="리액트 렌더링 과정"
+  caption="리액트 렌더링 과정"
+  href="https://react.dev/learn/render-and-commit"
+/>
+
+> 1. Triggering a render (delivering the guest’s order to the kitchen) <br/>
+> 2. Rendering the component (preparing the order in the kitchen) <br/>
+> 3. Committing to the DOM (placing the order on the table) <br/>
+>
+> [리액트 공식문서 - Render and Commit](https://react.dev/learn/render-and-commit)
+
+<Figure
+  fileName="react_render_process2.webp"
+  alt="리액트 리렌더링 과정"
+  caption="리액트 리렌더링 과정"
+  href="https://react.dev/learn/render-and-commit"
+/>
+
+> "Rendering" is React calling your components.<br/> > [리액트 공식문서 - Render and Commit](https://react.dev/learn/render-and-commit)
+
+쉽게 정리하면 다음과 같다.
+
+- Trigger는 사용자가 이벤트를 통해 렌더링을 유발하는 과정이다.
+- Rendering은 컴포넌트가 화면에 출력되기 위해서 계산되는 과정이다. Virtual DOM을 조작하는 과정이라고 볼 수 있다.
+- Commit은 Virtual DOM이 화면에 그려지기 위해서, Real DOM에 붙는 과정이라고 볼 수 있다.
+
+즉, 이렇게 리액트는 Trigger -> Rendering -> Commit의 과정을 거쳐서 렌더링을 진행한다.
+
+</details>
+
+커밋 차트는 리액트 랜더링 과정에서, `Commit` 단계를 기록한 차트이다.
+
+커밋은 프로파일러 우측 상단에 막대 차트로 표시된다.
+
+<Figure fileName="commit_chart.webp" alt="커밋 차트" caption="커밋 차트" />
+
+빨간색으로 표시한 부분이 커밋차트이다.
+
+<Figure fileName="commit_chart2.webp" alt="커밋 차트 상세" caption="커밋 차트 상세" />
+
+각 막대는 커밋 별로 그룹화 된 성능 정보를 보여준다.
+
+막대의 <strong>색상과 높이</strong>을 통해 <strong>렌더링에 걸린 시간</strong>을 비교할 수 있다.
+
+길이가 긴 노란색 막대(🟨)가 짧은 초록색 막대(🟩)보다 오랜 시간이 걸렸음을 의미한다.
+
+마우스로 각 막대를 클릭하거나 좌우 화살표 버튼을 클릭해 커밋 별 상세 정보를 확인할 수 있다.
+
+선택된 커밋은 파란색(🟦) 막대로 표시된다.
+
+### Profile Filtering
+
+프로파일링 시간이 길 수록 너무 많은 커밋이 많아질 수 있다.
+
+이로 인해, 원하는 정보를 찾기 어려울 수 있다.
+
+이를 위해서 프로파일러에서는 <strong>필터링</strong> 기능을 제공한다.
+
+<Figure fileName="profile_filter.gif" alt="Profile 필터링" caption="Profile 필터링" />
+
+> "Setting" -> "Profiler" 에서 확인할 수 있다.
+
+위에서 확인할 수 있듯이, 특정 `ms`이하의 커밋을 감추었더니 막대가 줄어드는 것을 볼 수 있다.
+
+### Flame Chart
+
+일반적으로 `플레임(Flame)` 차트는 애플리케이션의 성능을 시각적으로 분석하기 위한 도구를 가리킨다.
+
+주로 함수 호출 스택과, 각 함수의 실행 시간을 한눈에 파악할 수 있게 도와준다.
+
+<details>
+
+<summary>플레임 차트의 어원</summary>
+
+플레임 그래프라는 용어는 Brendan Gregg라는 컴퓨터 과학자가 성능 분석을 위해 개발한 시각화 기법에서 유래되었다.
+
+Brendan Gregg는 시스템 성능 분석을 위한 다양한 도구와 방법론을 개발했으며, 그 중 플레임 그래프는 복잡한 호출 스택을 직관적으로 이해할 수 있게 해주는 강력한 도구로 널리 사용되고 있다.
+
+플레임 그래프는 그 모양이 불꽃(Flame)이 타오르는 듯한 형상을 띄기 때문에 "플레임"이라는 이름이 붙여졌다.
+
+이 시각적 특성 덕분에 복잡한 데이터도 쉽게 해석할 수 있게 되었으며, 다양한 성능 분석 도구에서 채택되어 사용되고 있다.
+
+</details>
+
+리액트 개발자 도구의 프로파일러에서의 플레임 차트는 특정 커밋에 대한 애플리케이션의 상태를 보여준다.
+
+특징을 정리하면 다음과 같다.
+
+- 렌더링 성능 분석: 어떤 컴포넌트가 렌더링될 때 얼마나 시간이 소요되는지 시각적으로 확인할 수 있다.
+- 재렌더링 원인 파악: 불필요한 재렌더링이 발생하는 부분을 식별하여 최적화할 수 있다.
+- 컴포넌트 트리 이해: 컴포넌트 간의 호출 관계를 한눈에 파악하여 구조적인 개선점을 찾을 수 있다.
+
+각 차트의 막대는 리액트 컴포넌트를 의미한다.
+
+막대의 <strong>크기와 색상</strong>은 <strong>컴포넌트와 그 자식 요소까지 모두 렌더링하는 데 걸린 시간</strong>을 의미한다.
+
+너비는 컴포넌트가 최종 렌더링될 떄 소요된 시간을, 색상은 현재 커밋의 일부로써 소요된 시간을 보여준다.
+
+막대의 너비가 넓을 수록 렌더링에 오랜 시간이 걸린 것이다.
+
+막대가 노란색(🟨)이면 상대적으로 오랜 시간, 초록색(🟩)이면 짧은 시간이 소요되었다고 볼 수 있다.
+
+만일 회색(⬜️)이라면 이 커밋 중에 컴포넌트가 전혀 렌더링되지 않았다는 뜻이다.
+
+<Figure
+  fileName="flame_chart.webp"
+  alt="플레임 차트"
+  caption="플레임 차트"
+  href="https://ko.legacy.reactjs.org/blog/2018/09/10/introducing-the-react-profiler.html"
+/>
+
+특정 컴포넌트가 몇 번이나 업데이트 되었는지 알고 싶다면 플레임 차트에서 해당 컴포넌트 명을 가진 막대를 클릭하면 된다.
+
+우측 패널의 `Rendered at` 영역에서 클릭한 내용을 확인할 수 있다.
+
+<Figure fileName="flame_chart2.webp" alt="플레임 차트 상세" caption="플레임 차트 상세" />
+
+### Ranked Chart
+
+단일 커밋들에 대해서, 렌더링이 오래 걸린 순서대로 보여준다.
+
+<Figure fileName="ranked_chart.webp" alt="Ranked 차트" caption="Ranked 차트" />
+
+각 막대는 리액트 컴포넌트를 의미한다.
+
+렌더링에 걸린 시간은 해당 컴포넌트와 하위 컴포넌트까지 모두 렌더링하는데 소요된 시간을 의미한다.
+
+그렇기에, 일반적으로 상위 컴포넌트 일 수록 트리 상단에 위치할 확률이 높다.
+
+플레임 차트와 마찬가지로, 개별 막대를 클릭하여 렌더링된 횟수와 렌더링된 원인을 추적할 수 있다.
+
+### 저장/불러오기 기능
+
+성능을 공유하기 위한 저장/불러오기 기능을 제공하고 있다.
+
+<Figure fileName="save_load.webp" alt="저장/불러오기" caption="저장/불러오기" />
+
+데이터는 `JSON` 포멧으로 저장되며, 이를 불러오면 간단하게 해당 데이터를 볼 수 있다.
+
+<Figure fileName="json.webp" alt="출력되는 JSON 값" caption="출력되는 JSON 값" />
+
+## 마무리
+
+한번 정리를 하고 나니, `console.log`가 생각이상으로 비효율적인 방법임을 알 수 있었다.
+
+리액트 개발자 도구를 활용하여 앞으로 최적화 작업을 보다 효율적으로 진행해보고자 한다.
+
+## 참고 자료
+
+[React 개발자 도구 활용하기 (Dev Tools) - 시소](https://velog.io/@seesaw/React-%EA%B0%9C%EB%B0%9C%EC%9E%90-%EB%8F%84%EA%B5%AC-%ED%99%9C%EC%9A%A9%ED%95%98%EA%B8%B0-Dev-Tools)
+
+[리액트 공식 문서 - Introducing the React Profiler](https://ko.legacy.reactjs.org/blog/2018/09/10/introducing-the-react-profiler.html)
+
+[리액트 공식 문서 - Render and Commit](https://react.dev/learn/render-and-commit)
+
+[리액트 공식 문서 - New React Developer Tools](https://ko.legacy.reactjs.org/blog/2015/09/02/new-react-developer-tools.html)
+
+[MDN - 개발자 도구 (Developer Tools)](https://developer.mozilla.org/ko/docs/Glossary/Developer_Tools)

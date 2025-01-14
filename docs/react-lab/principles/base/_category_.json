@@ -1,8 +1,0 @@
-{
-  "label": "핵심 이론 탐구",
-  "position": 1,
-  "link": {
-    "type": "generated-index",
-    "description": "리액트의 설계 철학이나, 전체 과정에서 베이스가 되는 이론을 탐구하는 공간입니다."
-  }
-}
