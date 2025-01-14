@@ -31,12 +31,24 @@
 }
 
 .ol {
-  font-size: 1.2rem;
-  margin-bottom: 0;
+  font-size: 1.125rem;
+  list-style: none; /* 브라우저 기본 번호 숨김 */
+  margin: 0;
+  padding: 0;
+}
+
+.ol li {
+  counter-increment: item;
 }
 
 .li {
   line-height: 1.8rem;
+}
+
+.ol li::before {
+  content: counter(item) '.';
+  margin-right: 0.5rem;
+  opacity: 0.75;
 }
 
 .a {
@@ -49,7 +61,7 @@
   font-weight: 600;
 }
 
-.strong::marker {
+.strong::before {
   color: var(--ifm-link-color);
 }
 
@@ -59,6 +71,7 @@
   height: 100%;
   display: flex;
   align-items: center;
+  cursor: pointer;
 }
 
 .header {
@@ -66,4 +79,10 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1.5rem;
+}
+
+@media (max-width: 996px) {
+  .marker {
+    display: none;
+  }
 }

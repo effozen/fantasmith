@@ -4,18 +4,18 @@ import styles from './styles.module.css';
 
 const COLLAPSED_STANDARD = 8;
 
-interface ICategory {
+interface IList {
   name: string;
   link: string;
 }
 
-interface ICategoryProps {
+interface ISeriesProps {
   title: string;
-  children: ICategory[];
+  children: IList[];
   className?: string;
 }
 
-export const Series = ({ title, children, className }: ICategoryProps) => {
+export const Series = ({ title, children, className }: ISeriesProps) => {
   // 컴포넌트의 확장 여부를 관리하는 state
   const [isOpen, setIsOpen] = useState<boolean>(true);
   // 콘텐츠 영역의 DOM 엘리먼트를 참조하기 위한 ref
