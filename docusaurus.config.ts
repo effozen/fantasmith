@@ -84,7 +84,7 @@ const config: Config = {
         sidebarPath: require.resolve('./sidebars.ts'), // 사이드바 구성 파일
         editUrl: 'https://github.com/effozen/fantasmith/tree/main/', // 문서 편집 링크
         showLastUpdateTime: true, // 마지막 업데이트 시간 표시
-        sidebarCollapsible: false, // 사이드바 접기/펼치기
+        sidebarCollapsible: true, // 사이드바 접기/펼치기
         remarkPlugins: [remarkMath],
         rehypePlugins: [rehypeKatex],
       },
@@ -98,7 +98,7 @@ const config: Config = {
         sidebarPath: require.resolve('./sidebars.ts'), // 사이드바 구성 파일
         editUrl: 'https://github.com/effozen/fantasmith/tree/main/', // 문서 편집 링크
         showLastUpdateTime: true, // 마지막 업데이트 시간 표시
-        sidebarCollapsible: false, // 사이드바 접기/펼치기
+        sidebarCollapsible: true, // 사이드바 접기/펼치기
         remarkPlugins: [remarkMath],
         rehypePlugins: [rehypeKatex],
       },
@@ -112,7 +112,7 @@ const config: Config = {
         sidebarPath: require.resolve('./sidebars.ts'), // 사이드바 구성 파일
         editUrl: 'https://github.com/effozen/fantasmith/tree/main/', // 문서 편집 링크
         showLastUpdateTime: true, // 마지막 업데이트 시간 표시
-        sidebarCollapsible: false, // 사이드바 접기/펼치기
+        sidebarCollapsible: true, // 사이드바 접기/펼치기
         remarkPlugins: [remarkMath],
         rehypePlugins: [rehypeKatex],
       },
@@ -126,7 +126,7 @@ const config: Config = {
         sidebarPath: require.resolve('./sidebars.ts'), // 사이드바 구성 파일
         editUrl: 'https://github.com/effozen/fantasmith/tree/main/', // 문서 편집 링크
         showLastUpdateTime: true, // 마지막 업데이트 시간 표시
-        sidebarCollapsible: false, // 사이드바 접기/펼치기
+        sidebarCollapsible: true, // 사이드바 접기/펼치기
         remarkPlugins: [remarkMath],
         rehypePlugins: [rehypeKatex],
       },
@@ -140,7 +140,7 @@ const config: Config = {
         sidebarPath: require.resolve('./sidebars.ts'), // 사이드바 구성 파일
         editUrl: 'https://github.com/effozen/fantasmith/tree/main/', // 문서 편집 링크
         showLastUpdateTime: true, // 마지막 업데이트 시간 표시
-        sidebarCollapsible: false, // 사이드바 접기/펼치기
+        sidebarCollapsible: true, // 사이드바 접기/펼치기
         remarkPlugins: [remarkMath],
         rehypePlugins: [rehypeKatex],
       },
@@ -154,7 +154,7 @@ const config: Config = {
         sidebarPath: require.resolve('./sidebars.ts'), // 사이드바 구성 파일
         editUrl: 'https://github.com/effozen/fantasmith/tree/main/', // 문서 편집 링크
         showLastUpdateTime: true, // 마지막 업데이트 시간 표시
-        sidebarCollapsible: false, // 사이드바 접기/펼치기
+        sidebarCollapsible: true, // 사이드바 접기/펼치기
         remarkPlugins: [remarkMath],
         rehypePlugins: [rehypeKatex],
       },
@@ -168,7 +168,7 @@ const config: Config = {
         sidebarPath: require.resolve('./sidebars.ts'), // 사이드바 구성 파일
         editUrl: 'https://github.com/effozen/fantasmith/tree/main/', // 문서 편집 링크
         showLastUpdateTime: true, // 마지막 업데이트 시간 표시
-        sidebarCollapsible: false, // 사이드바 접기/펼치기
+        sidebarCollapsible: true, // 사이드바 접기/펼치기
         remarkPlugins: [remarkMath],
         rehypePlugins: [rehypeKatex],
       },
@@ -271,7 +271,7 @@ const config: Config = {
     docs: {
       sidebar: {
         hideable: true, // 사용자가 숨기거나 펼칠 수 있도록 함
-        // autoCollapseCategories: true, // 모든 카테고리가 기본적으로 펼쳐지도록 설정
+        autoCollapseCategories: true, // 모든 카테고리가 기본적으로 펼쳐지도록 설정
       },
     },
     navbar: {
