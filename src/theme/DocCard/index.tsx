@@ -1,25 +1,19 @@
-import React, {type ReactNode} from 'react';
+import React, { type ReactNode } from 'react';
 import clsx from 'clsx';
 import Link from '@docusaurus/Link';
-import {
-  useDocById,
-  findFirstSidebarItemLink,
-} from '@docusaurus/plugin-content-docs/client';
-import {usePluralForm} from '@docusaurus/theme-common';
+import { useDocById, findFirstSidebarItemLink } from '@docusaurus/plugin-content-docs/client';
+import { usePluralForm } from '@docusaurus/theme-common';
 import isInternalUrl from '@docusaurus/isInternalUrl';
-import {translate} from '@docusaurus/Translate';
+import { translate } from '@docusaurus/Translate';
 
-import type {Props} from '@theme/DocCard';
+import type { Props } from '@theme/DocCard';
 import Heading from '@theme/Heading';
-import type {
-  PropSidebarItemCategory,
-  PropSidebarItemLink,
-} from '@docusaurus/plugin-content-docs';
+import type { PropSidebarItemCategory, PropSidebarItemLink } from '@docusaurus/plugin-content-docs';
 
 import styles from './styles.module.css';
 
 function useCategoryItemsPlural() {
-  const {selectMessage} = usePluralForm();
+  const { selectMessage } = usePluralForm();
   return (count: number) =>
     selectMessage(
       count,
@@ -30,22 +24,14 @@ function useCategoryItemsPlural() {
           description:
             'The default description for a category card in the generated index about how many items this category includes',
         },
-        {count},
-      ),
+        { count }
+      )
     );
 }
 
-function CardContainer({
-  href,
-  children,
-}: {
-  href: string;
-  children: ReactNode;
-}): JSX.Element {
+function CardContainer({ href, children }: { href: string; children: ReactNode }): JSX.Element {
   return (
-    <Link
-      href={href}
-      className={clsx('card padding--lg', styles.cardContainer)}>
+    <Link href={href} className={clsx('card padding--lg', styles.cardContainer)}>
       {children}
     </Link>
   );
@@ -64,24 +50,25 @@ function CardLayout({
   description?: string;
   cardImg?: string;
 }): JSX.Element {
-
   return (
     <CardContainer href={href}>
       <Heading
         as="h2"
         // className={clsx('text--truncate', styles.cardTitle)}
         className={clsx(styles.cardTitle)}
-        title={title}>
+        title={title}
+      >
         {icon} {title}
       </Heading>
-      <div className={clsx(styles.cardImgContainer)} >
+      <div className={clsx(styles.cardImgContainer)}>
         <img className={clsx(styles.cardImg)} src={cardImg} alt={title} />
       </div>
       {description && (
         <p
           // className={clsx('text--truncate', styles.cardDescription)}
           className={clsx(styles.cardDescription)}
-          title={description}>
+          title={description}
+        >
           {description}
         </p>
       )}
@@ -89,11 +76,7 @@ function CardLayout({
   );
 }
 
-function CardCategory({
-  item,
-}: {
-  item: PropSidebarItemCategory;
-}): JSX.Element | null {
+function CardCategory({ item }: { item: PropSidebarItemCategory }): JSX.Element | null {
   const href = findFirstSidebarItemLink(item);
   const categoryItemsPlural = useCategoryItemsPlural();
   const cardImg = item?.customProps?.img ?? '/img/logo.webp';
@@ -114,7 +97,7 @@ function CardCategory({
   );
 }
 
-function CardLink({item}: {item: PropSidebarItemLink}): JSX.Element {
+function CardLink({ item }: { item: PropSidebarItemLink }): JSX.Element {
   const icon = isInternalUrl(item.href) ? '📄️' : '🔗';
   const doc = useDocById(item.docId ?? undefined);
   const cardImg = item?.customProps?.img ?? '/img/logo.webp';
@@ -130,7 +113,7 @@ function CardLink({item}: {item: PropSidebarItemLink}): JSX.Element {
   );
 }
 
-export default function DocCard({item}: Props): JSX.Element {
+export default function DocCard({ item }: Props): JSX.Element {
   switch (item.type) {
     case 'link':
       return <CardLink item={item} />;

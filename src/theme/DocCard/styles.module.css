@@ -9,6 +9,7 @@
   transition-property: border, box-shadow;
 
   height: 100%;
+  display: flex;
 }
 
 .cardContainer:hover {
