@@ -54,7 +54,7 @@
 .a {
   /* font-weight: 300; */
   /* opacity: 0.8; */
-  color: white;
+  color: var(--color-text-primary);
 }
 
 .strong {
