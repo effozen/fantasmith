@@ -1,21 +1,29 @@
 ---
-title: "알고리즘과 문제풀이법"
-image: "/media/skills/tutorial/what_is_algorithm/img/index.webp"
-description: "알고리즘은 똑똑한 사람들이 정리해놓은 문제풀이법과도 같습니다. 어렵게만 생각했던 알고리즘을 조금 더 쉽게 접근해볼까요?"
+title: '알고리즘과 문제풀이법'
+image: '/media/skills/tutorial/what_is_algorithm/img/index.webp'
+description: '알고리즘은 똑똑한 사람들이 정리해놓은 문제풀이법과도 같습니다. 어렵게만 생각했던 알고리즘을 조금 더 쉽게 접근해볼까요?'
 tags: [skills, algorithm, data_structure]
 keywords: [skills, algorithm, data_structure]
 sidebar_position: 2
-sidebar_label: "알고리즘과 문제풀이법"
+sidebar_label: '알고리즘과 문제풀이법'
 sidebar_custom_props:
-  img: "/media/skills/tutorial/what_is_algorithm/img/index.webp"
+  img: '/media/skills/tutorial/what_is_algorithm/img/index.webp'
 last_update:
   date: 2024-01-01
   author: zen
 ---
 
-import { Figure } from "@site/src/components/utils";
-import Tabs from "@theme/Tabs";
-import TabItem from "@theme/TabItem";
+import { Figure, Series } from '@site/src/components/utils';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import { seriesList } from '@site/docs/skills/tutorial/__utils__/';
+
+<Series title={seriesList.title}>{seriesList.children}</Series>
+
+> [배영수](https://github.com/Bongpal-dev)님의 도움으로 코틀린 코드가 추가되었습니다. 감사합니다!
+
+<br />
+<br />
 
 ## 알고리즘 개요
 
@@ -178,6 +186,10 @@ $$
 
 그러면 이대로 코드로 바꾸면 됩니다.
 
+<Tabs>
+
+<TabItem value="javascript" label="JavaScript">
+
 ```javascript
 function calculateFruit(n, m) {
   const result = n + m;
@@ -185,6 +197,22 @@ function calculateFruit(n, m) {
   return result;
 }
 ```
+
+</TabItem>
+
+<TabItem value="kotlin" label="Kotlin">
+
+```kotlin
+fun calculateFruit(n: Int, m: Int): Int {
+    val result = n + m
+
+    return result
+}
+```
+
+</TabItem>
+
+</Tabs>
 
 그냥 단순하게 n + m 으로 표현해도 되겠지만, 위와 같이 함수로도 표현할 수 있을 것입니다.
 
@@ -267,17 +295,17 @@ $$
 
 쪼개고 보니 또 뭐가 보이시나요?
 
-<Figure
-  fileName="steps.webp"
-  alt="곱셈 문제 과정 분석"
-  caption="곱셈 문제 과정 분석"
-/>
+<Figure fileName="steps.webp" alt="곱셈 문제 과정 분석" caption="곱셈 문제 과정 분석" />
 
 글씨가 조금 이상하긴 하지만 위와 같은 결과가 보이지 않나요?
 
 $3 * 4$는 그저 $n = 3$인 단계의 결과에 불과 합니다.
 
 그러면 코딩도 가능하지 않을까요?
+
+<Tabs>
+
+<TabItem value="javascript" label="JavaScript">
 
 ```javascript
 function multiply(a, b) {
@@ -291,6 +319,26 @@ function multiply(a, b) {
 }
 ```
 
+</TabItem>
+
+<TabItem value="kotlin" label="Kotlin">
+
+```kotlin
+fun multiply(a: Int, b: Int): Int {
+    var result = 0
+
+    for (i in 0 until b) {
+        result +=3
+    }
+
+    return result
+}
+```
+
+</TabItem>
+
+</Tabs>
+
 위와 같이 표현할 수 있지 않을까요?
 
 앞선 과정이 되게 단순해보이지만, 쪼개다보니 규칙이 보였고, 그를 통해서 코드를 만든 모습입니다.
@@ -303,11 +351,27 @@ function multiply(a, b) {
 
 당장 이 문제만 놓고 보더라도, 곱셈으로 표현하면 아래와 같이 보다 쉽게 단순화해서 표현할 수 있지 않나요?
 
+<Tabs>
+
+<TabItem value="javascript" label="JavaScript">
+
 ```javascript
 function multiply(a, b) {
   return a * b;
 }
 ```
+
+</TabItem>
+
+<TabItem value="kotlin" label="Kotlin">
+
+```kotlin
+fun multiply(a: Int, b: Int) = a * b
+```
+
+</TabItem>
+
+</Tabs>
 
 그리고 이런 과정 필요 없이 어느정도 단계는 건너 뛸 수 있지 않나요?
 
@@ -365,6 +429,10 @@ function multiply(a, b) {
 
 앞서서 본, 아래와 같은 코드를 볼까요?
 
+<Tabs>
+
+<TabItem value="javascript" label="JavaScript">
+
 ```javascript
 function multiply(a, b) {
   let result = 0;
@@ -377,15 +445,51 @@ function multiply(a, b) {
 }
 ```
 
+</TabItem>
+
+<TabItem value="kotlin" label="Kotlin">
+
+```kotlin
+fun multiply(a: Int, b: Int): Int {
+    var result = 0
+
+    for (i in 0 until b) {
+        result +=3
+    }
+
+    return result
+}
+```
+
+</TabItem>
+
+</Tabs>
+
 이를 되돌아보는 것입니다. 아.. 어떻게 해야 단순화할 수 있을까? 어떻게 해야 코드를 줄일 수 있을까? 다른 풀이는 없었을까?
 
 있었죠!
+
+<Tabs>
+
+<TabItem value="javascript" label="JavaScript">
 
 ```javascript
 function multiply(a, b) {
   return a * b;
 }
 ```
+
+</TabItem>
+
+<TabItem value="kotlin" label="Kotlin">
+
+```kotlin
+fun multiply(a: Int, b: Int) = a * b
+```
+
+</TabItem>
+
+</Tabs>
 
 위와 같은 코드가요!
 

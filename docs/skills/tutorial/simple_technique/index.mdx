@@ -1,21 +1,24 @@
 ---
-title: "간단한 문제 풀이 테크닉"
-image: "/media/skills/tutorial/simple_technique/img/index.webp"
-description: "본격적이면서, 간단한 알고리즘에 대해 다룹니다. 슬라이딩 윈도우, 빈도수 세기, 투 포인터 패턴 등을 다루며, 이를 통해 문제를 풀어보는 방법을 알아봅니다."
+title: '간단한 문제 풀이 테크닉'
+image: '/media/skills/tutorial/simple_technique/img/index.webp'
+description: '본격적이면서, 간단한 알고리즘에 대해 다룹니다. 슬라이딩 윈도우, 빈도수 세기, 투 포인터 패턴 등을 다루며, 이를 통해 문제를 풀어보는 방법을 알아봅니다.'
 tags: [skills, algorithm, data_structure]
 keywords: [skills, algorithm, data_structure]
 sidebar_position: 3
-sidebar_label: "간단한 문제 풀이 테크닉"
+sidebar_label: '간단한 문제 풀이 테크닉'
 sidebar_custom_props:
-  img: "/media/skills/tutorial/simple_technique/img/index.webp"
+  img: '/media/skills/tutorial/simple_technique/img/index.webp'
 last_update:
   date: 2024-01-01
   author: zen
 ---
 
-import { Figure } from "@site/src/components/utils";
-import Tabs from "@theme/Tabs";
-import TabItem from "@theme/TabItem";
+import { Figure, Series } from '@site/src/components/utils';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import { seriesList } from '@site/docs/skills/tutorial/__utils__/';
+
+<Series title={seriesList.title}>{seriesList.children}</Series>
 
 ## 들어가며
 
@@ -178,8 +181,8 @@ import TabItem from "@theme/TabItem";
 ```javascript
 const count = {};
 
-if (count["문자"] !== undefined) count["문자"] = 1;
-else count["문자"] += 1;
+if (count['문자'] !== undefined) count['문자'] = 1;
+else count['문자'] += 1;
 ```
 
 자바스크립트 같은 경우는 배열의 원소를 동적으로 할당할 수 있어서, 위와 같이 짤 수 있겠죠?<br/>
@@ -509,52 +512,28 @@ console.log(result); // [5, 11, 2]
 
 참고로 아래 그림에서 start는 빨간 화살표, end는 녹색 화살표로 표기할게요.
 
-<Figure
-  fileName="two_pointer1.webp"
-  alt="투포인터 그림 1"
-  caption="투포인터 그림 1"
-/>
+<Figure fileName="two_pointer1.webp" alt="투포인터 그림 1" caption="투포인터 그림 1" />
 
 투 포인터 방식에서는 위처럼 2개의 변수를 두고 처음 위치를 가리키게 해요.
 
 그리고 문제의 조건이 합이 18이 되는 경우이므로 합을 저장하는 변수를 따로 선언해둡니다.
 
-<Figure
-  fileName="two_pointer2.webp"
-  alt="투포인터 그림 2"
-  caption="투포인터 그림 2"
-/>
+<Figure fileName="two_pointer2.webp" alt="투포인터 그림 2" caption="투포인터 그림 2" />
 
 처음에는 단순한 방법처럼 end를 움직여가면서 합을 구해요. 그리고 18보다 클 경우 end를 그만 옮기면 됩니다! 한번 아래에 표현해볼게요.
 
 <Tabs>
   <TabItem value="그림 3" label="그림 3">
-    <Figure
-      fileName="two_pointer3.webp"
-      alt="투포인터 그림 3"
-      caption="투포인터 그림 3"
-    />
+    <Figure fileName="two_pointer3.webp" alt="투포인터 그림 3" caption="투포인터 그림 3" />
   </TabItem>
   <TabItem value="그림 4" label="그림 4">
-    <Figure
-      fileName="two_pointer4.webp"
-      alt="투포인터 그림 4"
-      caption="투포인터 그림 4"
-    />
+    <Figure fileName="two_pointer4.webp" alt="투포인터 그림 4" caption="투포인터 그림 4" />
   </TabItem>
   <TabItem value="그림 5" label="그림 5">
-    <Figure
-      fileName="two_pointer5.webp"
-      alt="투포인터 그림 5"
-      caption="투포인터 그림 5"
-    />
+    <Figure fileName="two_pointer5.webp" alt="투포인터 그림 5" caption="투포인터 그림 5" />
   </TabItem>
   <TabItem value="그림 6" label="그림 6">
-    <Figure
-      fileName="two_pointer6.webp"
-      alt="투포인터 그림 6"
-      caption="투포인터 그림 6"
-    />
+    <Figure fileName="two_pointer6.webp" alt="투포인터 그림 6" caption="투포인터 그림 6" />
   </TabItem>
 </Tabs>
 
@@ -569,28 +548,16 @@ start(빨간 화살표)를 한칸 옮기고, 초록색을 빨간색의 위치부
 
 <Tabs>
   <TabItem value="그림 7" label="그림 7">
-    <Figure
-      fileName="two_pointer7.webp"
-      alt="투포인터 그림 7"
-      caption="투포인터 그림 7"
-    />
+    <Figure fileName="two_pointer7.webp" alt="투포인터 그림 7" caption="투포인터 그림 7" />
   </TabItem>
   <TabItem value="그림 8" label="그림 8">
-    <Figure
-      fileName="two_pointer8.webp"
-      alt="투포인터 그림 8"
-      caption="투포인터 그림 8"
-    />
+    <Figure fileName="two_pointer8.webp" alt="투포인터 그림 8" caption="투포인터 그림 8" />
   </TabItem>
 </Tabs>
 
 위에 보시면 합이 17로, 18보다 작아졌죠? 그러면 빨간 화살표의 이동을 멈추고 다시 18보다 큰 값이 될때까지 초록 화살표를 이동하는 겁니다.
 
-<Figure
-  fileName="two_pointer9.webp"
-  alt="투포인터 그림 9"
-  caption="투포인터 그림 9"
-/>
+<Figure fileName="two_pointer9.webp" alt="투포인터 그림 9" caption="투포인터 그림 9" />
 
 한칸을 이동했더니 합이 18이 되었습니다. 이제, 정답인 [1, 5, 11, 2] 를 반환하면 됩니다.
 
