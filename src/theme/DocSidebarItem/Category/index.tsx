@@ -19,6 +19,9 @@ import useIsBrowser from '@docusaurus/useIsBrowser';
 import DocSidebarItems from '@theme/DocSidebarItems';
 import type { Props } from '@theme/DocSidebarItem/Category';
 
+import styles from './styles.module.css';
+import { BiCaretRight } from 'react-icons/bi';
+
 // If we navigate to a category and it becomes active, it should automatically
 // expand itself
 function useAutoExpandActiveCategory({
@@ -94,9 +97,16 @@ function CollapseButton({
       }
       aria-expanded={!collapsed}
       type="button"
-      className="clean-btn menu__caret"
+      // className="clean-btn menu__caret"
+      className={clsx(
+        'clean-btn',
+        styles.myCustomCaret,
+        !collapsed ? styles.myCustomCaretRotated : ''
+      )}
       onClick={onClick}
-    />
+    >
+      <BiCaretRight />
+    </button>
   );
 }
 
