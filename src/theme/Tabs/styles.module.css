@@ -1,0 +1,19 @@
+.tabList {
+  margin-bottom: var(--ifm-leading);
+}
+
+/* .tabItem {
+  margin-top: 0 !important;
+} */
+
+/* 스크롤 가능한 탭 목록 컨테이너 */
+.tabsScroll {
+  overflow-x: auto;
+}
+
+/* 각 탭 항목에 텍스트 줄바꿈 방지 및 shrink 방지 */
+.tabItem {
+  margin-top: 0 !important;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
