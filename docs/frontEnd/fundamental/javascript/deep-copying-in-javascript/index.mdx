@@ -1,0 +1,604 @@
+---
+title: '자바스크립트에서의 Deep Copy 방법과 성능에 대한 고찰'
+image: '/media/frontEnd/fundamental/javascript/deep-copying-in-javascript/img/index.webp'
+description: 'structuredClone() 메서드를 포함해서 자바스크립트에서의 딥 카피 방법에 대해서 알아보고, 각각의 성능에 대해서 다룹니다.'
+tags: [frontend, javascript]
+keywords:
+  [
+    자바스크립트,
+    딥 카피,
+    deep copy,
+    structuredClone,
+    JSON.parse,
+    JSON.stringify,
+    lodash,
+    cloneDeep,
+    performance,
+  ]
+sidebar_position: 2
+sidebar_label: 'Deep Copy 방법과 성능에 대한 고찰'
+sidebar_custom_props:
+  img: '/media/frontEnd/fundamental/javascript/deep-copying-in-javascript/img/index.webp'
+last_update:
+  date: 2024-01-01
+  author: zen
+---
+
+import { Figure } from '@site/src/components/utils';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+:::note
+현재 작성중인 문서입니다.
+:::
+
+> [surma의 Deep-copying in JavaScript](https://surma.dev/things/deep-copy/index.html) 을 번역하고, 추가적인 내용을 덧붙여 작성한 글입니다.<br/>
+> 원작자의 허락을 받았으며, 번역을 진행하면서 추가적인 내용을 덧붙였기에, 원작자의 글과 다를 수 있습니다.
+
+<br />
+<br />
+
+## 들어가며
+
+자바스크립트에서 어떻게 객체를 복사할 수 있을까?
+
+간단한 질문이지만, 그 답은 간단하지 않다.
+
+## Call by reference
+
+자바스크립트에서 객체를 인자로 넘겨줄 때, 참조값을 넘겨준다.
+
+이 말이 이해가 안될 수 있는데, 다음의 코드를 보자.
+
+```javascript
+function mutate(obj) {
+  obj.a = true;
+}
+
+const obj = { a: false };
+mutate(obj);
+console.log(obj.a); // true를 출력
+```
+
+`mutate` 함수는 인자로 받은 `obj`의 `a` 속성을 `true`로 변경한다.
+
+`Call by value (값에 의한 호출)` 환경에서는 <strong>인자로 들어온 값을 복사해서 사용</strong>한다.
+
+그렇기에 <strong>함수에 내에서 어떤 변화가 있더라도, 원본(원래의 인자값)에는 영향을 미치지 않는다.</strong>
+
+즉, 함수 내에서 들어온 인자를 어떻게 조작하는 지 외부에 드러내지 않는다.
+
+그러나, 자바스크립트와 같은 `Call by reference (참조에 의한 호출)` 환경에서는 함수는 인자로 들어온 값의 참조값(주소)를 활용한다.
+
+그렇기에 함수 내부에서 참조로 들어온 인자에 어떤 변화가 있으면, 원본에도 영향을 미친다.
+
+위의 예제에서, `console.log`를 통해 `obj.a`를 출력하면 `true`를 출력하는 것이 바로 그 예시이다.
+
+<details>
+
+<summary>값에 의한 호출 vs 참조에 의한 호출</summary>
+
+#### 값에 의한 호출 (Call by value)
+
+##### 배경 및 개념
+
+| 주제        | 내용                                                                                                                                   |
+| ----------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| 정의        | 함수가 호출될 때, 인자로 전달되는 데이터의 값 자체를 복사하여 전달하는 방식이다.                                                       |
+| 특징        | 함수 내부에서 인자의 값을 변경하더라도 원본 변수에는 아무런 영향이 없다.                                                               |
+| 메모리 관점 | 복사된 값은 함수 내부의 별도의 메모리 공간에 저장되므로, 원본과는 별개로 존재한다.                                                     |
+| 적용 대상   | 7가지 `primitive` 타입이 `Call by value`로 동작한다.<br/><br/>(`string`, `number`, `boolean`, `null`, `undefined`, `symbol`, `bigint`) |
+
+##### 동작 원리 및 풀이 과정
+
+1. 함수 호출 시, 실제 인자의 값이 복사된다.
+2. 함수의 매개변수는 이 복사된 값을 참조하게 된다.
+3. 함수 내부에서 매개변수의 값을 수정해도, 원본 인자에는 영향을 주지 않는다.
+
+##### 예시
+
+JavaScript에서 기본 데이터 타입(숫자, 문자열, 불리언 등)은 값에 의한 호출 방식을 사용한다.
+
+```javascript
+function increment(num) {
+  num = num + 1; // 함수 내부에서 num의 값을 변경함
+  console.log('함수 내부:', num); // 11을 출력
+}
+
+let value = 10;
+increment(value);
+
+console.log('함수 외부:', value); // 여전히 10
+```
+
+- value 변수에 저장된 값 10이 increment 함수에 인자로 전달될 때, num은 10의 복사본을 받는다.
+- 함수 내부에서 num은 11로 변경되지만, 이 변경은 복사본에만 반영되고 원본인 value에는 영향을 주지 않는다.
+- 결과적으로, 함수 외부에서 출력한 value는 여전히 10이다.
+
+#### 참조에 의한 호출 (Call by reference)
+
+##### 배경 및 개념
+
+| 주제        | 내용                                                                                                                                                                                |
+| ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 정의        | 함수에 인자를 전달할 때, 변수의 실제 값이 아닌 그 변수의 메모리 주소(참조값)를 전달하는 방식이다.                                                                                   |
+| 특징        | 함수 내부에서 매개변수를 통해 값을 변경하면, 그 변경은 원본 변수에도 직접 반영된다.                                                                                                 |
+| 메모리 관점 | 함수는 원본 데이터가 저장된 메모리 공간을 직접 참조하기 때문에, 하나의 데이터에 여러 참조가 동시에 접근할 수 있다.                                                                  |
+| 적용 대상   | 객체, 배열 등 참조형 데이터의 경우, 내부적으로 값에 의한 호출(call-by-value)을 사용하지만, 이 값이 참조값이기 때문에 함수 내부에서 변경이 이루어지면 원본 데이터에도 영향을 미친다. |
+
+##### 동작 원리 및 풀이 과정
+
+1. 함수 호출 시, 인자의 메모리 주소(혹은 참조값)가 전달된다.
+2. 함수의 매개변수는 이 주소를 받아, 원본 데이터가 저장된 곳을 직접 참조한다.
+3. 함수 내부에서 해당 주소를 통해 데이터를 수정하면, 원본 데이터 자체가 변경된다.
+
+##### 예시
+
+JavaScript에서 객체와 배열 등 참조형 데이터의 경우, 내부적으로 값에 의한 호출(call-by-value)을 사용하지만, 이 값이 참조값이기 때문에 함수 내부에서 변경이 이루어지면 원본 데이터에도 영향을 미친다. (이를 흔히 call by sharing이라고도 부른다.)
+
+```javascript
+function addItem(arr, item) {
+  arr.push(item); // 전달받은 배열(arr)을 직접 변경함
+  console.log('함수 내부:', arr);
+}
+
+let myArray = [1, 2, 3];
+addItem(myArray, 4);
+console.log('함수 외부:', myArray); // 변경된 [1, 2, 3, 4]
+```
+
+- myArray는 배열 객체를 가리키는 참조값을 가진다.
+- 이 참조값이 addItem 함수에 인자로 전달되고, 함수 내부 매개변수 arr도 동일한 참조값을 갖는다.
+- arr.push(item)은 배열의 원본 데이터를 직접 수정하기 때문에, 함수 외부에서도 myArray의 내용이 변경되어 [1, 2, 3, 4]가 된다.
+
+</details>
+
+## JS에서 자료형의 데이터를 다루는 법
+
+깊은 복사 등을 논하기에 앞서서 Call by Reference나, Call by Value의 원리에 대해서 살펴볼 필요가 있다.
+
+자바스크립트에서 자료형이 메모리 상에서 어떻게 다루어지는 지를 이해하면, 깊은 복사 및 얕은 복사에 대해서 더 쉽게 이해할 수 있기 때문이다.
+
+### 변수와 식별자의 구분
+
+변수와 식별자를 구분하는 것에서 시작하자.
+
+> 변수는 값을 저장하는 공간이다. 식별자는 변수를 가리키는 이름이다.
+
+<strong>변수는 값을 담는 공간</strong>이라는 것.
+
+그리고, <strong>식별자는 변수를 지칭하는 이름</strong>임을 기억하자.
+
+### Primitive 값은 어떻게 처리되는가?
+
+객체에 대해 다루기 전에 `Primitive` 값들은 어떻게 처리되는지 알아보자.
+
+<Tabs>
+
+<TabItem value="코드" label="코드">
+
+```javascript
+var a;
+```
+
+위 코드를 실행하면, 변수 공간이 메모리에 할당된다.
+
+이때의 주소를 1001이라고 하자.
+
+메모리 상 할당된 공간에 접근하기 위해서 매번 1001번의 주소를 기억하고 사용한다면 많은 불편함을 낳는다.
+
+그래서 우리는 주소에 별칭을 부여해서 사용한다. 이게 <strong>식별자</strong>이다.
+
+</TabItem>
+
+<TabItem value="결과" label="결과">
+
+<Figure fileName="principle1.webp" alt="변수와 식별자" caption="변수와 식별자" />
+
+앞에서 말한 내용을 그림으로 표현하면 위와 같다.
+
+1001번이라는 공간에, 식별자 `a`를 부여했다.
+
+그리고, 아직 값은 입력하지 않았기에 값 항목은 비어있다.
+
+</TabItem>
+
+</Tabs>
+
+```javascript
+var a = 1;
+```
+
+이렇게 코드를 실행한다고 하면 어떻게 될 것 같은가?
+
+<Tabs>
+
+<TabItem value="오답" label="오답">
+
+<Figure fileName="principle2.webp" alt="일반적인 생각" caption="일반적인 생각" />
+
+아마 위와 같이 1001번에 1이라는 값이 들어간다고 생각할 것이다.
+
+하지만, 이는 틀린 생각이다.
+
+</TabItem>
+
+<TabItem value="정답" label="정답">
+
+<Figure fileName="principle3.webp" alt="실제 결과" caption="실제 결과" />
+
+실제로는 위와 같이 1001번에 1이라는 값이 들어가는 것이 아니라, 메모리 상에 새롭게 공간이 할당되고, 그 공간에 1이라는 값이 들어간다.
+
+임의로 할당되는 주소를 5001번이라고 하자. 그리고 구분을 위해서 앞에 `@`를 붙여주었다.
+
+그리고, `a`라는 식별자를 가진 공간은 5001번이라는 주소를 참조한다.
+
+</TabItem>
+
+</Tabs>
+
+이렇게 동작하는 이유는 간단하다.
+
+1이라는 값을 `a`라는 변수 뿐 아니라 `b`, `c` 등에서도 활용한다고 생각해보자.
+
+그러면 만약 '오답'의 경우처럼 각각에 대해서 1이 들어간다고 생각하면 메모리의 낭비가 생긴다.
+
+> 자바스크립트에서 `Number` 타입은 `8byte`이며, `double` 형이다.
+
+이에 따라서, 변수 3개에 1이 저장된다고 가정하면 24바이트가 필요해진다.
+
+<Figure fileName="principle4.webp" alt="메모리 낭비" caption="메모리 낭비" />
+
+그렇지만, 만약 '정답'의 경우처럼 1이라는 값을 메모리에 한 번만 할당하고, 각 변수들은 그 값을 참조하도록 한다면 메모리를 효율적으로 사용할 수 있다.
+
+<Figure fileName="principle5.webp" alt="메모리 효율" caption="메모리 효율" />
+
+그러면 한가지 혼동이 생길 수 있다. `1`이라는 값에 대해서 `a`, `b`, `c`가 참조하고 있다면, 만약 `c`에서 `1`을 `2`로 변경한다면 `b`, `c`는 어떻게 될까?
+
+<Figure fileName="principle6.webp" alt="값 변경" caption="값 변경" />
+
+위와 같이 새롭게 메모리 상에 공간을 할당하고, 그 공간에 `2`라는 값을 넣어주는 형태로 동작한다.
+
+그리고, `c`는 새롭게 할당된 주소를 참조하게 된다.
+
+이처럼 자바스크립트에서는 `primitive` 값들은 값 자체가 메모리에 할당되고, 변수들은 그 값을 참조하는 형태로 동작한다.
+
+그리고, 그 값들은 변경이 불가능하다. 위 그림처럼 어떤 동작이 이루어진다면, 새롭게 복사해서 다뤄지는 형태로 동작한다.
+
+그리고 이를, `immutable`한 값이라고 부른다.
+
+<Tabs>
+
+<TabItem value="코드" label="코드">
+
+```javascript
+var a = 'abc';
+```
+
+위의 코드가 있다고 해보자.
+
+그리고 다음의 코드를 실행시키면 어떻게 될 것 같은가?
+
+```javascript
+a.concat('def');
+```
+
+답은 당연히 `abcdef`가 될 것이다. 다만 메모리 상에서 어떻게 처리될 것 같은가?
+
+</TabItem>
+
+<TabItem value="과정 1" label="과정 1">
+
+<Figure fileName="principle7.webp" alt="첫 번째 과정" caption="첫 번째 과정" />
+
+```javascript
+var a = 'abc';
+```
+
+이 코드 실행에 대한 결과이다.
+
+문자열은 `primitive` 타입이므로, 숫자를 처리할 때 처럼 새로운 공간에 값이 할당되고 변수는 이를 가리킨다.
+
+</TabItem>
+
+<TabItem value="과정 2" label="과정 2">
+
+<Figure fileName="principle8.webp" alt="두 번째 과정" caption="두 번째 과정" />
+
+```javascript
+a.concat('def');
+```
+
+`concat` 메서드는 문자열을 합쳐주는 메서드이다.
+
+앞에서 언급했듯이 자바스크립트는 `primitive` 값에 대해서 `immutable`한 특성을 가진다.
+
+그렇기에, `abcdef`와 같은 문자열을 새로 생성해서 공간에 할당한다.
+
+그리고, 이를 `a`가 참조하게 된다.
+
+</TabItem>
+
+<TabItem value="결과" label="결과">
+
+<Figure fileName="principle9.webp" alt="결과" caption="결과" />
+
+최종적으로 위와 같이 동작한다.
+
+`abc`를 참조하는 요소가 없으므로, `abc`가 담긴 5001번은 가비지 컬렉터에 의해서 메모리에서 해제된다.
+
+</TabItem>
+
+</Tabs>
+
+### 객체와 같은 참조값은 어떻게 처리가 되는가?
+
+`Primitive` 값에 대해서 알아보았으니 객체에 대해서 알아보자.
+
+객체는 앞선 과정에서 한 단계를 더 거치게 된다.
+
+```javascript
+var obj = { a: 1 };
+```
+
+이런 값이 있다고 해보자.
+
+메모리 상에 어떻게 할당이 될 것 같은가?
+
+<Tabs>
+
+<TabItem value="오답" label="오답">
+
+<Figure fileName="principle10.webp" alt="단순한 접근" caption="단순한 접근" />
+
+단순하게 위와 같이 접근해볼 수 있을 것이다.
+
+반절은 맞고 반절은 틀리다.
+
+자바스크립트 객체에서 속성은 변수와 같은 방식으로 동작한다.
+
+</TabItem>
+
+<TabItem value="정답" label="정답">
+
+<Figure fileName="principle11.webp" alt="실제 동작" caption="실제 동작" />
+
+실제로는 위와 같이 동작한다.
+
+즉, 변수 처리 과정은 동일한데, 그 변수들을 참조하는 공간을 만들고, `obj`라는 공간은 주소들을 가리키는 공간을 참조한다고 보면 된다.
+
+위 그림에서 2001번을 코드로 표현하면 다음과 같다.
+
+```javascript
+{
+}
+```
+
+중괄호 부분이라고 볼 수 있다.
+
+</TabItem>
+
+</Tabs>
+
+<br />
+<br />
+
+조금 더 확장해서 생각해보자.
+
+```javascript
+var obj = { a: 1, b: 2, c: 'abc' };
+```
+
+이런 코드가 있다고 하자. 이는 어떻게 처리될 것인가?
+
+<Figure fileName="principle12.webp" alt="실제 동작" caption="실제 동작" />
+
+위와 같이 동작한다.
+
+<Tabs>
+
+<TabItem value="퀴즈" label="퀴즈">
+
+그러면 다음의 코드는 어떻게 처리될 것인가?
+
+```javascript
+var obj = { a: 1, b: 2, c: 'abc' };
+var obj2 = obj;
+```
+
+</TabItem>
+
+<TabItem value="정답" label="정답">
+
+<Figure fileName="principle13.webp" alt="실제 동작" caption="실제 동작" />
+
+위와 같이 동작한다.
+
+</TabItem>
+
+</Tabs>
+
+## 얕은 복사와 깊은 복사
+
+앞에서 이해한 내용을 바탕으로 하면 얕은 복사와 깊은 복사에 대해서 쉽게 이해할 수 있다.
+
+### 얕은 복사
+
+<Tabs>
+
+<TabItem value="코드" label="코드">
+
+```javascript
+var obj = {
+  a: 1,
+  b: 2,
+  c: 'abc',
+};
+
+var obj2 = obj;
+```
+
+위와 같은 코드가 있다고 해보자.
+
+</TabItem>
+
+<TabItem value="코드 수정" label="코드 수정">
+
+```javascript
+obj.c = 'abcdef';
+```
+
+그리고 이를 실행했다고 해보자.
+
+이제부터 과정을 하나씩 살펴보자.
+
+</TabItem>
+
+<TabItem value="과정 1" label="과정 1">
+
+```javascript
+var obj = {
+  a: 1,
+  b: 2,
+  c: 'abc',
+};
+
+var obj2 = obj;
+```
+
+이 코드를 실행시켰을 때, 아래와 같은 모습을 하고 있을 것이다.
+
+<Figure fileName="principle13.webp" alt="처음 코드 실행 모습" caption="처음 코드 실행 모습" />
+
+</TabItem>
+
+<TabItem value="과정 2" label="과정 2">
+
+<Figure fileName="shallow1.webp" alt="얕은 복사" caption="얕은 복사" />
+
+이렇게 처리되는 과정을 얕은 복사라고 한다.
+
+</TabItem>
+
+<TabItem value="과정 3" label="과정 3">
+
+```javascript
+obj.c = 'abcdef';
+```
+
+위와 같은 코드를 실행하면 다음과 같이 변한다.
+
+<Figure fileName="shallow2.webp" alt="속성 값 변경" caption="속성 값 변경" />
+
+</TabItem>
+
+<TabItem value="결과" label="결과">
+
+<Figure fileName="shallow3.webp" alt="결과" caption="결과" />
+
+결과적으로 위와 같이 동작하게 된다.
+
+</TabItem>
+
+</Tabs>
+
+<br />
+<br />
+
+위의 과정이 곧 얕은 복사이다.
+
+### 깊은 복사
+
+그러면 깊은 복사는 무엇인가?
+
+내용물을 전부 복사하는 것이 깊은 복사이다.
+
+<Tabs>
+
+<TabItem value="깊은 복사 예 1" label="깊은 복사 예 1">
+
+<Figure fileName="deep1.webp" alt="깊은 복사 예 1" caption="깊은 복사 예 1" />
+
+</TabItem>
+
+<TabItem value="깊은 복사 예 2" label="깊은 복사 예 2">
+
+<Figure fileName="deep2.webp" alt="깊은 복사 예 2" caption="깊은 복사 예 2" />
+
+</TabItem>
+
+</Tabs>
+
+<br />
+<br />
+
+위와 같이 전체 복사가 이루어지기에, 서로간에 영향을 미치지 않는다.
+
+그리고, 이렇게 관련된 모든 것을 복사하는 게 곧 깊은 복사이다.
+
+## 깊은 복사와 얕은 복사를 하는 방법
+
+지금까지 깊은 복사와 얕은 복사가 무엇인지 원리를 살펴보았다.
+
+그러면 이제 실제로 어떻게 깊은 복사와 얕은 복사를 할 수 있는지 알아보자.
+
+### 얕은 복사 : `Object.assign`
+
+`Object.assign(target, sources...)`를 이용하면 얕은 복사를 할 수 있다.
+
+이는, `sources`에 있는 객체들의 속성들을 `target`에 복사한다.
+
+<Figure fileName="assign.webp" alt="object.assign 동작 모습" caption="object.assign 동작 모습" />
+
+이는 앞에서 언급한 얕은 복사의 문제를 똑같이 안고 있다.
+
+```javascript
+source.a = 23;
+
+// 위를 실행하면 target.a도 23이 된다.
+
+target.a === 23;
+```
+
+이런 문제가 발생한다.
+
+```javascript
+function mutateDeepObject(obj) {
+  obj.a.thing = true;
+}
+
+const obj = { a: { thing: false } };
+const copy = Object.assign({}, obj);
+
+mutateDeepObject(copy);
+
+console.log(obj.a.thing); // prints true
+```
+
+또 다른 문제의 예시는 위와 같다.
+
+:::info[전개 연산자]
+
+```javascript
+var obj = { a: 1, b: 2, c: 3 };
+var obj2 = { ...obj };
+```
+
+이런 전개 연산자도 생각해볼 수 있다.
+
+이 역시, `Object.assign`과 유사하게 동작하며, 얕은 복사를 유발한다.
+:::
+
+### 깊은 복사 : `JSON.parse(JSON.stringify(obj))`
+
+객체의 복사본을 만드는 잘 알려진 방법 중 하나는 `JSON.stringify`와 `JSON.parse`를 사용하는 것이다.
+
+`JSON` 객체를 이용해서 객체를 직렬화하고, 다시 역직렬화하는 방식이다.
+
+다소 번거로운 측면이 있지만 `값(value)`에 한정해서는 잘 동작하는 방법이다.
+
+## 참고 자료
+
+- [surma의 Deep-copying in JavaScript](https://surma.dev/things/deep-copy/index.html)
+- [코어 자바스크립트 책](https://product.kyobobook.co.kr/detail/S000001766397)
+- [모던 자바스크립트 튜토리얼 : 참조에 의한 객체 복사](https://ko.javascript.info/object-copy)
