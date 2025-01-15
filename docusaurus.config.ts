@@ -215,6 +215,7 @@ const config: Config = {
     },
     prism: {
       additionalLanguages: [
+        'typescript',
         'markup',
         'jsx',
         'tsx',
