@@ -2,6 +2,13 @@
   margin-bottom: 0.4rem !important;
 }
 
+.markdown h5 {
+  font-weight: 700;
+  font-size: 1.05rem; /* 18px */
+  line-height: 1.4;
+  margin: 0.8em 0;
+}
+
 .markdown p {
   line-height: 1.7rem;
 }

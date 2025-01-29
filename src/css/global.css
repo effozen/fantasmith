@@ -1,7 +1,7 @@
-@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css');
 
 html {
-  font-family: "Pretendard", sans-serif;
+  font-family: 'Pretendard', sans-serif;
 }
 
 /* ================================
@@ -13,16 +13,14 @@ html {
    Docusaurus/Infima의 --ifm-* 변수를
    우리가 정의한 색상값으로 덮어쓰기
    ===================================== */
-html[data-theme="light"] {
+html[data-theme='light'] {
   /* Docusaurus 기본 변수 맵핑 */
   --ifm-background-color: var(--color-bg);
   --ifm-background-color-alt: var(--color-bg-emphasis);
   --ifm-font-color-base: var(--color-text-primary);
   --ifm-font-color-secondary: var(--color-text-secondary);
   --ifm-color-primary: var(--color-link);
-  --ifm-color-primary-dark: var(
-    --color-button-bg
-  ); /* 필요하다면 더 어두운 톤으로 조정 가능 */
+  --ifm-color-primary-dark: var(--color-button-bg); /* 필요하다면 더 어두운 톤으로 조정 가능 */
   --ifm-color-success: var(--color-success);
   --ifm-color-info: var(--color-info);
   --ifm-color-warning: var(--color-warning);
@@ -41,16 +39,14 @@ html[data-theme="light"] {
    Dark 모드에서 ifm 변수와 매핑
    기존 --color-* 다크 모드 값 유지
    ===================================== */
-html[data-theme="dark"] {
+html[data-theme='dark'] {
   /* Docusaurus 기본 변수 맵핑 */
   --ifm-background-color: var(--color-bg);
   --ifm-background-color-alt: var(--color-bg-emphasis);
   --ifm-font-color-base: var(--color-text-primary);
   --ifm-font-color-secondary: var(--color-text-secondary);
   --ifm-color-primary: var(--color-link);
-  --ifm-color-primary-dark: var(
-    --color-button-bg
-  ); /* 필요하다면 다크한 톤을 조정 가능 */
+  --ifm-color-primary-dark: var(--color-button-bg); /* 필요하다면 다크한 톤을 조정 가능 */
   --ifm-color-success: var(--color-success);
   --ifm-color-info: var(--color-info);
   --ifm-color-warning: var(--color-warning);
@@ -182,6 +178,13 @@ html[data-theme="dark"] {
 .typography-h4 {
   font-weight: 700;
   font-size: 1.125rem; /* 20px */
+  line-height: 1.4;
+  margin: 0.8em 0;
+}
+
+.typography-h5 {
+  font-weight: 700;
+  font-size: 1.05rem; /* 18px */
   line-height: 1.4;
   margin: 0.8em 0;
 }
