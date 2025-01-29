@@ -173,7 +173,8 @@ const config: Config = {
         rehypePlugins: [rehypeKatex],
       },
     ],
-    'docusaurus-plugin-image-zoom',
+    // 'docusaurus-plugin-image-zoom',
+    'docusaurus-plugin-zooming',
     '@docusaurus/theme-live-codeblock',
   ],
 
@@ -258,15 +259,18 @@ const config: Config = {
       darkTheme: PrismDark,
     },
     zoom: {
-      selector: '.markdown :not(em) > img',
+      // selector: '.markdown :not(em) > img',
+      selector: '.markdown img',
+      delay: 500,
       background: {
         light: 'rgb(255, 255, 255)',
         dark: 'rgb(50, 50, 50)',
       },
-      config: {
+      options: {
         // options you can specify via https://github.com/francoischalifour/medium-zoom#usage
         margin: 24,
         scrollOffset: 600,
+        enableGrab: true,
       },
     },
     docs: {
@@ -394,11 +398,7 @@ const config: Config = {
         '@type': 'Person',
         name: 'Zen',
         url: 'https://fantasmith.com',
-        sameAs: [
-          'https://github.com/effozen',
-          'https://www.linkedin.com/in/effozen/',
-          'https://x.com/effozen',
-        ],
+        sameAs: ['https://github.com/effozen', 'https://www.linkedin.com/in/effozen/', 'https://x.com/effozen'],
         jobTitle: '프론트엔드 개발자',
         description: '생각의 동기화를 통해 몰입을 이끌어내는 개발자',
       }),
