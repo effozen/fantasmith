@@ -6,7 +6,14 @@
   font-weight: 700;
   font-size: 1.05rem; /* 18px */
   line-height: 1.4;
-  margin: 0.8em 0;
+  margin: 0.9em 0;
+}
+
+.markdown h6 {
+  font-weight: 700;
+  font-size: 1rem !important; /* 16px */
+  line-height: 1.4;
+  margin: 0.9em 0 !important;
 }
 
 .markdown p {

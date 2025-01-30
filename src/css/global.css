@@ -172,21 +172,28 @@ html[data-theme='dark'] {
   font-weight: 700;
   font-size: 1.25rem; /* 22px */
   line-height: 1.4;
-  margin: 0.8em 0;
+  margin: 0.9em 0;
 }
 
 .typography-h4 {
   font-weight: 700;
   font-size: 1.125rem; /* 20px */
   line-height: 1.4;
-  margin: 0.8em 0;
+  margin: 0.9em 0;
 }
 
 .typography-h5 {
   font-weight: 700;
   font-size: 1.05rem; /* 18px */
   line-height: 1.4;
-  margin: 0.8em 0;
+  margin: 0.9em 0;
+}
+
+.typography-h5 {
+  font-weight: 700;
+  font-size: 1rem; /* 16px */
+  line-height: 1.4;
+  margin: 0.9em 0;
 }
 
 /* Body Text */

@@ -1,0 +1,4253 @@
+---
+title: 'FSD를 위한 ESLint 플러그인 개발 일지'
+image: '/media/challenge/opensource/fsd_lint/img/index.webp'
+description: 'FSD 프로젝트를 진행하면서, 수동으로 설정하는 데 불편함을 느꼈다. 제대로된 플러그인이 존재하지 않았고, 개발을 편하게 하기 위해 ESLint 모듈을 만들어보기로 했다.'
+tags: ['challenge', 'project', 'fsd']
+keywords: ['Frontend', 'FSD', 'Featured Sliced Design']
+sidebar_position: 1
+sidebar_label: FSD를 위한 ESLint 플러그인 개발 일지
+sidebar_custom_props:
+  img: '/media/challenge/opensource/fsd_lint/img/index.webp'
+last_update:
+  date: 2025-01-26
+  author: zen
+---
+
+import { Figure } from '@site/src/components/utils';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+:::info[현재 배포 및 관리 중인 오픈소스입니다.]
+
+아래의 링크에서 사용할 수 있습니다.
+
+- [GitHub Repository](https://github.com/effozen/eslint-plugin-fsd-lint)
+- [NPM Package](https://www.npmjs.com/package/eslint-plugin-fsd-lint)
+
+:::
+
+<br />
+<br />
+
+## 배경
+
+<Figure fileName="voyage.webp" alt="항해 플러스 커리큘럼" caption="항해 플러스 커리큘럼" />
+
+항해 플러스의 과정 중 '클린 코드' 교육이 있다.
+
+과정을 들으면서 리팩토링의 핵심 요인이나, 코드 품질을 높이기 위한 방법을 배웠다.
+
+그리고, 그 과정에서 `Feature-Sliced-Design(FSD)`의 개념을 배우고 적용해보았다.
+
+강제되는 규칙이 많아, 프로젝트나 네이버 웹툰 인턴을 하며 경험중인 실무에서 이를 적용해보려고 하는데, 마땅한 Lint 플러그인이 없어서 불편함을 느꼈다.
+
+그래서, 이를 개발하기로 결정했다.
+
+## 문제 상황
+
+> 만약 도구를 쓴다면, 무조건 만들려고 하기 보다는 이미 있는 것을 활용하는 것이 좋다.
+
+내가 가진 개발 철학 중 하나이다. 소프트웨어의 장점 중 하나는 <strong>'재사용성'</strong>이다. 그래서, 리서치 과정을 꼭 거치는 편이다.
+
+공식 문서에서는 [Steiger](https://github.com/feature-sliced/steiger)라는 도구를 권장하고 있었다.
+
+그러나, 내가 필요한 설정은 없었고, `ESLint`가 아닌 별도 라이브러리이기에 설치해서 관리해야한다는 어려움이 있었다.
+
+| 비교 항목                    | Steiger (별도 CLI 툴)                                                                                                                                                                      | ESLint 플러그인                                                                                                                                                                                                    |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 설치 및 유지보수             | - 프로젝트에 별도 툴(클라이언트/서버) 설치 필요<br/>- 추가 의존성 및 버전 관리 필요<br/>- 툴 업데이트 시 팀 전체에 재설치 안내                                                             | - 이미 존재하는 ESLint 구성에 플러그인만 추가<br/>- 별도 툴 관리 부담 감소<br/>- ESLint 버전 관리만 신경 쓰면 됨                                                                                                   |
+| 개발 워크플로 및 에디터 통합 | - 전용 CLI를 실행해야 하므로, IDE 내 즉각적인 피드백이 어려울 수 있음<br/>- 에디터마다 Steiger 관련 플러그인이 있을 수도 있지만, 보편적이지 않을 수 있음                                   | - VSCode, WebStorm 등 거의 모든 IDE에서 ESLint를 바로 연동<br/>- 실시간으로 린트 에러 확인 가능<br/>- GitHooks/CI 파이프라인에서 별도 세팅 없이 자동 검사 가능                                                     |
+| 규칙 제어 및 세분화(린트 룰) | - 제공되는 규칙을 기반으로 사용해야 함<br/>- 규칙 세분화나 직접적인 커스터마이징(오픈소스 기여 제외)은 제한적<br/>- CLI 기반이므로, 에디터 내 오토픽스(autofix) 기능 사용이 어려울 수 있음 | - ESLint의 Rule 시스템을 그대로 활용 가능<br/>- 규칙 세분화 및 에러/워닝 등 심각도 설정이 자유롭고, 예외 처리를 쉽게 구성<br/>- AST 분석을 통한 깊이 있는 룰 작성 가능<br/>- ESLint autofix 등 자동 수정 활용 가능 |
+| 온보딩 및 교육               | - 새로 들어온 팀원에게 Steiger 도구 설치 및 사용법을 추가로 안내해야 함<br/>- ESLint 경험만 있는 사람에게는 별도 툴 학습 부담                                                              | - 대부분의 개발자가 ESLint에 익숙<br/>- “ESLint 룰이 추가됐다” 정도로 안내하면 되므로 학습 부담 최소화<br/>- 마이그레이션 및 팀 합의가 수월                                                                        |
+| 확장성 및 커스터마이징       | - 도구 자체가 제공하는 옵션, 버전을 고려해야 함<br/>- 고도화나 수정이 필요한 경우 툴 자체 업데이트를 기다려야 함<br/>- 오픈소스 기여 과정이 복잡할 수 있음                                 | - 오픈소스로 릴리스 시, 빠른 피드백 및 기여 가능<br/>- TypeScript 확장 시 @typescript-eslint/parser 등과 쉽게 연동<br/>- 프로젝트 요구사항에 맞게 룰을 추가/변경하기 용이                                          |
+
+위와 같은 이유로, `ESLint` 플러그인을 리서치햇다.
+
+검색하는 과정에서 몇가지 도구를 찾았다. 그러나, 이들은 저마다 문제를 안고 있었다.
+
+| 도구                                                                                        | 설명                                                        | 불편한 점                                                                                                                                                         |
+| ------------------------------------------------------------------------------------------- | ----------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [Eslint plugin for FSD best practices](https://github.com/lndbaryshnikov/eslint-plugin-fsd) | FSD BP를 기준으로 만들어진 ESLint이다.                      | 마지막 관리가 4~5년전으로, 관리가 제대로 이루어지지 않고 있다.<br/><br/>이에 따라서, ESLint 9 이상의 최신 버전에서 강제되는 `Flat Config`에 대한 대응이 부족했다. |
+| [ESLint plugin fsd import](https://github.com/vgratsilev/eslint-plugin-fsd-import)          | 아마도 개인이 사용하기 위해 만들어진 Lint 같았다.           | 관리가 제대로 되고 있지 않으며 기능도 제한적이다.<br/><br/> 신뢰성이 적어 사용이 어려웠다.                                                                        |
+| [@feature-sliced/eslint-config](https://github.com/feature-sliced/eslint-config)            | 135개의 스타와 8000명 이상이 다운받은 FSD를 위한 Lint 이다. | 제대로 된 관리가 2022년이며, `Flat Config`의 대응이 되고 있지 않았다.                                                                                             |
+
+이 외에도 여러가지 도구를 찾아보았으나, 마음에 쏙 드는 플러그인이 없었다.
+
+필요한 요소 중, 특히 핵심적으로 다루어야 하는 부분이 `Flat Config`에 대한 대응이었다.
+
+<Figure
+  fileName="eslint_limit.webp"
+  alt="공식 문서에서 ESLint 8.x 버전 이전의 지원이 중단됨을 공지하고 있다."
+  caption="ESLint 8.x 버전 이전의 지원이 중단됨을 공지하고 있다."
+/>
+
+특히나, 공식문서에서 ESLint 8.x 버전 이전의 지원이 끊긴다고 언급하고 있으므로, 신생 프로젝트에서는 ESLint 9 이상을 사용이 필요했다.
+
+내가 찾은 방법에서는 특정 `ESLint Plugin`이 `Flat Config`를 제공하지 않을 경우, 플러그인 자체의 코드를 수정하지 않고서는 이를 `Flat Config`에 적용할 수 있는 방법이 없었다.
+
+그래서, 이를 해결하기 위해 직접 `ESLint Plugin`을 만들기로 결정했다.
+
+<details>
+
+<summary>Flat Config란 무엇인가?</summary>
+
+#### Flat Config란?
+
+ESLint 8.23.0 이후부터 도입된 새로운 설정 방식이다.
+
+기존의 `.eslintrc` 파일 대신 Javascript 기반의 배열 형식으로 설정하는 방식이다.
+
+#### 기존 방식(.eslintrc.json) vs Flat Config
+
+<Tabs>
+
+<TabItem value="기존 방식(.eslintrc)" label="기존 방식(.eslintrc)">
+
+```json
+{
+  "extends": "eslint:recommended",
+  "env": {
+    "node": true
+  },
+  "rules": {
+    "no-console": "warn"
+  }
+}
+```
+
+##### 단점
+
+- JSON 기반이라 조건문, 변수 사용 등이 불가능하다.
+
+</TabItem>
+
+<TabItem value="Flat Config" label="Flat Config">
+
+```javascript
+import js from '@eslint/js';
+
+export default [
+  js.configs.recommended, // eslint:recommended와 동일
+  {
+    languageOptions: {
+      globals: {
+        console: 'readonly',
+      },
+    },
+    rules: {
+      'no-console': 'warn',
+    },
+  },
+];
+```
+
+##### 장점
+
+- JavaScript 문법 사용 가능 → import / export, 변수, 조건문 활용 가능하다.
+- 설정의 유연성 증가 → 여러 개의 설정을 배열로 조합 가능하다.
+- 속도 개선 → 필요 없는 규칙을 줄이고, 트리 구조 없이 배열을 병합하는 방식으로 처리가능 하다.
+
+</TabItem>
+
+</Tabs>
+
+#### Flat Config의 주요 문법
+
+Flat Config는 배열(`export default []`)을 기반으로 여러 설정을 조합하는 방식이다.
+
+##### 1. 기본 구조
+
+```javascript
+export default [
+  {
+    languageOptions: {},
+    rules: {},
+    plugins: {},
+    settings: {},
+  },
+];
+```
+
+각 객체는 별도의 설정 블록으로 독립적으로 존재할 수 있다.
+
+##### 2. `languageOptions`: 언어 설정
+
+JavaScript 환경을 설정하는 옵션이다.
+
+```javascript
+import globals from 'globals';
+
+export default [
+  {
+    languageOptions: {
+      ecmaVersion: 'latest', // 최신 ECMAScript 버전 사용
+      sourceType: 'module', // ESM(ES Modules) 사용
+      globals: globals.browser, // 브라우저 환경 전역 변수 허용
+    },
+  },
+];
+```
+
+| 옵션          | 설명                                                       |
+| ------------- | ---------------------------------------------------------- |
+| `ecmaVersion` | 지원할 ECMAScript 버전 (`"latest"`, `"2021"`, `"2020"` 등) |
+| `sourceType`  | `"module"` (ESM) 또는 `"script"` (CommonJS)                |
+| `globals`     | 전역 변수 (예: `globals.node`, `globals.browser`)          |
+
+<br />
+
+###### ECMAScript 최신 버전 설정
+
+```javascript
+languageOptions: {
+  ecmaVersion: "latest",
+}
+```
+
+###### Node.js 환경 설정
+
+```javascript
+languageOptions: {
+  globals: globals.node,
+}
+```
+
+###### 브라우저 환경 설정
+
+```javascript
+languageOptions: {
+  globals: globals.browser,
+}
+```
+
+<br />
+
+##### 3. `rules`: ESLint 규칙 설정
+
+Flat Config에서는 규칙을 `rules` 객체에 정의한다.
+
+```javascript
+export default [
+  {
+    rules: {
+      'no-console': 'warn', // console.log 사용 시 경고
+      eqeqeq: 'error', // 일치 연산자(===) 강제
+    },
+  },
+];
+```
+
+- `"off"`: 규칙 비활성화
+- `"warn"`: 경고만 표시
+- `"error"`: 오류 처리
+
+<br />
+
+##### 4. `plugins`: 플러그인 추가가
+
+Flat Config에서 플러그인은 직접 `import` 후 추가해야 한다.
+
+```javascript title="예제: @typescript-eslint 플러그인 적용"
+// highlight-start
+import ts from '@typescript-eslint/eslint-plugin';
+import tsParser from '@typescript-eslint/parser';
+// highlight-end
+
+export default [
+  {
+    languageOptions: {
+      parser: tsParser,
+    },
+    plugins: {
+      '@typescript-eslint': ts,
+    },
+    rules: {
+      '@typescript-eslint/no-unused-vars': 'warn',
+    },
+  },
+];
+```
+
+<br />
+
+##### 5. `extends` 대신 배열 병합
+
+기존 `.eslintrc`에서 `"extends"`를 사용하던 방식 대신, Flat Config에서는 배열을 통해 설정을 조합한다.
+
+<Tabs>
+
+<TabItem value="기존 방식(.eslintrc)" label="기존 방식(.eslintrc)">
+
+```json
+{
+  "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"]
+}
+```
+
+</TabItem>
+
+<TabItem value="Flat Config" label="Flat Config">
+
+```javascript
+import js from '@eslint/js';
+import ts from '@typescript-eslint/eslint-plugin';
+
+export default [
+  js.configs.recommended, // ESLint 기본 추천 설정
+  ts.configs.recommended, // TypeScript 추천 설정
+];
+```
+
+배열을 통해서 여러 설정을 순차저긍로 병합할 수 있다.
+
+</TabItem>
+
+</Tabs>
+
+<br />
+
+##### 6. `overrides`: 특정 파일에 대한 별도 규칙 설정
+
+특정 파일 패턴에 대해 별도의 규칙을 적용할 수 있다.
+
+<Tabs>
+
+<TabItem value="예제 1" label="예제 1">
+
+```javascript title="예제: test/ 폴더 내 테스트 파일에만 규칙 적용"
+export default [
+  {
+    files: ['test/**/*.js'],
+    rules: {
+      'no-console': 'off', // 테스트 파일에서는 console.log 허용
+    },
+  },
+];
+```
+
+</TabItem>
+
+<TabItem value="예제 2" label="예제 2">
+
+```javascript title="예제: TypeScript 파일에 대한 별도 설정"
+export default [
+  {
+    files: ['**/*.ts'],
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'error',
+    },
+  },
+];
+```
+
+</TabItem>
+
+</Tabs>
+
+<br />
+
+##### 7. `ignores`: 특정 파일/폴더 제외
+
+특정 파일이나 폴더를 예외처리 할 수 있다.
+
+<Tabs>
+
+<TabItem value="예제 1" label="예제 1">
+
+```javascript title="node_modules, dist, .next 폴더 제외"
+export default [
+  {
+    ignores: ['node_modules/', 'dist/', '.next/'],
+  },
+];
+```
+
+</TabItem>
+
+<TabItem value="예제 2" label="예제 2">
+
+```javascript title=".env 파일 무시"
+export default [
+  {
+    ignores: ['.env'],
+  },
+];
+```
+
+</TabItem>
+
+</Tabs>
+
+<br />
+
+##### 요약
+
+| 특징             | `.eslintrc.json (기존)`             | `eslint.config.js (Flat Config)` |
+| ---------------- | ----------------------------------- | -------------------------------- |
+| 설정 방식        | JSON/YAML 기반                      | JavaScript 코드 가능             |
+| `extends` 사용   | 문자열 배열                         | 객체 배열                        |
+| `plugins` 설정   | `"plugins": ["@typescript-eslint"]` | `import` 후 객체 추가            |
+| 환경 설정        | `"env": { "node": true }`           | `globals.node` 사용              |
+| 파일별 규칙 적용 | `overrides` 배열 사용               | `files` 키 사용                  |
+| 특정 파일 무시   | `.eslintignore` 필요                | `ignores` 키 사용                |
+
+</details>
+
+## 프로젝트 목표
+
+- `Feature-Sliced-Design`의 컨벤션을 준수하는 `ESLint Plugin`을 만든다.
+- `Flat Config`를 지원한다.
+- `ESLint Plugin`을 만들면서, `ESLint`의 동작 방식을 이해한다.
+
+사실 있는 설정을 가져다쓰기만 했지, ESLint에 대해서 제대로 이해하고 있지 않았다.
+
+그래서 이번에 도전을 하면서, ESLint에 대해 제대로 이해하고, 이를 통해 `Feature-Sliced-Design`의 컨벤션을 준수하는 `ESLint Plugin`을 만들어보기로 했다.
+
+## 계획
+
+처음 시도해보는 도전이라, 모든게 새로웠고, 모든게 장벽이었다.
+
+부족한게 많기에 전략적으로 접근할 필요가 있었다.
+
+목표를 수립하고, 이를 효과적으로 달성하기 위해서 계획을 세웠다.
+
+| 계획                                                        | 내용                                                                                                                                  |
+| ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| 1. 기본 개념 이해 및 환경 준비                              | - ESLint의 기본 개념과 작동 방식을 학습.<br/>- ESLint 플러그인을 만들기 위한 기본 환경 설정.<br/>- NPM 패키지 및 모듈 관리 기본 학습. |
+| 2. ESLint 규칙의 기본 구조 이해                             | - 간단한 커스텀 규칙 작성해보기.<br/>- ESLint의 AST(Abstract Syntax Tree)와 ESLint Rule API 이해.                                     |
+| 3. Feature-Sliced Design 이해, <br/> 관련 규칙 설계 및 구현 | - Feature-Sliced Design의 구조와 철학 학습.<br/>- 설계 원칙을 ESLint 규칙으로 변환하는 방법 구상. <br/> - FSD를 위한 규칙 초안 작성.  |
+| 4. ESLint 플러그인 개발                                     | - 여러 규칙을 플러그인으로 패키징.<br/>- 플러그인 테스트 및 디버깅.                                                                   |
+| 5. 배포 준비 및 테스트                                      | - 플러그인의 문서 작성.<br/>- 플러그인을 NPM에 배포하는 과정 학습.                                                                    |
+| 6. 실제 프로젝트에 적용해보며 테스트                        | - 실제 프로젝트에 적용해보면서 정상적으로 동작하는지 사용성 테스트 진행.                                                              |
+
+GPT와 함께 짠 커리큘럼이다. 이를 바탕으로 천천히 따라가면서 프로젝트를 진행하기로 했다.
+
+본 글도 이 과정대로 진행할 예정이다.
+
+## 1단계: 기본 개념 이해 및 환경 준비
+
+### 목표
+
+- ESLint와 Prettier의 역할과 작동 방식을 이해한다.
+- ESLint 플러그인 개발을 위한 기본 환경을 설정한다.
+- NPM을 사용한 패키지 관리와 개발 환경 설정을 익힌다.
+
+<br />
+
+### ESLint란 무엇인가?
+
+들어가기에 앞서서, ESLint가 무엇인지 간단하게 알아보자.
+
+> Find and fix problems in your javascript code.
+>
+> [ESLint 공식문서 발췌](https://eslint.org/)
+
+위의 설명에서 확인할 수 있듯이, 자바스크립트 코드에서 문제를 찾아서 수정하는 도구이다.
+
+> ESLint statically analyzes your code to quickly find problems. It is built into most text editors and you can run ESLint as part of your continuous integration pipeline.
+>
+> [ESLint 공식문서 발췌](https://eslint.org/)
+
+<strong>ESLint는 코드를 정적으로 분석하여 빠르게 문제를 찾아내는 것과, 일관된 코드 품질 유지를 목적</strong>으로 한다.
+
+라이브러리나 프레임워크에 종속되지 않고, 대부분의 텍스트 에디터에서 사용할 수 있다.
+
+또한, CI 파이프라인에서도 ESLint를 사용할 수 있다.
+
+<br />
+
+#### ESLint의 주요 기능 요약
+
+ESLint의 주요 기능을 요약하면 다음과 같다.
+
+| 기능                | 설명                                                     |
+| ------------------- | -------------------------------------------------------- |
+| 문법 오류 감지      | 코드에서 발생 가능한 오류를 잡아낸다.                    |
+| 코드 스타일 체크    | 팀 규칙이나 코드 스타일을 유지하도록 도와준다.           |
+| 자동 수정(Auto-fix) | 가능한 경우, 문제를 자동으로 고쳐준다.                   |
+| 확장 가능           | 플러그인이나 규칙을 추가하여 원하는 대로 확장할 수 있다. |
+
+<br />
+
+#### ESLint가 중요한 이유
+
+ESLint는 코드 품질을 유지하고, 팀원들 간의 코드 컨벤션을 일관되게 유지하는데 중요한 역할을 한다.
+
+특히, 대규모 프로젝트에서는 이러한 도구가 필수적이다.
+
+디버깅 시간을 줄여주고, 컨벤션과 관련된 불필요한 자원 낭비를 예방해준다.
+
+즉, 생산성을 높여주는 도구이기에 중요하다고 할 수 있다.
+
+<br />
+
+### ESLint의 동작 원리
+
+ESLint는 다음과 같은 과정으로 동작한다.
+
+#### 1. 코드 입력
+
+ESLint는 검사할 JavaScript 또는 TypeScript 파일을 읽어들인다.
+
+#### 2. 파싱 (Parsing)
+
+코드를 분석하기 위해 **파서(Parser)**를 사용하여 **AST(Abstract Syntax Tree, 추상 구문 트리)**로 변환한다.
+
+기본적으로 ESLint는 espree라는 파서를 사용하지만, TypeScript를 지원하려면 @typescript-eslint/parser 같은 커스텀 파서를 사용할 수도 있다.
+
+AST는 코드 구조를 트리 형태로 표현하는 데이터 구조이다.
+
+```javascript
+const sum = (a, b) => a + b;
+```
+
+예시로 이 코드는 다음과 같은 AST로 변환된다.
+
+```plaintext
+Program
+ ├── VariableDeclaration (const sum)
+ │    ├── VariableDeclarator
+ │    │    ├── Identifier (sum)
+ │    │    ├── ArrowFunctionExpression
+ │    │         ├── Parameters (a, b)
+ │    │         ├── Body (BinaryExpression +)
+```
+
+#### 3. 규칙(Rules) 적용
+
+ESLint는 AST를 순회하면서 <strong>설정된 규칙(Rules)</strong>을 적용한다.
+
+규칙은 <strong>노드 유형(Node Type)</strong>에 따라 동작하며, 특정한 패턴이 발견되면 오류를 보고하거나 자동으로 수정할 수 있다.
+
+예를 들어서 `no-console` 규칙이 활성화되어 있다면, `console.log()` 같은 코드가 있으면 ESLint가 경고를 띄워준다.
+
+이때, ESLint는 각 노드에 대해 <strong>방문자(Visitor) 패턴</strong>을 사용하여 규칙을 검사한다.
+
+```javascript
+module.exports = {
+  create(context) {
+    return {
+      Identifier(node) {
+        // (1) 방문자 함수: Identifier 노드 방문 시 실행
+        if (node.name === 'temp') {
+          // (2) 특정 조건 검사
+          context.report({
+            node,
+            message: "'temp'라는 변수명을 사용하지 마세요.", // (3) 규칙 위반 보고
+          });
+        }
+      },
+    };
+  },
+};
+```
+
+이 규칙은 `temp`라는 변수를 사용하면 ESLint가 경고를 띄우는 간단한 예제이다.
+
+<details>
+
+<summary>방문자(Visitor) 패턴이란?</summary>
+
+#### 방문자 패턴(Visitor Pattern)이란?
+
+`방문자 패턴(Visitor Pattern)`은 객체의 구조는 변경하지 않으면서 새로운 기능을 추가할 수 있도록 하는 `행동 패턴(Behavioral Pattern)` 중 하나이다.
+
+방문자 패턴은 객체의 구조와 그 구조에서 수행되는 작업을 분리하여 구현하는 패턴이다.
+
+객체 구조를 이루는 요소들을 독립적으로 변경할 수 있도록 하는 패턴으로, 객체의 구조와 구조에서 수행되는 작업을 분리하여 구현함으로써 객체의 확장성과 유연성을 높이는데 목적이 있다.
+
+즉, 기존 클래스의 구조를 수정하지 않고도 새로운 연산을 쉽게 추가할 수 있도록 돕는 디자인 패턴이다.
+
+#### 방문자 패턴은 어떤 문제를 해결하기 위해 등장하였는가?
+
+프로그램을 개발하다 보면 어떤 객체(클래스)에 새로운 기능(메서드)를 추가해야하는 경우가 많다.
+
+하지만, 기존 클래스를 수정하면 유지보수가 어려워지고 코드가 점점 복잡해지는 문제가 발생한다.
+
+특히 <strong>객체들의 구조(클래스 설계)는 그대로 유지하면서, 기능만 유연하게 확장하고 싶을 때</strong> 어려움이 생긴다.
+
+#### 방문자 패턴의 목적
+
+객체의 구조(클래스)는 변경하지 않으면서 새로운 기능을 추가하는 것이 목적이다.
+
+즉, 객체(Element) 자체는 건드리지 않고, 방문자(Visitor)가 새로운 기능을 수행하도록 만들자는 것이다.
+
+이를 통해서 기존 코드의 수정 없이 유연하게 기능을 추가하고자 한다.
+
+#### 실생활 예제를 통해 이해하기
+
+##### 🏡 실생활 예제: 집(객체)과 수리공(방문자)
+
+🏠 집(객체)과 수리공(방문자)를 예시로 들어서 이해해보자.
+
+당신은 <strong>집(객체)</strong>를 갖고 있다.
+
+집에는 <strong>다양한 방(Rooms)</strong>이 있다.
+
+어느 날, 당신은 집에 전기 점검도 하고 싶고, 페인트칠도 하고 싶다. 🎨⚡
+
+하지만, 집의 구조는 바꾸고 싶지 않다. 😵
+
+##### 🛠 해결 방법: 방문자 패턴 적용
+
+집의 방(Rooms)마다 일일이 기능을 추가하지 않고, 전문가(Visitor)를 초대해서 일을 맡기자 라는게 발상이다.
+
+전기기사(Electician), 페인트공(Painter) 같은 방문자가 집의 각 방(Room)을 방문하면서 필요한 작업을 해주는 방식이다.
+
+#### 방문자 패턴을 코드로 이해하기
+
+##### 객체 구조 (Element)
+
+- 집에는 여러개의 방(객체)이 있다.
+
+```typescript
+interface Room {
+  accept(visitor: RoomVisitor): void; // 방문자(Visitor)를 받아들임
+}
+
+class Bedroom implements Room {
+  accept(visitor: RoomVisitor): void {
+    visitor.visitBedroom(this);
+  }
+}
+
+class Kitchen implements Room {
+  accept(visitor: RoomVisitor): void {
+    visitor.visitKitchen(this);
+  }
+}
+```
+
+##### 방문자 인터페이스 (Visitor)
+
+- 각 방을 방문하여 특정 작업을 수행하는 방문자(전문가)를 정의한다.
+
+```typescript
+interface RoomVisitor {
+  visitBedroom(room: Bedroom): void;
+  visitKitchen(room: Kitchen): void;
+}
+```
+
+##### 구체적인 방문자 (Concrete Visitor)
+
+- 전기기사(Electician)와 페인트공(Painter)이 방을 방문해서 작업을 수행한다.
+
+```typescript
+class Electrician implements RoomVisitor {
+  visitBedroom(room: Bedroom): void {
+    console.log('🔌 침실에서 전기 점검 중...');
+  }
+
+  visitKitchen(room: Kitchen): void {
+    console.log('🔌 주방에서 전기 점검 중...');
+  }
+}
+
+class Painter implements RoomVisitor {
+  visitBedroom(room: Bedroom): void {
+    console.log('🎨 침실에 페인트칠 중...');
+  }
+
+  visitKitchen(room: Kitchen): void {
+    console.log('🎨 주방에 페인트칠 중...');
+  }
+}
+```
+
+##### 방문자 패턴 실행
+
+- 집에 있는 모든 방을 방문하여 작업을 수행하도록 한다.
+
+<Tabs>
+
+<TabItem value="코드" label="코드">
+
+```typescript
+const rooms: Room[] = [new Bedroom(), new Kitchen()];
+
+const electrician = new Electrician();
+const painter = new Painter();
+
+rooms.forEach((room) => room.accept(electrician)); // 전기 점검 수행
+rooms.forEach((room) => room.accept(painter)); // 페인트칠 수행
+```
+
+</TabItem>
+
+<TabItem value="실행 결과" label="실행 결과">
+
+```plaintext
+🔌 침실에서 전기 점검 중...
+🔌 주방에서 전기 점검 중...
+🎨 침실에 페인트칠 중...
+🎨 주방에 페인트칠 중...
+```
+
+</TabItem>
+
+</Tabs>
+
+#### 방문자 패턴의 장점
+
+1. 객체(집, 방) 구조는 그대로 유지하면서 기능(전기 점검, 페인트칠)을 추가할 수 있다.
+   → Room 클래스를 직접 수정하지 않고도 새로운 방문자를 추가가 가능하다.
+2. 새로운 기능을 쉽게 확장할 수 있다.
+   → 만약 "📦 청소 전문가(Cleaner)"를 추가하고 싶다면? Cleaner 방문자만 추가하면 된다.
+
+#### 방문자 패턴이 적절하지 않은 경우
+
+객체 구조가 자주 변한다면? 방문자 패턴이 오히려 불편할 수 있다.
+
+새로운 객체 유형(방 종류)이 계속 추가되면 Visitor 인터페이스도 계속 수정해야 한다.
+
+#### 정리 : 방문자 패턴이 필요한 경우
+
+- 객체의 구조는 변경하지 않고, 새로운 기능을 추가하고 싶을 때
+- 비슷한 작업을 여러 객체에서 다르게 실행해야 할 때
+- 객체 내부 로직과 추가 기능(연산)을 분리하고 싶을 때
+
+</details>
+
+:::info[ESLint가 방문자 패턴을 사용하는 이유]
+
+#### 객체(Element)를 유지한 채 새로운 기능(검사 규칙)을 추가하기 위해
+
+ESLint는 코드(AST)를 직접 변경하지 않는다.
+
+대신, 특정한 노드(객체)에 대해 <strong>새로운 기능(규칙 적용)</strong>을 수행할 수 있도록 `create(context)` 안에서 방문자 함수를 정의한다.
+
+#### 각 노드 유형을 방문(Visit)하면서 특정 작업을 수행하기 위해
+
+방문자 패턴에서는 `Visitor` 객체가 객체(Element)를 순회하며 특정 작업을 수행하는데, ESLint에서는 각 AST 노드 타입마다 방문할 수 있는 메서드를 제공한다.
+
+예제 코드에서 `Identifier(node)` 함수는 AST에서 Identifier(변수 이름) 노드를 방문할 때 실행되는 방문자(Visitor) 역할을 수행한다.
+:::
+
+#### 4. 리포팅 (Reporting)
+
+- 검사 결과를 ESLint가 콘솔이나 파일로 출력한다.
+
+```plaintext
+src/index.js
+  2:5  error  Unexpected console statement  no-console
+```
+
+- `2:5` → 2번째 줄, 5번째 칸에서 문제가 발생
+- `error` → 에러 수준
+- `Unexpected console statement` → 규칙에서 정의한 메시지
+- `no-console` → 적용된 ESLint 규칙 이름
+
+#### 5. 자동 수정 (Auto-fixing)
+
+- 일부 규칙은 자동으로 고칠 수 있다. (--fix 옵션 사용)
+
+```bash
+eslint src --fix
+```
+
+예를 들어 `semi`(세미콜론 강제) 규칙이 적용된 경우:
+
+```javascript
+// prettier-ignore
+const sum = (a, b) => a + b
+```
+
+자동 수정 후:
+
+```javascript
+const sum = (a, b) => a + b;
+```
+
+### ESLint의 주요 컴포넌트
+
+ESLint는 다음과 같은 주요 컴포넌트로 구성되어 있다.
+
+#### 1. Parser (파서)
+
+- 코드를 AST로 변환하는 역할을 한다.
+- 기본적으로 `espree`를 사용하지만, TypeScript나 JSX를 지원하려면 다른 파서를 지정해야 한다.
+  - TypeScript 지원: `@typescript-eslint/parser`
+  - Babel 지원: `babel-eslint`
+
+#### 2. Rule Engine (규칙 엔진)
+
+- AST를 순회하면서 규칙을 실행 및 적용하는 역할을 한다.
+- ESLint는 내장 규칙이 있지만, 커스텀 규칙을 추가할 수도 있다.
+- `eslint-plugin`을 통해 사용자 정의 규칙을 추가할 수 있다.
+
+#### 3. Formatter (출력 포맷터)
+
+- ESLint의 결과를 콘솔이나 파일로 출력하는 역할을 한다.
+- 기본적으로 `stylish` 포맷터를 사용하지만, `--format` 옵션을 통해 JSON, HTML, Markdown 등의 다양한 포맷터를 사용할 수 있다.
+- 예) `eslint src --format json`
+
+#### 4. Fixer (자동 수정기)
+
+- `--fix` 옵션을 사용하면, ESLint가 일부 규칙을 자동으로 수정해준다.
+- 하지만 논리적인 문제는 수정할 수 없다. (예: no-unused-vars 같은 문제)
+
+### ESLint 설정 파일의 역할
+
+ESLint의 동작 방식은 <strong>설정 파일</strong>을 기반으로 결정된다.
+
+<Tabs>
+
+<TabItem value="Flat Config 설정 파일" label="Flat Config설정 파일">
+
+```javascript title="eslint.config.mjs"
+// eslint.config.mjs
+import js from '@eslint/js';
+import ts from '@typescript-eslint/eslint-plugin';
+import tsParser from '@typescript-eslint/parser';
+
+export default [
+  {
+    files: ['**/*.ts', '**/*.tsx'], // TypeScript 파일 대상
+    languageOptions: {
+      parser: tsParser,
+    },
+    plugins: {
+      '@typescript-eslint': ts,
+    },
+    rules: {
+      'no-console': 'warn', // console.log 사용 시 경고
+      eqeqeq: 'error', // === 사용 강제
+      semi: ['error', 'always'], // 세미콜론 강제
+      '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+    },
+  },
+];
+```
+
+- `files`: 특정 파일 확장자(.ts, .tsx)에 대한 규칙을 적용.
+- `languageOptions.parser`: AST(Abstract Syntax Tree) 변환을 위해 @typescript-eslint/parser 사용 (TypeScript 코드 분석용).
+- `plugins`: @typescript-eslint/eslint-plugin을 추가하여 TypeScript 전용 ESLint 규칙을 활성화.
+- `rules`: 코드 스타일 및 코드 품질 규칙을 설정.
+
+</TabItem>
+
+<TabItem value="8.x 버전 이하의 설정" label="8.x 버전 이하의 설정">
+
+```javascript title=".eslintrc.js"
+module.exports = {
+  parser: '@typescript-eslint/parser', // TypeScript 지원
+  extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended'],
+  rules: {
+    'no-console': 'warn', // console 사용 시 경고
+    eqeqeq: 'error', // === 사용 강제
+    semi: ['error', 'always'], // 세미콜론 필수
+  },
+};
+```
+
+- `parser`: AST 변환에 사용될 파서를 정의.
+- `extends`: 기본 규칙 세트를 상속(eslint:recommended 등).
+- `rules`: 특정한 규칙을 활성화하고, 에러/경고 여부 설정.
+
+</TabItem>
+
+<TabItem value="설정 파일 비교" label="설정 파일 비교">
+
+| 구분           | .eslintrc.js (기존 방식)              | eslint.config.mjs (Flat Config)                            |
+| -------------- | ------------------------------------- | ---------------------------------------------------------- |
+| 파일 형식      | CommonJS(module.exports)              | ESM(export default)                                        |
+| 구조           | extends, parser, rules 등의 객체 구성 | 플러그인과 규칙을 직접 배열(export default \[\])로 설정    |
+| 규칙 적용 대상 | 전역 적용(파일별 설정 어려움)         | files: \["\*_/_.ts"\] 등 특정 파일 지정 가능               |
+| 플러그인 추가  | "plugins": \["@typescript-eslint"\]   | plugins: \{ "@typescript-eslint": ts \} (객체 형태로 설정) |
+
+</TabItem>
+
+</Tabs>
+
+<br />
+
+#### ESLint의 동작을 깊이 이해하기 위한 추가 개념
+
+##### 1. AST(Abstract Syntax Tree, 추상 구문 트리)를 이용한 코드 분석
+
+ESLint는 AST를 기반으로 동작하므로, AST를 직접 확인하면 규칙 작성이 쉬워진다.
+
+- [AST Explorer](https://astexplorer.net/)같은 도구를 활용하여 코드의 AST를 시각적으로 확인할 수 있다.
+
+<br />
+
+##### 2. 플러그인과 확장 기능
+
+ESLint는 플러그인을 추가하여 기능을 확장할 수 있다. (내가 본 프로젝트를 통해서 만들고자 하는 요소이다.)
+
+- 예제: React용 플러그인 추가
+
+```bash
+npm install eslint-plugin-react --save-dev
+```
+
+- 설정 파일에 추가
+
+<Tabs>
+
+<TabItem value="Flat Config 설정 파일" label="Flat Config 설정 파일">
+
+```javascript title="eslint.config.mjs"
+import react from 'eslint-plugin-react';
+
+export default [
+  {
+    files: ['**/*.jsx', '**/*.tsx'], // React 관련 파일 대상
+    plugins: {
+      react,
+    },
+    rules: {
+      ...react.configs.recommended.rules, // React 추천 규칙 적용
+    },
+  },
+];
+```
+
+- `files`: **/\*.jsx, **/\*.tsx 파일에 React 관련 ESLint 규칙 적용.
+- `plugins`: eslint-plugin-react을 추가하여 React 관련 규칙 활성화.
+- `rules`: react.configs.recommended.rules → React 추천 규칙을 그대로 적용(plugin:react/recommended와 동일).
+
+</TabItem>
+
+<TabItem value="8.x 버전 이하의 설정" label="8.x 버전 이하의 설정">
+
+```javascript title=".eslintrc.js"
+module.exports = {
+  extends: ['plugin:react/recommended'],
+  plugins: ['react'],
+};
+```
+
+</TabItem>
+
+</Tabs>
+
+### 기본 개발 환경 준비
+
+#### 1. Node.js 설치
+
+ESLint는 Node.js 환경에서 동작하므로, Node.js를 설치해야 한다.
+
+[Node.js 공식 사이트](https://nodejs.org/)에서 LTS 버전을 다운로드 받아 설치한다.
+
+<br />
+
+#### 2. 프로젝트 디렉토리 생성
+
+ESLint 플러그인을 개발할 프로젝트 디렉토리를 생성한다.
+
+```bash
+mkdir eslint-fsd-plugin
+cd eslint-fsd-plugin
+```
+
+<br />
+
+#### 3. NPM 프로젝트 초기화
+
+NPM 프로젝트를 초기화한다.
+
+```bash
+npm init -y
+```
+
+이렇게 하면 package.json 파일이 생성된다. 이 파일은 프로젝트의 설정과 의존성을 관리한다.
+
+<Figure fileName="npm_init.webp" alt="npm init 명령어 실행 결과" caption="npm init 명령어 실행 결과" />
+
+<br />
+
+#### 4. ESLint 설치
+
+ESLint를 설치한다.
+
+```bash
+npm install eslint --save-dev
+```
+
+`--save-dev` 옵션을 사용하여 개발 의존성으로 설치한다. (개발 환경에서만 사용하겠다는 의미이며, 빌드 시에는 포함하지 않겠다는 의미이다.)
+
+<br />
+
+#### 5. ESLint 초기화
+
+ESLint를 초기화한다.
+
+```bash
+npx eslint --init
+```
+
+이 명령어를 실행하면, ESLint 초기화 설정이 시작된다.
+
+- "How would you like to use ESLint?" → "To check syntax, find problems, and enforce code style" 선택.
+- "What type of modules does your project use?" → "JavaScript modules (import/export)" 선택.
+- "Which framework does your project use?" → "None of these" 선택 (React는 나중에 필요하면 추가할 수 있다).
+- "Does your project use TypeScript?" → "No" 선택 (초반은 JavaScript로 진행하기 때문).
+- "Where does your code run?" → "Node" 선택.
+- "Would you like to install them now?" → "Yes" 선택.
+- "Which package manager do you want to use?" → "npm" 선택.
+
+<Figure fileName="eslint_init.webp" alt="ESLint 초기화 설정" caption="ESLint 초기화 설정" />
+
+<details>
+
+<summary>결과물 설명</summary>
+
+ESLint를 초기화하고 나면 `eslint.config.mjs` 파일이 생성된다.
+
+그리고 다음과 같은 내용이 서술되어 있다.
+
+```javascript title="eslint.config.mjs"
+import globals from 'globals';
+import pluginJs from '@eslint/js';
+
+/** @type {import('eslint').Linter.Config[]} */
+export default [{ languageOptions: { globals: globals.node } }, pluginJs.configs.recommended];
+```
+
+이에 대해서 알아보자.
+
+#### `global` 모듈 사용 (`import globals from "globals";`)
+
+```javascript
+import globals from 'globals';
+```
+
+`globals` 패키지는 Node.js, 브라우저, ES6 등의 전역 변수 목록을 제공하는 라이브러리이다.
+
+`globals.node`는 Node.js 환경에서 사용되는 전역 변수들을 포함한다.
+
+```javascript title="globals.node에 포함된 변수들"
+{
+  global: "readonly",
+  process: "readonly",
+  __dirname: "readonly",
+  __filename: "readonly",
+  module: "readonly",
+  exports: "readonly",
+  require: "readonly",
+  console: "readonly",
+}
+```
+
+Node.js 환경에서 `process`, `global`, `console`, `require` 등의 변수를 사용할 때 ESLint가 "정의 되지 않음(no-undef)" 경고를 표시하지 않도록 하는 역할을 한다.
+
+#### Node.js 환경을 설정
+
+```
+{languageOptions: { globals: globals.node }},
+```
+
+`languageOptions` 속성을 통해 Node.js 환경에서 사용할 전역 변수를 추가한다.
+
+`globals: globals.node` -> Node.js의 기본 전역 변수들을 자동으로 포함한다.
+
+#### `@eslint/js`의 추천 설정을 적용
+
+```javascript
+pluginJs.configs.recommended;
+```
+
+`@eslint/js`는 ESLint의 기본 Javascript 규칙을 포함하는 <strong>공식 플러그인</strong>이다.
+
+`pluginJs.configs.recommended`는 ESLint의 추천 규칙(`eslint:recommended`)을 적용하는 설정이다.
+
+이 설정은 ESLint의 기본 규칙을 적용하고, 코드 품질을 유지하는데 도움을 준다.
+
+##### `pluginJs.configs.recommended`가 포함하는 주요 규칙
+
+- `no-unused-vars`: 사용되지 않는 변수를 금지한다.
+- `no-undef`: 정의되지 않은 변수를 금지한다.
+- `no-console`: `console.log` 사용을 방지한다. (기본설정은 경고이다.)
+- `eqeqeq`: `==` 대신 `===`를 사용하도록 강제한다.
+- `curly`: 중괄호 `{}` 생략을 금지한다.
+
+#### 정리
+
+1. Node.js 환경 설정
+   - globals.node를 통해 process, global, require 등 Node.js 전역 변수를 허용한다.
+2. 기본 JavaScript 추천 규칙 적용
+   - pluginJs.configs.recommended를 통해 ESLint의 기본 추천 규칙(eslint:recommended)을 활성화한다.
+3. Flat Config 기반 설정
+   - .eslintrc.json 대신 배열을 사용하여 여러 개의 설정을 결합하는 방식이다.
+
+</details>
+
+<br />
+
+### Prettier 설치
+
+`Prettier`는 코드 스타일을 자동으로 포멧팅해주는 도구이다.
+
+ESLint와 함께 사용하면 코드 품질과 스타일을 모두 관리할 수 있다.
+
+이에 대해서는 제일 마지막에 다룰 것이므로 우선은 설치만 해두자.
+
+```bash
+npm install prettier --save-dev
+```
+
+### 디렉토리 구조 설계
+
+초기에 작업할 디렉토리 구조는 단순하게 유지한다.
+
+```plaintext
+eslint-fsd-plugin/
+├── node_modules/
+├── .eslintrc.js
+├── package.json
+├── package-lock.json
+├── src/
+└── README.md
+```
+
+## 2단계: ESLint 규칙의 기본 구조 이해
+
+### 목표
+
+- ESLint가 코드를 분석하는 방식(파싱, AST 활용)을 이해한다.
+- 간단한 ESLint 규칙을 직접 만들어 본다.
+- 규칙을 적용하고 실행하는 방법을 익힌다.
+
+### ESLint 규칙 다시 한번 상기하기
+
+앞에서 이미 ESLint가 어떻게 동작하는지를 자세히 다루었지만, 프로젝트 진행을 위해서는 중요한 내용이니 다시한번 상기해보자.
+
+ESLint는 단순한 문자열 비교가 아니라 <strong>AST(Abstract Syntax Tree, 추상 구문 트리)</strong>를 기반으로 동작한다.
+
+#### AST란?
+
+AST는 코드의 구조를 트리 형태로 표현한 것이다.
+
+예를 들어서 아래의 콛르르 살펴보자.
+
+```javascript
+const message = 'Hello, world!';
+console.log(message);
+```
+
+이 코드의 AST는 대략 다음과 같이 표현된다.
+
+```plaintext
+Program
+├── VariableDeclaration (const message = "Hello, world!")
+│   ├── Identifier (message)
+│   └── Literal ("Hello, world!")
+└── ExpressionStatement (console.log(message))
+    ├── MemberExpression (console.log)
+    └── Identifier (message)
+```
+
+이렇게 AST를 통해 코드의 구조를 트리 형태로 표현하게 된다.
+
+이 트리를 이용해서 ESLint는 코드를 분석하고 규칙을 적용한다.
+
+### 간단한 ESLint 플러그인 만들기
+
+원리는 이해했는데, 이제 활용해서 어떻게 규칙을 만들 수 있는지 감이 잡히지 않는다.
+
+그래서, 간단한 규칙을 만들어보면서 실습해보고자 한다.
+
+앞선 예제에서 서술한 `console.log`를 사용하지 못하도록 하는 규칙을 만들어보자.
+
+#### 1. 규칙 디렉토리 생성
+
+먼저, 규칙을 저장할 디렉토리를 생성한다.
+
+```bash
+mkdir -p src/rules
+```
+
+여기서 `-p` 옵션은 부모 디렉터리를 자동으로 생성하는 옵션이다.
+
+예를 들어, `src/rules` 폴더를 만들려고 하는데 `src`가 존재하지 않는다면, `mkdir -p`를 사용하면 `src`부터 자동으로 생성해 준다.
+
+<br />
+
+#### 2. 규칙 파일 생성
+
+규칙을 저장할 파일을 생성한다.
+
+```bash
+touch src/rules/no-console-log.js
+```
+
+<br />
+
+#### 3. 규칙 코드 작성
+
+이제, `no-console-log.js` 파일에 규칙 코드를 작성한다.
+
+```javascript
+export default {
+  meta: {
+    type: 'problem',
+    docs: {
+      description: 'console.log 사용 금지',
+      recommended: true,
+    },
+    messages: {
+      avoidConsoleLog: 'console.log는 사용하지 마세요.',
+    },
+  },
+
+  create(context) {
+    return {
+      CallExpression(node) {
+        if (
+          node.callee.type === 'MemberExpression' &&
+          node.callee.object.name === 'console' &&
+          node.callee.property.name === 'log'
+        ) {
+          context.report({
+            node,
+            messageId: 'avoidConsoleLog',
+          });
+        }
+      },
+    };
+  },
+};
+```
+
+이 코드는 다음과 같은 역할을 수행한다.
+
+1. ESLint는 `CallExpression` 노드를 찾는다. -> 이는 함수 호출을 의미한다.
+2. 만약 `console.log`를 호출한 경우:
+   - `node.callee.object.name === "console"`
+   - `node.callee.property.name === "log"`
+3. 위 조건을 만족하면 ESLint가 경고 메세지를 띄운다.
+
+<details>
+
+<summary>코드 설명</summary>
+
+#### 1. 규칙 개요
+
+이 규칙은 `console.log`를 코드에서 사용하지 못하도록 제한하는 ESLint 규칙이다.
+
+- `console.log`를 발견하면 ESLint가 경고 또는 오류를 출력한다.
+- `Flat Config` 기반 설정을 고려하면, 이 규칙을 `rules` 객체에 추가하여 적용할 수 있다.
+
+<br />
+
+#### 2. 코드 분석
+
+이제 코드를 분석해보자.
+
+##### (1) `meta` 속성
+
+규칙에 대한 메타 정보를 정의하는 부분이다.
+
+```javascript
+meta: {
+  type: 'problem',
+  docs: {
+    description: "console.log 사용 금지",
+    recommended: true,
+  },
+  message: {
+    avoidConsoleLog: "console.log는 사용하지 마세요.",
+  },
+},
+```
+
+- `type: 'problem'`
+  - 이 규칙이 코드 품질과 관련된 문제(problem)를 감지한다는 의미이다.<br/>
+    (다른 옵션으로 suggestion(개선점 제안), layout(코드 스타일 관련)이 있음)
+- `docs`
+  - ESLint 공식 문서에서 이 규칙을 설명할 때 사용된다.
+    - `description`: `"console.log 사용 금지"` (규칙 설명)
+    - `recommended`: `true` (기본적으로 활성화할지 여부)
+- `message`
+  - ESLint가 위반된 코드에서 출력할 메시지를 정의한다.
+    - `"avoidConsoleLog"` 키: `"console.log는 사용하지 마세요."`라는 메시지를 출력한다.
+
+##### (2) `create` 함수 (AST 검사)
+
+```javascript
+create(context) {
+  return {
+    CallExpression(node) {
+      if (
+        node.callee.type === 'MemberExpression' &&
+        node.callee.object.name === 'console' &&
+        node.callee.property.name === 'log'
+      ) {
+        context.report({
+          node,
+          messageId: 'avoidConsoleLog',
+        });
+      }
+    },
+  };
+}
+```
+
+- `create(context)`: ESLint가 이 규칙을 실행할 때 호출되는 함수이다.
+- `AST(Abstract Syntax Tree, 추상 구문 트리)`을 분석하여 console.log 호출을 감지하는 역할을 한다.
+
+##### (3) 세부 동작 과정
+
+1. `CallExpression(node)`
+   - JavaScript 코드에서 함수 호출(예: console.log())을 찾으면 실행되는 ESLint의 AST Visitor이다.
+2. `if (node.callee.type === 'MemberExpression')`
+   - 함수 호출이 console.log(...)와 같은 객체의 메서드 호출 형태인지 확인한다.<br/>
+     (예: console.log는 console 객체의 log 메서드이므로 MemberExpression)
+3. `node.callee.object.name === 'console'`
+   - 메서드를 호출하는 객체(console)인지 확인한다.
+4. `node.callee.property.name === 'log'`
+   - 호출된 메서드가 log인지 확인한다.
+5. `context.report({...})`
+   - console.log 호출을 감지하면 ESLint에 경고 메시지를 출력한다.
+   - `messageId: 'avoidConsoleLog'`를 사용하여 "console.log는 사용하지 마세요." 메시지를 표시한다.
+
+</details>
+
+<br />
+
+#### 4. 규칙을 바탕으로 플러그인 만들기
+
+이제 `eslint.config.mjs`에서 우리가 만든 규칙을 등록해볼 차례이다.
+
+Flat Config에서는 기존 `.eslintrc.js` 방식과 다르게 플러그인을 명시적으로 등록하고, 네임스페이스를 사용하여 규칙을 호출해야 한다.
+
+```javascript title="eslint.config.mjs 참고 예"
+import eslintFsdPlugin from './src/rules/plugin.js';
+
+export default [
+  {
+    plugins: {
+      fsd: eslintFsdPlugin,
+    },
+    rules: {
+      'fsd/no-console-log': 'error', // 심각도를 명확하게 지정해야 함
+    },
+  },
+];
+```
+
+위와 같이 `plugins` 속성에 플러그인을 등록하고 `[플러그인명]/[규칙명]` 형식으로 규칙을 호출한다.
+
+그래서 `no-console-log.js`와 같은 규칙을 만들었다고 하더라도, 플러그인은 별도로 설정해주어야 한다.
+
+> 현재는 규칙만을 만들었을 뿐 플러그인을 만들지는 않았다.<br/>ESLint는 커스텀 규칙 적용을 위해서는 플러그인을 요구한다.<br/>따라서, 플러그인을 만들어서 규칙을 적용해야 한다.
+
+##### (1) 플러그인 만들기
+
+`index.js`에서 `규칙들(rules)`을 플러그인 형식으로 감싸야 한다.
+
+Flat Config에서는 플러그인 내에서 `rules` 객체를 정의하는 것이 필수이다.
+
+이때 파일명은 `index.js`가 아니어도 된다. (예: `plugin.js`)
+
+그러나, 관례상 플러그인의 시작점이기도 하기에, `index.js`라는 명칭을 사용했다.
+
+다음과 같이 만들어보자.
+
+```javascript title="src/rules/index.js"
+import noConsoleLog from './rules/no-console-log.js';
+
+export default {
+  rules: {
+    'no-console-log': noConsoleLog,
+  },
+};
+```
+
+위와 같이 `rules` 객체를 만들어서 규칙을 등록한다.
+
+여기서 중요한 점은 다음과 같다.
+
+- `rules` 객체를 만들어서 규칙을 등록한다.
+- `rules` 객체를 포함하여 내보내야 한다.
+- `export default { rules: { "no-console-log": noConsoleLog } };` 형태로 설정해야 Flat Config에서 올바르게 인식한다.
+
+<br />
+
+#### 5. Flat Config에서 만든 플러그인 사용하기
+
+이제 `eslint.config.mjs`에서 플러그인을 명확히 등록하고 네임스페이스를 설정해야 한다.
+
+파일을 열어서 다음과 같이 추가한다.
+
+```javascript title="eslint.config.mjs"
+import eslintFsdPlugin from './src/index.js'; // 플러그인 파일 경로 확인
+
+export default [
+  {
+    plugins: {
+      fsd: eslintFsdPlugin, // 플러그인을 네임스페이스 "fsd"로 등록
+    },
+    rules: {
+      'fsd/no-console-log': 'error', // 규칙을 네임스페이스 포함하여 사용
+    },
+  },
+];
+```
+
+##### 여기서 중요한 점
+
+- plugins 객체 내에 fsd: eslintFsdPlugin 형태로 플러그인을 등록해야 한다.
+- rules에서 반드시 "fsd/no-console-log"처럼 네임스페이스(fsd/)를 붙여서 호출해야 한다.
+  - "no-console-log" → ❌ 에러 발생
+  - "fsd/no-console-log" → ✅ 올바른 방식
+
+<br />
+
+:::info[eslint.config.mjs에 이미 뭐가 있는데요...?]
+
+```javascript
+import globals from 'globals';
+import pluginJs from '@eslint/js';
+
+/** @type {import('eslint').Linter.Config[]} */
+export default [{ languageOptions: { globals: globals.node } }, pluginJs.configs.recommended];
+```
+
+위와 같이 이미 내부에 값이 들어있을 수 있다.
+
+이는 위쪽에서 [결과물 설명](#5-eslint-초기화) 항목에서 서술했던 내용으로,
+
+Node.js 환경이나 기본적인 JavaScript 규칙을 적용하는 설정이다.
+
+이 설정은 그대로 두고, 새로 만든 규칙을 추가하면 된다.
+
+```javascript
+import globals from 'globals';
+import pluginJs from '@eslint/js';
+// highlight-next-line
+import eslintFsdPlugin from './src/index.js'; // 플러그인 파일 경로 확인
+
+/** @type {import('eslint').Linter.Config[]} */
+export default [
+  { languageOptions: { globals: globals.node } },
+  pluginJs.configs.recommended,
+  // highlight-start
+  {
+    plugins: {
+      fsd: eslintFsdPlugin, // 플러그인을 네임스페이스 "fsd"로 등록
+    },
+    rules: {
+      'fsd/no-console-log': 'error', // 규칙을 네임스페이스 포함하여 사용
+    },
+  },
+  // highlight-end
+];
+```
+
+Flat Config는 배열 방식으로 여러 속성을 연결해서 적용할 수 있다.
+
+그렇기에 위와 같이 적용시켜주면 된다.
+
+```javascript
+/** @type {import('eslint').Linter.Config[]} */
+```
+
+이때 참고로 위 코드는 TypeScript의 타입 정의를 의미한다.
+
+이를 통해서 TypeScript가 해당 변수가 `Linter.Config[]` 타입이라는 걸 알 수 있다.
+
+타입스크립트를 사용하지 않는다면 지워도 되지만, 어떻게 될 지 모르니 가급적 그냥 두는 것을 추천한다.
+
+:::
+
+<br />
+
+#### 5. ESLint 실행 테스트
+
+이제 `console.log`가 포함된 파일을 만들어 실행해보자.
+
+##### (1) 테스트용 파일 생성
+
+```bash
+touch src/test.js
+```
+
+그리고 `test.js` 파일에 다음의 코드를 추가한다.
+
+```javascript
+console.log('이 코드는 ESLint 규칙에 의해서 경고를 받을 거야.');
+```
+
+##### (2) ESLint 실행
+
+```bash
+npx eslint test.js
+```
+
+##### (3) 실행 결과 확인
+
+<Tabs>
+
+<TabItem value="실행 결과 사진" label="실행 결과 사진">
+
+<Figure fileName="lint_result.webp" alt="ESLint 실행 결과" caption="ESLint 실행 결과" />
+
+</TabItem>
+
+<TabItem value="실행 결과 텍스트" label="실행 결과 텍스트">
+
+```plaintext
+test.js
+  1:1  error  console.log는 사용하지 마세요.  no-console-log
+```
+
+</TabItem>
+
+</Tabs>
+
+정상적으로 에러가 출력되는 것을 확인할 수 있다.
+
+#### 6. npx eslint 실행 시 디버깅
+
+모든 설정을 올바르게 적용한 후, ESLint가 플러그인을 정상적으로 불러오는지 확인해야 한다.
+
+<Tabs>
+
+<TabItem value="디버깅 실행" label="디버깅 실행">
+
+```bash
+npx eslint --debug src/test.js
+```
+
+</TabItem>
+
+<TabItem value="디버깅 실행 결과" label="디버깅 실행 결과">
+
+<Figure fileName="lint_debug_result.webp" alt="ESLint 디버깅 실행 결과" caption="ESLint 디버깅 실행 결과" />
+
+위와 같이 뜨는 것을 볼 수 있다.
+
+</TabItem>
+
+</Tabs>
+
+##### 디버깅 결과에서 확인할 점
+
+1. Loaded plugin: fsd
+   - `Loaded plugin: fsd` 로그가 있어야 플러그인이 정상적으로 로드된 것이다.
+2. Applying rule: fsd/no-console-log
+   - `Applying rule: fsd/no-console-log` 로그가 있어야 규칙이 적용되고 있는 것이다.
+3. ESLint 실행 결과
+   ```plaintext
+   test.js
+     1:1  error  console.log는 사용하지 마세요.  fsd/no-console-log
+   ```
+   - 위와 같이 오류가 발생해야 정상적으로 동작하는 것이다.
+
+#### 7. 정리
+
+이번 단계에서는 다음과 같은 내용을 진행했다.
+
+| 단계                | 수정 사항                                                                           | 설명                                                         |
+| ------------------- | ----------------------------------------------------------------------------------- | ------------------------------------------------------------ |
+| 1️⃣ 규칙 정의 수정   | rules/no-console-log.js에서 meta.messages와 context.report\(\) 올바르게 설정        | Flat Config에서는 meta 정보가 필수                           |
+| 2️⃣ 플러그인 설정    | index.js에서 rules 객체를 포함하여 내보냄                                           | rules: \{ "no-console-log": noConsoleLog \} 형태로 정의      |
+| 3️⃣ Flat Config 적용 | eslint.config.mjs에서 plugins.fsd로 등록하고, "fsd/no-console-log" 형태로 규칙 적용 | Flat Config에서는 plugins 객체가 필수                        |
+| 4️⃣ ESLint 디버깅    | npx eslint --debug src/test.js 실행                                                 | Loaded plugin: fsd 및 Applying rule: fsd/no-console-log 확인 |
+
+1. Flat Config에서는 ESLint 플러그인을 네임스페이스로 등록해야 한다.
+   - "no-console-log" → ❌ 오류 발생
+   - "fsd/no-console-log" → ✅ 올바른 방식
+2. rules 객체를 index.js에서 플러그인으로 내보내야 한다.
+   - `export default { rules: { "no-console-log": noConsoleLog } };` → ✅ 올바른 방식
+3. ESLint 실행 전에 npx eslint --debug로 플러그인이 정상적으로 로드되는지 확인해야 한다.
+   - Loaded plugin: fsd 로그를 반드시 확인해야 함.
+
+## 3단계: Feature-Sliced Design(FSD) 기반 ESLint 규칙 설계 및 구현
+
+지금까지 간단한 ESLint 규칙을 만들어보았다.
+
+지금부터는 Feature-Sliced Design(FSD)를 이해하고, 이에 대한 규칙 설계를 진행해보자.
+
+### 목표
+
+- Feature-Sliced Design(FSD)의 개념을 다시 한번 정리한다.
+- FSD 구조에서 ESLint 규칙이 어떤 역할을 해야 하는지 설계한다.
+- 기본적인 FSD 규칙을 직접 구현해본다.
+
+### Feature-Sliced Design(FSD)이란?
+
+<Figure
+  fileName="feature_sliced_design.webp"
+  alt="Feature-Sliced Design(FSD) 개념"
+  caption="Feature-Sliced Design(FSD) 개념"
+/>
+
+FSD는 프로젝트를 기능(feature) 중심으로 구조화하여 확장성과 유지보수성을 높이는 아키텍처이다.
+
+프론트엔드 프로젝트를 기능 중심으로 구성하여 유지보수성과 확장성을 극대화하는 아키텍쳐 패턴이다.
+
+기존의 `pages`, `components`, `services` 같은 폴더 기반 구조와 달리, 비즈니스 도메인과 기능(feature)에 따라 구조화하는 것이 핵심이다.
+
+### FSD의 핵심 원칙
+
+#### 1. 기능 중심의 구조 (Feature-Oriented Architecture)
+
+- 기존의 Layer-Based 구조(예: `components/`, `services/` 폴더에 모든 컴포넌트와 서비스가 모이는 구조)와 다르게, 각 기능 단위로 폴더를 나누고 해당 기능과 관련된 모든 요소(UI, 상태, API 호출, 로직 등)를 한곳에 배치하는 방식을 따른다.
+- 예를 들어, 인증(Authentication)과 관련된 모든 요소를 `features/auth/` 내부에 배치하고, 결제(Payment) 관련 요소는 `features/payment/`에 배치하는 방식이다.
+- 기능 단위로 그룹화하면 재사용성이 증가하고 유지보수가 쉬워진다.
+
+`REST API` 처럼 디렉토리 자체로 코드가 무엇을 하는 지 명확하게 의미를 드러내는 효과를 가진다.
+
+가령 `features/auth/` 디렉토리는 인증 처리와 관련된 모든 코드를 포함하고, `features/payment/` 디렉토리는 결제 처리와 관련된 모든 코드를 포함한다.
+
+`entities/auth/`디렉토리의 경우는 인증 정보와 관련된 로직을 처리와 관련된 코드를 포함한다.
+
+이처럼 디렉토리 이름만 보고도 어떤 기능을 담당하는 지 쉽게 파악할 수 있다는 장점이 있다.
+
+<br />
+
+#### 2. 레이어 기반 아키텍쳐 (Layered Architecture)
+
+- FSD는 7개의 레이어로 구성되며, 상위 레이어는 하위 레이어를 참조할 수 있지만, 반대로 하위 레이어가 상위 레이어를 참조하는 것은 금지된다. (상향식 의존성 방지)
+- ✅ 올바른 참조 관계
+  ```plaintext
+  App → Process → Pages → Widgets → Features → Entities → Shared
+  ```
+- ❌ 잘못된 참조 예시
+  ```plaintext
+  Features → Pages (X)  // Features 레이어가 Pages를 참조하면 안 됨
+  Entities → Features (X)  // Entities가 Features를 참조하면 안 됨
+  ```
+
+이러한 레이어 구조 덕분에 FSD는 코드 간 결합도를 줄이고, 유지보수성을 극대화할 수 있다.
+
+<br />
+
+#### 3. 올바른 의존성 관리 (Dependency Rules)
+
+- FSD에서는 명확한 의존성 규칙을 준수해야 한다.
+- 특히, import할 때 상위 요소를 참조할 수 없도록 강제하는 것이 핵심이다.
+
+<br />
+
+##### 규칙: 상위 레이어를 참조할 수 없음
+
+- features/ 내부에서는 pages/ 또는 widgets/의 코드를 import할 수 없다.
+- entities/ 내부에서는 features/ 또는 widgets/을 import할 수 없다.
+- ✅ 올바른 import 예시
+
+```typescript
+// features/auth/index.ts
+import { User } from '@/entities/user'; // ✅ 가능 (하위 레이어 참조)
+import { Button } from '@/shared/ui'; // ✅ 가능 (공유 컴포넌트 사용)
+```
+
+- ❌ 잘못된 import 예시
+
+```typescript
+// entities/user.ts
+import { AuthService } from '@/features/auth'; // ❌ 불가능 (상위 레이어 참조 금지)
+```
+
+이 원칙을 지키면, 하위 모듈이 상위 모듈에 의존하지 않으므로 결합도가 낮아지고, 기능을 독립적으로 유지보수하기 쉬워진다.
+
+<br />
+
+#### 4. 도메인 중심 설계 (Domain-Driven Design, DDD)
+
+- 각 도메인(예: 사용자, 상품, 결제 등)을 기능 단위로 그룹화하여 설계한다.
+- 기존 MVC 패턴에서는 모델과 서비스가 별도로 존재하지만, FSD에서는 기능(feature) 중심으로 관련된 모든 요소(UI, 상태, API, 로직 등)를 한곳에 모아 배치하여 도메인 주도 설계와 유사한 접근법을 취한다.
+
+이렇게 하면 코드 탐색이 쉬워지고, 기능 단위로 유지보수가 간편해지는 장점이 있다.
+
+<br />
+
+#### 5. 재사용성 및 모듈화 증가
+
+- `Shared` 레이어에 공통적으로 사용될 유틸리티, 스타일, API 함수, 기본 컴포넌트 등을 배치하여 중복을 방지하고, 프로젝트 전반에서 쉽게 재사용할 수 있도록 한다.
+- 컴포넌트, 상태관리, API 요청을 Features 단위로 모듈화하여 독립적인 개발이 가능해진다.
+- 예제:
+  ```plaintext
+  /shared/
+    ├── api/
+    ├── ui/
+    ├── utils/
+  ```
+- 예를 들어, 모든 페이지에서 재사용할 수 있는 `Button` 컴포넌트는 `shared/ui/Button.tsx`에 위치해야 한다.
+
+<br />
+
+#### 6. 유지보수성 및 확장성 증가
+
+- FSD의 구조를 따르면 프로젝트가 커져도 유지보수가 쉬워진다.
+- 새로운 기능을 추가할 때, 기존 코드에 영향을 주지 않고 독립적으로 개발할 수 있다.
+- 리팩토링이 용이함 → 특정 기능만 수정해도 전체 프로젝트에 영향을 주지 않는다.
+- 팀 협업이 쉬워짐 → 기능 단위로 작업을 나눠 진행 가능하다.
+
+특히, FSD는 문서와 관련 예제가 굉장히 자세하다.
+
+만약 이를 도입한다고 하면 팀 내에서 아키텍쳐와 관련해서 생각의 동기화를 위한 비용을 많이 줄일 수 있다.
+
+자세한 문서를 기반으로 판단을 내리면 되고, 애매한 것들만 합의를 하면 되기 때문이다.
+
+<br />
+
+#### 7. 정리
+
+| 장점                                | 설명                                                                       |
+| ----------------------------------- | -------------------------------------------------------------------------- |
+| 코드의 가독성과 유지보수성이 높아짐 | 기능별로 코드가 정리되어 있어서 찾기 쉬움                                  |
+| 확장성이 뛰어남                     | 프로젝트가 커질수록 FSD의 장점이 극대화됨                                  |
+| 의존성이 명확해짐                   | 하위 레이어에서 상위 레이어를 참조하지 못하도록 강제함으로써 결합도를 낮춤 |
+| 도메인 중심 개발이 가능해짐         | 애플리케이션이 실질적인 비즈니스 로직과 잘 맞아떨어짐                      |
+| 리팩토링이 쉬워짐                   | 기능(feature) 단위로 수정할 수 있어 안정적인 변경이 가능                   |
+| 팀원 간 협업이 용이함               | 각 기능 단위로 작업을 나눠 진행할 수 있음                                  |
+
+<br />
+
+:::tip[Feature-Sliced Design(FSD) 참고 자료]
+
+만약 더 자세한 정보를 원한다면 다음의 글을 추천한다.
+
+- [TEO의 글 : FSD 관점으로 바라보는 코드 경계 찾기](https://velog.io/@teo/fsd)
+- [TEO의 글 : 프론트엔드 개발자 관점으로 바라보는 관심사의 분리와 좋은 폴더 구조 \(feat. FSD\)](https://velog.io/@teo/separation-of-concerns-of-frontend)
+- [FSD 공식 문서](https://feature-sliced.design/kr/)
+
+:::
+
+<br />
+
+### FSD에서 ESLint 규칙이 필요한 이유
+
+FSD는 기능 중심으로 프로젝트를 구조화하여 확장성과 유지보수를 높이는 방식이다.
+
+그렇지만, 개발자가 이를 일관되게 유지하지 않으면 오히려 혼란을 초래할 수 있다.
+
+| 문제 유형                 | 예제                                           | 문제점                                         |
+| ------------------------- | ---------------------------------------------- | ---------------------------------------------- |
+| ❌ 잘못된 레이어 import   | features/에서 app/을 import                    | features는 app을 몰라야 하지만, 의존성이 생김  |
+| ❌ 잘못된 경로 import     | import Button from "../../shared/ui/Button";   | 상대 경로(../../)로 import하면 유지보수 어려움 |
+| ❌ 잘못된 Slice 간 의존성 | features/auth가 features/payment를 직접 import | 서로 독립적이어야 하지만 강한 의존성이 생김    |
+| ❌ 잘못된 전역 상태 접근  | features/에서 app/store.ts를 import            | feature는 global store를 직접 몰라야 함        |
+| ❌ 잘못된 UI 요소 import  | entities/에서 widgets/을 import                | 비즈니스 로직(entities)이 UI를 몰라야 함       |
+
+위와 같은 문제들이 개발자가 자주 유발할 수 있는 실수들이다.
+
+### 나는 어떤 규칙을 만들 것인가?
+
+FSD의 원칙을 깨는 코드를 감시하는 규칙을 만들 것이다.
+
+그리고, 당연하게도 이 규칙은 Flat Config를 기준으로 만들 것이며, 플러그인을 만들어서 적용할 것이다.
+
+옵션들은 기본적으로 `error`로 설정할 것이다.
+
+그렇지만, 당연하게도 `rules`는 사용자 마음대로 수정할 수 있으니, 사용자가 필요에 따라서 이를 `warn` 하거나 `off` 할 수 있도록 구현하고자 한다.
+
+<br />
+
+#### 내가 만들 ESLint 규칙 목록
+
+| 규칙 이름                   | 설명                                                                       | 예제 (잘못된 코드)                                                                |
+| --------------------------- | -------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| `forbidden-imports`         | 상위 레이어 import 및 cross-import 금지                                    | `features/` → `app/` import 금지                                                  |
+| `no-relative-imports`       | 상대 경로 import 금지, import 시 `@shared/ui` 같은 alias를 사용하도록 강제 | `import Button from "../../shared/ui/Button";` ❌                                 |
+| `no-public-api-sidestep`    | public API(index.ts) 우회 import 금지                                      | `import { authSlice } from "../../features/auth/slice.ts";` ❌                    |
+| `no-cross-slice-dependency` | feature slice 간 import를 금지 \(`features/auth` → `features/payment` ❌)  | `import { processPayment } from "../payment";` ❌                                 |
+| `no-ui-in-business-logic`   | 비즈니스 로직에서 UI import 금지 (`entities` → `widgets` 방지)             | `import { Header } from "../../widgets/Header";` ❌                               |
+| `no-global-store-imports`   | 전역 store 직접 import 금지                                                | `import store from "../../app/store.ts";` ❌                                      |
+| `ordered-imports`           | import 정렬 (레이어별 그룹화)                                              | `import { Button } from '@shared/ui'; import { User } from '@/entities/user';` ❌ |
+
+- 규칙 이름은 FSD의 린터인 [steiger](https://github.com/feature-sliced/steiger)를 참고해서 작성했다.
+- `forbidden-imports`를 제외하면 중복되는 요소 없이 `steiger`에서 지원하지 않는 부분에 대해서 린팅을 지원하도록 설계했다.
+- 추후 `steiger`에 있는 내용을 추가해볼 예정이다.
+
+<details>
+
+<summary>steiger 규칙들</summary>
+
+| 규칙(Rule)                       | 설명(Description)                                                                                           |
+| -------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| fsd/ambiguous-slice-names        | Shared 레이어의 일부 세그먼트 이름과 일치하는 슬라이스 이름을 금지합니다.                                   |
+| fsd/excessive-slicing            | 그룹화되지 않은 슬라이스가 너무 많거나, 하나의 그룹 내 슬라이스가 너무 많을 경우를 금지합니다.              |
+| fsd/forbidden-imports            | 상위 레이어에서 하위 레이어로의 import 및 동일 레이어 내 슬라이스 간 cross-import를 금지합니다.             |
+| fsd/inconsistent-naming          | 모든 엔터티의 명명법이 단수/복수 형태에서 일관되도록 강제합니다.                                            |
+| fsd/insignificant-slice          | 참조 횟수가 1회 이하이거나 아예 없는 슬라이스를 감지합니다.                                                 |
+| fsd/no-layer-public-api          | 레이어 수준의 index 파일을 금지합니다.                                                                      |
+| fsd/no-public-api-sidestep       | 슬라이스의 공개 API를 우회하고 내부 모듈에서 직접 import하는 것을 금지합니다.                               |
+| fsd/no-reserved-folder-names     | 특정 세그먼트 내에서 다른 일반적인 세그먼트와 동일한 이름을 가진 하위 폴더를 금지합니다.                    |
+| fsd/no-segmentless-slices        | 어떤 세그먼트도 포함하지 않는 슬라이스를 금지합니다.                                                        |
+| fsd/no-segments-on-sliced-layers | entities, features 같은 슬라이스 기반 레이어 폴더에 직접 ui, lib, api 등의 세그먼트를 두는 것을 금지합니다. |
+| fsd/no-ui-in-app                 | App 레이어 내에서 ui 세그먼트를 갖는 것을 금지합니다.                                                       |
+| fsd/public-api                   | 슬라이스 (및 세그먼트가 없는 레이어, 예: Shared)는 공개 API 정의를 갖도록 요구합니다.                       |
+| fsd/repetitive-naming            | 모든 엔터티가 단수/복수 형태에서 일관되게 명명되었는지 확인합니다.                                          |
+| fsd/segments-by-purpose          | 코드의 본질(essence)로 그룹화하는 세그먼트명을 지양하고, 목적(purpose)에 따라 그룹화하도록 권장합니다.      |
+| fsd/shared-lib-grouping          | shared/lib 폴더 내에 너무 많은 개별 모듈이 존재하는 것을 금지합니다.                                        |
+| fsd/typo-in-layer-name           | 모든 레이어의 이름이 철자 오류 없이 올바르게 작성되었는지 확인합니다.                                       |
+| fsd/no-processes                 | 사용이 중단된 Processes 레이어의 사용을 지양합니다.                                                         |
+
+</details>
+
+<br />
+
+#### 각 규칙의 필요성 설명
+
+##### 1. `forbidden-imports`: 올바른 레이어 간 의존성 적용
+
+- 상위 레이어에서 하위 레이어를 import하는 것을 금지한다.
+- 예를 들어, `features/`에서 `app/`을 import하는 것을 방지한다.
+- 이 규칙을 통해 FSD의 레이어 구조를 지키도록 유도한다.
+
+<Tabs>
+
+<TabItem value="잘못된 예제 코드" label="잘못된 예제 코드">
+
+```typescript title="features/auth/index.ts"
+// ❌ features에서 app을 import (잘못된 패턴)
+import { config } from '../../app/config';
+```
+
+</TabItem>
+
+<TabItem value="올바른 예제 코드" label="올바른 예제 코드">
+
+```typescript title="app/app.ts"
+// ✅ app에서 features를 import하는 것은 가능
+import { loginUser } from '../../features/auth';
+```
+
+</TabItem>
+
+</Tabs>
+
+<br />
+
+##### 2. `no-relative-imports`: 경로 alias 사용 강제
+
+- 상대 경로(`../../`)를 사용하는 것을 금지하고, alias(`@shared/ui`)를 사용하도록 강제한다.
+- 코드의 가독성을 높이고 유지보수를 쉽게 만들기 위함이다.
+
+<Tabs>
+
+<TabItem value="잘못된 예제 코드" label="잘못된 예제 코드">
+
+```typescript
+// ❌ 상대 경로 import (경로가 길어지고 유지보수 어려움)
+import Button from '../../shared/ui/Button';
+```
+
+</TabItem>
+
+<TabItem value="올바른 예제 코드" label="올바른 예제 코드">
+
+```typescript
+// ✅ 절대 경로 또는 alias 사용 (가독성이 높아짐)
+import Button from '@shared/ui/Button';
+```
+
+</TabItem>
+
+</Tabs>
+
+<br />
+
+##### 3. `no-public-api-sidestep`: `public API`를 통한 import 강제
+
+- 각 slice\(`features`, `entities`, `widgets`\)의 내부 파일을 직접 import하지 않도록 강제한다.
+- 항상 `index.ts`를 통해 import하도록 제한한다.
+
+<Tabs>
+
+<TabItem value="잘못된 예제 코드" label="잘못된 예제 코드">
+
+```typescript
+// ❌ features/auth/slice.ts를 직접 import (잘못된 패턴)
+import { authSlice } from '../../features/auth/slice.ts';
+```
+
+</TabItem>
+
+<TabItem value="올바른 예제 코드" label="올바른 예제 코드">
+
+```typescript
+// ✅ index.ts를 통해 import (public API를 통한 import)
+import { authSlice } from '../../features/auth';
+```
+
+</TabItem>
+
+</Tabs>
+
+<br />
+
+##### 4. `no-cross-slice-dependency`: Slice 간 의존성 제한
+
+- feature slice 간의 import를 금지한다.
+- `features/auth`에서 `features/payment`를 import하는 것을 방지한다.
+- 각 feature가 독립적으로 동작할 수 있도록 하기 위함이다.
+
+<Tabs>
+
+<TabItem value="잘못된 예제 코드" label="잘못된 예제 코드">
+
+```typescript
+// ❌ features/auth에서 features/payment를 import (잘못된 패턴)
+import { processPayment } from '../payment';
+```
+
+</TabItem>
+
+<TabItem value="올바른 예제 코드" label="올바른 예제 코드">
+
+```typescript
+// ✅ shared 또는 entities를 통해 간접적으로 의존
+import { PaymentService } from '@entities/payment';
+```
+
+</TabItem>
+
+</Tabs>
+
+<br />
+
+##### 5. `no-ui-in-business-logic`: UI 레이어 간 import 제한
+
+- 비즈니스 로직(`entities`)이 UI(`widgets`)를 import하지 못하도록 제한한다.
+
+<Tabs>
+
+<TabItem value="잘못된 예제 코드" label="잘못된 예제 코드">
+
+```typescript
+// ❌ entities에서 widgets를 import (잘못된 패턴)
+import { Header } from '../../widgets/Header';
+```
+
+</TabItem>
+
+<TabItem value="올바른 예제 코드" label="올바른 예제 코드">
+
+```typescript
+// ✅ widgets에서 entities import는 가능
+import { User } from '@entities/user';
+```
+
+</TabItem>
+
+</Tabs>
+
+<br />
+
+##### 6. `no-global-store-imports`: 전역 상태 관리 접근 제한
+
+- feature, widgets, entities 등에서 전역 상태(store)를 직접 import하는 것을 금지한다.
+- 전역 상태는 `useStore`, `useSelector` 같은 상태 관리 훅을 통해 접근해야 한다.
+- Redux, Zustand 등 다양한 상태 관리 라이브러리를 고려한 일반적인 규칙을 적용한다.
+
+<Tabs>
+
+<TabItem value="잘못된 예제 코드" label="잘못된 예제 코드">
+
+```typescript title="features/auth/AuthForm.tsx"
+import { store } from '../../app/store'; // ❌ 전역 store 직접 import
+import { useStore } from '../../shared/store'; // ❌ Zustand 전역 store 직접 import
+```
+
+- `features/auth/AuthForm.tsx`에서 store를 직접 import하고 있다.
+- 전역 상태는 store 객체를 직접 접근하는 방식이 아니라, 훅을 통해 접근해야 한다.
+
+</TabItem>
+
+<TabItem value="올바른 예제 코드" label="올바른 예제 코드">
+
+```typescript title="features/auth/AuthForm.tsx"
+// ✅ Redux를 사용하는 경우
+import { useSelector } from 'react-redux';
+
+const user = useSelector((state) => state.auth.user);
+```
+
+```typescript title="features/auth/AuthForm.tsx"
+// ✅ Zustand를 사용하는 경우
+import { useAuthStore } from '@shared/store';
+
+const user = useAuthStore((state) => state.user);
+```
+
+- 전역 상태는 `useSelector`, `useStore` 같은 상태 관리 훅을 통해 접근해야 한다.
+
+</TabItem>
+
+</Tabs>
+
+<br />
+
+##### 7. `ordered-imports`: import 구문 그룹화 강제
+
+- `import` 구문을 그룹화하여 코드 가독성을 높이도록 강제한다.
+- 예를 들어, import 구문을 같은 레이어끼리 그룹화하여 코드 가독성을 높이는 것을 목표로 한다.
+- `import` 순서가 랜덤하게 섞여 있는 경우 이를 정리할 수 있도록 강제한다.
+
+<Tabs>
+
+<TabItem value="잘못된 예제 코드" label="잘못된 예제 코드">
+
+```typescript
+import { loginUser } from '../features/auth';
+import { getUser } from '../entities/user';
+import { processPayment } from '../features/payment';
+import { formatCurrency } from '../shared/utils';
+import { Header } from '../widgets/Header';
+import { useStore } from '../app/store';
+```
+
+- `import` 정렬이 엉망인 것을 볼 수 있다.
+- 한눈에 보기 어렵고 유지보수가 어렵다는 문제가 존재한다.
+
+</TabItem>
+
+<TabItem value="올바른 예제 코드" label="올바른 예제 코드">
+
+```typescript
+// ✅ app (최상위)
+import { useStore } from '../app/store';
+
+// ✅ widgets
+import { Header } from '../widgets/Header';
+
+// ✅ features
+import { loginUser } from '../features/auth';
+import { processPayment } from '../features/payment';
+
+// ✅ entities
+import { getUser } from '../entities/user';
+
+// ✅ shared
+import { formatCurrency } from '../shared/utils';
+```
+
+- 각 레이어별로 import 구문이 정리되어 가독성이 향상되었다.
+
+</TabItem>
+
+</Tabs>
+
+### ESLint 규칙 구현하기
+
+이제 위에서 설계한 규칙들을 구현해볼 것이다.
+
+<br />
+
+#### `no-relative-imports` 규칙 구현
+
+<Tabs>
+
+<TabItem value="1. 규칙 파일 생성" label="1. 규칙 파일 생성">
+
+```bash
+mkdir -p src/rules
+touch src/rules/no-relative-imports.js
+```
+
+</TabItem>
+
+<TabItem value="2. 규칙 구현" label="2. 규칙 구현">
+
+```javascript title="src/rules/no-relative-imports.js"
+export default {
+  meta: {
+    type: 'problem',
+    docs: {
+      description: '상대 경로 import를 금지하고, 프로젝트에서 설정한 alias 사용을 강제합니다.',
+      recommended: true,
+    },
+    messages: {
+      noRelativePath: "🚨 '{{ importPath }}' 상대 경로 import를 사용할 수 없습니다. alias를 사용하세요.",
+    },
+  },
+
+  create(context) {
+    return {
+      ImportDeclaration(node) {
+        const importPath = node.source.value;
+
+        // 상대 경로인지 확인 (../ 또는 ./로 시작하는 경우)
+        if (importPath.startsWith('../') || importPath.startsWith('./')) {
+          context.report({
+            node,
+            messageId: 'noRelativePath',
+            data: {
+              importPath,
+            },
+          });
+        }
+      },
+    };
+  },
+};
+```
+
+- `ImpoortDeclaration`을 탐색하여 import 경로가 `../` 또는 `./`로 시작하면 ESLint 경고를 발생시킨다.
+- alias를 강제하기 위해 상대 경로를 감지하는 방식으로 동작한다.
+
+</TabItem>
+
+<TabItem value="3. 플러그인에 규칙 추가" label="3. 플러그인에 규칙 추가">
+
+```javascript title="src/index.js"
+import noConsoleLog from './rules/no-console-log.js';
+import noRelativeImports from './rules/no-relative-imports.js'; // ✅ 새 규칙 추가
+
+export default {
+  rules: {
+    'no-console-log': noConsoleLog,
+    'no-relative-imports': noRelativeImports, // ✅ 새 규칙 추가
+  },
+};
+```
+
+- `no-relative-imports` 규칙을 플러그인에 추가한다.
+
+</TabItem>
+
+<TabItem value="4. Flat Config에 규칙 추가" label="4. Flat Config에 규칙 추가">
+
+```javascript title="eslint.config.mjs"
+import eslintFsdPlugin from './src/index.js';
+
+export default [
+  {
+    plugins: {
+      fsd: eslintFsdPlugin,
+    },
+    rules: {
+      'fsd/no-console-log': 'error',
+      'fsd/no-relative-imports': 'error', // ✅ 새 규칙 추가
+    },
+  },
+];
+```
+
+- `no-relative-imports` 규칙을 Flat Config에 추가한다.
+
+</TabItem>
+
+<TabItem value="5. 테스트 코드 작성" label="5. 테스트 코드 작성">
+
+```javascript title="src/test.js"
+// ❌ 잘못된 코드 (상대 경로 import)
+import Button from '../../shared/ui/Button';
+import Card from '../../../shared/ui/Card';
+```
+
+```bash
+npx eslint src/test.js
+```
+
+</TabItem>
+
+<TabItem value="6. 실행 결과 확인" label="6. 실행 결과 확인">
+
+```plaintext
+test.js
+  1:1  error  🚨 '../../shared/ui/Button' 상대 경로 import를 사용할 수 없습니다. alias를 사용하세요.  no-relative-imports
+  2:1  error  🚨 '../../../shared/ui/Card' 상대 경로 import를 사용할 수 없습니다. alias를 사용하세요.  no-relative-imports
+```
+
+<Figure
+  fileName="fsd_path_alias_result.webp"
+  alt="no-relative-imports 규칙 실행 결과"
+  caption="no-relative-imports 규칙 실행 결과"
+/>
+
+- `no-relative-imports` 규칙이 정상적으로 동작하는 것을 확인할 수 있다.
+
+</TabItem>
+
+</Tabs>
+
+<br />
+
+#### `no-public-api-sidestep` 규칙 구현
+
+<Tabs>
+
+<TabItem value="1. 규칙 파일 생성" label="1. 규칙 파일 생성">
+
+```bash
+touch src/rules/no-public-api-sidestep.js
+```
+
+</TabItem>
+
+<TabItem value="2. 규칙 구현" label="2. 규칙 구현">
+
+```javascript title="src/rules/no-public-api-sidestep.js"
+export default {
+  meta: {
+    type: 'problem',
+    docs: {
+      description:
+        'features, widgets, entities 내부 파일을 직접 import하지 않고, index.ts를 통해 import하도록 강제합니다.',
+      recommended: true,
+    },
+    messages: {
+      noDirectImport:
+        "🚨 '{{ importPath }}' 파일을 직접 import할 수 없습니다. 반드시 public API(index.ts)를 통해 import하세요.",
+    },
+  },
+
+  create(context) {
+    return {
+      ImportDeclaration(node) {
+        const importPath = node.source.value;
+
+        // 검사할 레이어 목록
+        const restrictedLayers = ['features', 'entities', 'widgets'];
+
+        // import 대상이 특정 레이어 내부 파일인지 확인
+        const isRestrictedImport = restrictedLayers.some(
+          (layer) => importPath.includes(`/${layer}/`) && !importPath.endsWith('index.ts')
+        );
+
+        if (isRestrictedImport) {
+          context.report({
+            node,
+            messageId: 'noDirectImport',
+            data: {
+              importPath,
+            },
+          });
+        }
+      },
+    };
+  },
+};
+```
+
+- `ImportDeclaration`을 탐색하여 `features`, `entities`, `widgets` 내부 파일을 직접 import하는 경우 ESLint 경고를 발생시킨다.
+- 반드시 `index.ts`를 통해 import하도록 강제한다.
+
+</TabItem>
+
+<TabItem value="3. 플러그인에 규칙 추가" label="3. 플러그인에 규칙 추가">
+
+```javascript title="src/index.js"
+import noConsoleLog from './rules/no-console-log.js';
+import noRelativeImports from './rules/no-relative-imports.js';
+// highlight-next-line
+import noPublicApiSidestep from './rules/no-public-api-sidestep.js'; // ✅ 새 규칙 추가
+
+export default {
+  rules: {
+    'no-console-log': noConsoleLog,
+    'no-relative-imports': noRelativeImports,
+    // highlight-next-line
+    'no-public-api-sidestep': noPublicApiSidestep, // ✅ 새 규칙 추가
+  },
+};
+```
+
+- `no-public-api-sidestep` 규칙을 플러그인에 추가한다.
+
+</TabItem>
+
+<TabItem value="4. Flat Config에 규칙 추가" label="4. Flat Config에 규칙 추가">
+
+```javascript title="eslint.config.mjs"
+import eslintFsdPlugin from './src/index.js';
+
+export default [
+  {
+    plugins: {
+      fsd: eslintFsdPlugin,
+    },
+    rules: {
+      'fsd/no-console-log': 'error',
+      'fsd/no-relative-imports': 'error',
+      // highlight-next-line
+      'fsd/no-public-api-sidestep': 'error', // ✅ 새 규칙 추가
+    },
+  },
+];
+```
+
+- `no-public-api-sidestep` 규칙을 Flat Config에 추가한다.
+
+</TabItem>
+
+<TabItem value="5. 테스트 코드 작성" label="5. 테스트 코드 작성">
+
+```javascript title="src/test.js"
+// ❌ 잘못된 코드 (features/auth의 내부 파일 직접 import)
+import { authSlice } from '../../features/auth/slice.ts';
+
+// ❌ 잘못된 코드 (widgets/Header 내부 파일 직접 import)
+import { Header } from '../../widgets/Header/component.tsx';
+```
+
+```bash
+npx eslint src/test.js
+```
+
+</TabItem>
+
+<TabItem value="6. 실행 결과 확인" label="6. 실행 결과 확인">
+
+```plaintext
+test.js
+  1:1  error  🚨 '../../features/auth/slice.ts' 파일을 직접 import할 수 없습니다. 반드시 public API(index.ts)를 통해 import하세요.  no-public-api-sidestep
+  4:1  error  🚨 '../../widgets/Header/component.tsx' 파일을 직접 import할 수 없습니다. 반드시 public API(index.ts)를 통해 import하세요.  no-public-api-sidestep
+```
+
+<Figure
+  fileName="fsd_public_api_result.webp"
+  alt="no-public-api-sidestep 규칙 실행 결과"
+  caption="no-public-api-sidestep 규칙 실행 결과"
+/>
+
+- `no-public-api-sidestep` 규칙이 정상적으로 동작하는 것을 확인할 수 있다.
+
+</TabItem>
+
+</Tabs>
+
+<br />
+
+#### `no-cross-slice-dependency` 규칙 구현
+
+<Tabs>
+
+<TabItem value="1. 규칙 파일 생성" label="1. 규칙 파일 생성">
+
+```bash
+touch src/rules/no-cross-slice-dependency.js
+```
+
+</TabItem>
+
+<TabItem value="2. 규칙 구현" label="2. 규칙 구현">
+
+```javascript title="src/rules/no-cross-slice-dependency.js"
+export default {
+  meta: {
+    type: 'problem',
+    docs: {
+      description:
+        'features 내부에서 다른 features를 직접 import하지 않고, 반드시 entities 또는 shared를 통해 의존하도록 강제합니다.',
+      recommended: true,
+    },
+    messages: {
+      noFeatureDependency:
+        "🚨 '{{ fromFeature }}'에서 '{{ toFeature }}'을(를) 직접 import할 수 없습니다. 반드시 entities 또는 shared를 통해 의존하세요.",
+    },
+  },
+
+  create(context) {
+    return {
+      ImportDeclaration(node) {
+        const filePath = context.filename;
+        const importPath = node.source.value;
+
+        // features 내부에서 다른 features를 직접 import하는지 검사
+        if (filePath.includes('/features/') && importPath.includes('/features/')) {
+          const fromFeature = filePath.split('/features/')[1].split('/')[0];
+          const toFeature = importPath.split('/features/')[1].split('/')[0];
+
+          if (fromFeature !== toFeature) {
+            context.report({
+              node,
+              messageId: 'noFeatureDependency',
+              data: {
+                fromFeature,
+                toFeature,
+              },
+            });
+          }
+        }
+      },
+    };
+  },
+};
+```
+
+- 현재 파일(`filePath`)과 import 대상(`importPath`)을 분석하여, feature 내부에서 다른 feature를 import하면 ESLint 경고를 발생시킨다.
+- `entities` 또는 `shared`를 통해 간접적으로 import하는 것이 올바른 방식이다.
+
+</TabItem>
+
+<TabItem value="3. 플러그인에 규칙 추가" label="3. 플러그인에 규칙 추가">
+
+```javascript title="src/index.js"
+import noConsoleLog from './rules/no-console-log.js';
+import noRelativeImports from './rules/no-relative-imports.js';
+import noPublicApiSidestep from './rules/no-public-api-sidestep.js';
+// highlight-next-line
+import noCrossSliceDependency from './rules/no-cross-slice-dependency.js'; // ✅ 새 규칙 추가
+
+export default {
+  rules: {
+    'no-console-log': noConsoleLog,
+    'no-relative-imports': noRelativeImports,
+    'no-public-api-sidestep': noPublicApiSidestep,
+    // highlight-next-line
+    'no-cross-slice-dependency': noCrossSliceDependency, // ✅ 새 규칙 추가
+  },
+};
+```
+
+- `no-cross-slice-dependency` 규칙을 플러그인에 추가한다.
+
+</TabItem>
+
+<TabItem value="4. Flat Config에 규칙 추가" label="4. Flat Config에 규칙 추가">
+
+```javascript title="eslint.config.mjs"
+import eslintFsdPlugin from './src/index.js';
+
+export default [
+  {
+    plugins: {
+      fsd: eslintFsdPlugin,
+    },
+    rules: {
+      'fsd/no-console-log': 'error',
+      'fsd/no-relative-imports': 'error',
+      'fsd/no-public-api-sidestep': 'error',
+      // highlight-next-line
+      'fsd/no-cross-slice-dependency': 'error', // ✅ 새 규칙 추가
+    },
+  },
+];
+```
+
+- `no-cross-slice-dependency` 규칙을 Flat Config에 추가한다.
+
+</TabItem>
+
+<TabItem value="5. 테스트 코드 작성" label="5. 테스트 코드 작성">
+
+```javascript title="src/test.js"
+// ❌ 잘못된 코드 (features/auth에서 features/payment를 직접 import)
+import { processPayment } from '../../features/payment';
+```
+
+```bash
+npx eslint src/test.js
+```
+
+</TabItem>
+
+<TabItem value="6. 실행 결과 확인" label="6. 실행 결과 확인">
+
+```plaintext
+test.js
+  1:1  error  🚨 'auth'에서 'payment'을(를) 직접 import할 수 없습니다. 반드시 entities 또는 shared를 통해 의존하세요.  no-cross-slice-dependency
+```
+
+<Figure
+  fileName="fsd_slices_dependency_result.webp"
+  alt="no-cross-slice-dependency 규칙 실행 결과"
+  caption="no-cross-slice-dependency 규칙 실행 결과"
+/>
+
+- `no-cross-slice-dependency` 규칙이 정상적으로 동작하는 것을 확인할 수 있다.
+
+</TabItem>
+
+</Tabs>
+
+<br />
+
+#### `no-ui-in-business-logic` 규칙 구현
+
+<Tabs>
+
+<TabItem value="1. 규칙 파일 생성" label="1. 규칙 파일 생성">
+
+```bash
+touch src/rules/no-ui-in-business-logic.js
+```
+
+</TabItem>
+
+<TabItem value="2. 규칙 구현" label="2. 규칙 구현">
+
+```javascript title="src/rules/no-ui-in-business-logic.js"
+export default {
+  meta: {
+    type: 'problem',
+    docs: {
+      description: 'entities에서 widgets를 import하는 것을 금지합니다.',
+      recommended: true,
+    },
+    messages: {
+      noCrossUI:
+        "🚨 '{{ fromLayer }}'에서 '{{ toLayer }}'을(를) import할 수 없습니다. UI는 비즈니스 로직을 몰라야 합니다.",
+    },
+  },
+
+  create(context) {
+    return {
+      ImportDeclaration(node) {
+        const filePath = context.filename;
+        const importPath = node.source.value;
+
+        // entities에서 widgets를 import하는 경우 감지
+        if (filePath.includes('/entities/') && importPath.includes('/widgets/')) {
+          context.report({
+            node,
+            messageId: 'noCrossUI',
+            data: {
+              fromLayer: 'entities',
+              toLayer: 'widgets',
+            },
+          });
+        }
+      },
+    };
+  },
+};
+```
+
+- 현재 파일(`filePath`)이 `entities` 내부에 있고, import 대상(`importPath`)이 `widgets`에 포함되어 있으면 ESLint 경고를 발생시킨다.
+- 비즈니스 로직(`entities`)이 UI(`widgets`)를 import하는 것을 방지한다.
+
+</TabItem>
+
+<TabItem value="3. 플러그인에 규칙 추가" label="3. 플러그인에 규칙 추가">
+
+```javascript title="src/index.js"
+import noConsoleLog from './rules/no-console-log.js';
+import noRelativeImports from './rules/no-relative-imports.js';
+import noPublicApiSidestep from './rules/no-public-api-sidestep.js';
+import noCrossSliceDependency from './rules/no-cross-slice-dependency.js';
+// highlight-next-line
+import noUiInBusinessLogic from './rules/no-ui-in-business-logic.js'; // ✅ 새 규칙 추가
+
+export default {
+  rules: {
+    'no-console-log': noConsoleLog,
+    'no-relative-imports': noRelativeImports,
+    'no-public-api-sidestep': noPublicApiSidestep,
+    'no-cross-slice-dependency': noCrossSliceDependency,
+    // highlight-next-line
+    'no-ui-in-business-logic': noUiInBusinessLogic, // ✅ 새 규칙 추가
+  },
+};
+```
+
+- `no-ui-in-business-logic` 규칙을 플러그인에 추가한다.
+
+</TabItem>
+
+<TabItem value="4. Flat Config에 규칙 추가" label="4. Flat Config에 규칙 추가">
+
+```javascript title="eslint.config.mjs"
+import eslintFsdPlugin from './src/index.js';
+
+export default [
+  {
+    plugins: {
+      fsd: eslintFsdPlugin,
+    },
+    rules: {
+      'fsd/no-console-log': 'error',
+      'fsd/no-relative-imports': 'error',
+      'fsd/no-public-api-sidestep': 'error',
+      'fsd/no-cross-slice-dependency': 'error',
+      // highlight-next-line
+      'fsd/no-ui-in-business-logic': 'error', // ✅ 새 규칙 추가
+    },
+  },
+];
+```
+
+- `no-ui-in-business-logic` 규칙을 Flat Config에 추가한다.
+
+</TabItem>
+
+<TabItem value="5. 테스트 코드 작성" label="5. 테스트 코드 작성">
+
+```javascript title="src/entities/test.js"
+// ❌ 잘못된 코드 (entities에서 widgets import)
+import { ProfileCard } from '../../widgets/ProfileCard';
+```
+
+```bash
+npx eslint src/entities/test.js
+```
+
+- 이 규칙을 테스트하기 위해서는 디렉토리에 `entities`가 있어야 함에 유의하자.
+
+</TabItem>
+
+<TabItem value="6. 실행 결과 확인" label="6. 실행 결과 확인">
+
+```plaintext
+test.js
+  1:1  error  🚨 'entities'에서 'widgets'을(를) import할 수 없습니다. UI는 비즈니스 로직을 몰라야 합니다.  no-ui-in-business-logic
+```
+
+<Figure
+  fileName="fsd_no_cross_ui_result.webp"
+  alt="no-ui-in-business-logic 규칙 실행 결과"
+  caption="no-ui-in-business-logic 규칙 실행 결과"
+/>
+
+- `no-ui-in-business-logic` 규칙이 정상적으로 동작하는 것을 확인할 수 있다.
+
+</TabItem>
+
+</Tabs>
+
+<br />
+
+#### `no-global-store-imports` 규칙 구현
+
+<Tabs>
+
+<TabItem value="1. 규칙 파일 생성" label="1. 규칙 파일 생성">
+
+```bash
+touch src/rules/no-global-store-imports.js
+```
+
+</TabItem>
+
+<TabItem value="2. 규칙 구현" label="2. 규칙 구현">
+
+```javascript title="src/rules/no-global-store-imports.js"
+export default {
+  meta: {
+    type: 'problem',
+    docs: {
+      description: '전역 상태(store)를 직접 import하는 것을 금지합니다.',
+      recommended: true,
+    },
+    messages: {
+      noGlobalStore:
+        "🚨 '{{ storeName }}' 전역 store를 직접 import할 수 없습니다. useStore 또는 useSelector를 사용하세요.",
+    },
+  },
+
+  create(context) {
+    return {
+      ImportDeclaration(node) {
+        const importPath = node.source.value;
+
+        // 전역 store 경로 패턴 (Redux, Zustand 등 고려)
+        const forbiddenPatterns = ['/app/store', '/shared/store'];
+
+        // 전역 store를 직접 import하는지 검사
+        if (forbiddenPatterns.some((pattern) => importPath.includes(pattern))) {
+          context.report({
+            node,
+            messageId: 'noGlobalStore',
+            data: {
+              storeName: importPath,
+            },
+          });
+        }
+      },
+    };
+  },
+};
+```
+
+- `forbiddenPatterns` 배열에 전역 상태 관리 라이브러리의 store 경로를 정의한다.
+- `ImportDeclaration`을 탐색하여 전역 상태를 직접 import하는 경우 ESLint 경고를 발생시킨다.
+
+</TabItem>
+
+<TabItem value="3. 플러그인에 규칙 추가" label="3. 플러그인에 규칙 추가">
+
+```javascript title="src/index.js"
+import noConsoleLog from './rules/no-console-log.js';
+import noRelativeImports from './rules/no-relative-imports.js';
+import noPublicApiSidestep from './rules/no-public-api-sidestep.js';
+import noCrossSliceDependency from './rules/no-cross-slice-dependency.js';
+import noUiInBusinessLogic from './rules/no-ui-in-business-logic.js';
+// highlight-next-line
+import noGlobalStoreImports from './rules/no-global-store-imports.js'; // ✅ 새 규칙 추가
+
+export default {
+  rules: {
+    'no-console-log': noConsoleLog,
+    'no-relative-imports': noRelativeImports,
+    'no-public-api-sidestep': noPublicApiSidestep,
+    'no-cross-slice-dependency': noCrossSliceDependency,
+    'no-ui-in-business-logic': noUiInBusinessLogic,
+    // highlight-next-line
+    'no-global-store-imports': noGlobalStoreImports, // ✅ 새 규칙 추가
+  },
+};
+```
+
+- `no-global-store-imports` 규칙을 플러그인에 추가한다.
+
+</TabItem>
+
+<TabItem value="4. Flat Config에 규칙 추가" label="4. Flat Config에 규칙 추가">
+
+```javascript title="eslint.config.mjs"
+import eslintFsdPlugin from './src/index.js';
+
+export default [
+  {
+    plugins: {
+      fsd: eslintFsdPlugin,
+    },
+    rules: {
+      'fsd/no-console-log': 'error',
+      'fsd/no-relative-imports': 'error',
+      'fsd/no-public-api-sidestep': 'error',
+      'fsd/no-cross-slice-dependency': 'error',
+      'fsd/no-ui-in-business-logic': 'error',
+      // highlight-next-line
+      'fsd/no-global-store-imports': 'error', // ✅ 새 규칙 추가
+    },
+  },
+];
+```
+
+- `no-global-store-imports` 규칙을 Flat Config에 추가한다.
+
+</TabItem>
+
+<TabItem value="5. 테스트 코드 작성" label="5. 테스트 코드 작성">
+
+```javascript title="src/test.js"
+// ❌ 잘못된 코드 (전역 store 직접 import)
+import { store } from '../../app/store';
+import { useStore } from '../../shared/store';
+```
+
+```bash
+npx eslint src/test.js
+```
+
+</TabItem>
+
+<TabItem value="6. 실행 결과 확인" label="6. 실행 결과 확인">
+
+```plaintext
+test.js
+  1:1  error  🚨 '../../app/store' 전역 store를 직접 import할 수 없습니다. useStore 또는 useSelector를 사용하세요.  no-global-store-imports
+  2:1  error  🚨 '../../shared/store' 전역 store를 직접 import할 수 없습니다. useStore 또는 useSelector를 사용하세요.  no-global-store-imports
+```
+
+<Figure
+  fileName="fsd_no_global_store_result.webp"
+  alt="no-global-store-imports 규칙 실행 결과"
+  caption="no-global-store-imports 규칙 실행 결과"
+/>
+
+- `no-global-store-imports` 규칙이 정상적으로 동작하는 것을 확인할 수 있다.
+
+</TabItem>
+
+</Tabs>
+
+:::info[유의 사항]
+
+전역 상태를 어떤 디렉토리에 넣을 지는 프로젝트에 달려있다.
+따라서 프로젝트 별로 이게 고려가 되어야 하며, FSD에서 추구하는 전역상태 관리 요소를 기준으로도 이게 고려가 되어야 한다.
+
+다만, 여기서는 정말 보편적인 상황을 가정해서 `app/store`와 `shared/store`를 금지하는 규칙을 만들었다.
+
+`store` 요소가 `model`에 들어가는 경우도 있고 해서, 이 규칙은 추후 수정할 예정이다.
+:::
+
+<br />
+
+#### `forbidden-imports` 규칙 구현
+
+| 레이어    | import 가능 대상                                         |
+| --------- | -------------------------------------------------------- |
+| app       | processes, pages, widgets, features, entities, shared ✅ |
+| processes | pages, widgets, features, entities, shared ✅            |
+| pages     | widgets, features, entities, shared ✅                   |
+| widgets   | features, entities, shared ✅                            |
+| features  | entities, shared ✅                                      |
+| entities  | shared ✅                                                |
+| shared    | 아무 레이어도 import하지 않음 ✅                         |
+
+이 규칙은 위 구조를 지켜주게 하는 규칙이다.
+
+<Tabs>
+
+<TabItem value="1. 규칙 파일 생성" label="1. 규칙 파일 생성">
+
+```bash
+touch src/rules/forbidden-imports.js
+```
+
+</TabItem>
+
+<TabItem value="2. 규칙 구현" label="2. 규칙 구현">
+
+```javascript title="src/rules/forbidden-imports.js"
+export default {
+  meta: {
+    type: 'problem',
+    docs: {
+      description: 'FSD 레이어 간 올바른 import 규칙을 강제합니다.',
+      recommended: true,
+    },
+    messages: {
+      invalidImport: "🚨 '{{ fromLayer }}' 레이어에서는 '{{ toLayer }}' 레이어를 import할 수 없습니다.",
+    },
+  },
+
+  create(context) {
+    // ✅ FSD 레이어 목록 (위에서 아래로)
+    const layers = ['shared', 'entities', 'features', 'widgets', 'pages', 'processes', 'app'];
+
+    return {
+      ImportDeclaration(node) {
+        const filePath = context.filename;
+        const importPath = node.source.value;
+
+        // 현재 파일이 속한 레이어 찾기
+        const fromLayer = layers.find((layer) => filePath.includes(`/${layer}/`));
+        // import 대상 파일이 속한 레이어 찾기
+        const toLayer = layers.find((layer) => importPath.includes(`/${layer}/`));
+
+        if (!fromLayer || !toLayer) {
+          return; // 둘 중 하나라도 FSD 레이어에 속하지 않으면 검사하지 않음
+        }
+
+        // ✅ 올바른 경우 (상위 레이어가 하위 레이어를 import하는 경우) → 통과
+        if (layers.indexOf(fromLayer) > layers.indexOf(toLayer)) {
+          return;
+        }
+
+        // ❌ 잘못된 경우 (하위 레이어가 상위 레이어를 import하는 경우) → 경고 발생
+        context.report({
+          node,
+          messageId: 'invalidImport',
+          data: {
+            fromLayer,
+            toLayer,
+          },
+        });
+      },
+    };
+  },
+};
+```
+
+- `layers.indexOf(fromLayer) < layers.indexOf(toLayer)` 조건을 만족하지 않는 경우, 즉 하위 레이어가 상위 레이어를 import하는 경우 ESLint 경고를 발생시킨다.
+
+</TabItem>
+
+<TabItem value="3. 플러그인에 규칙 추가" label="3. 플러그인에 규칙 추가">
+
+```javascript title="src/index.js"
+import noConsoleLog from './rules/no-console-log.js';
+import noRelativeImports from './rules/no-relative-imports.js';
+import noPublicApiSidestep from './rules/no-public-api-sidestep.js';
+import noCrossSliceDependency from './rules/no-cross-slice-dependency.js';
+import noUiInBusinessLogic from './rules/no-ui-in-business-logic.js';
+import noGlobalStoreImports from './rules/no-global-store-imports.js';
+// highlight-next-line
+import fsdLayerImports from './rules/forbidden-imports.js'; // ✅ 새 규칙 추가
+
+export default {
+  rules: {
+    'no-console-log': noConsoleLog,
+    'no-relative-imports': noRelativeImports,
+    'no-public-api-sidestep': noPublicApiSidestep,
+    'no-cross-slice-dependency': noCrossSliceDependency,
+    'no-ui-in-business-logic': noUiInBusinessLogic,
+    'no-global-store-imports': noGlobalStoreImports,
+    // highlight-next-line
+    'forbidden-imports': fsdLayerImports, // ✅ 새 규칙 추가
+  },
+};
+```
+
+- `forbidden-imports` 규칙을 플러그인에 추가한다.
+
+</TabItem>
+
+<TabItem value="4. Flat Config에 규칙 추가" label="4. Flat Config에 규칙 추가">
+
+```javascript title="eslint.config.mjs"
+import eslintFsdPlugin from './src/index.js';
+
+export default [
+  {
+    plugins: {
+      fsd: eslintFsdPlugin,
+    },
+    rules: {
+      'fsd/no-console-log': 'error',
+      'fsd/no-relative-imports': 'error',
+      'fsd/no-public-api-sidestep': 'error',
+      'fsd/no-cross-slice-dependency': 'error',
+      'fsd/no-ui-in-business-logic': 'error',
+      'fsd/no-global-store-imports': 'error',
+      // highlight-next-line
+      'fsd/forbidden-imports': 'error', // ✅ 새 규칙 추가
+    },
+  },
+];
+```
+
+- `forbidden-imports` 규칙을 Flat Config에 추가한다.
+
+</TabItem>
+
+<TabItem value="5. 테스트 코드 작성" label="5. 테스트 코드 작성">
+
+```javascript title="src/entities/test.js"
+// ❌ 잘못된 코드 (entities에서 app import)
+import { config } from '../../app/config';
+
+// ❌ 잘못된 코드 (entities에서 processes import)
+import { processManager } from '../../processes/task-manager';
+
+// ❌ 잘못된 코드 (entities에서 entities import)
+import { test } from '../../entities/task-manager';
+
+// ✅ 올바른 코드 (entities에서 shared import)
+import { User } from '../../shared/entities/user';
+```
+
+```bash
+npx eslint src/entities/test.js
+```
+
+</TabItem>
+
+<TabItem value="6. 실행 결과 확인" label="6. 실행 결과 확인">
+
+```plaintext
+test.js
+  1:1  error  🚨 'entities' 레이어에서는 'app' 레이어를 import할 수 없습니다.  forbidden-imports
+  4:1  error  🚨 'entities' 레이어에서는 'processes' 레이어를 import할 수 없습니다.  forbidden-imports
+```
+
+<Figure
+  fileName="fsd_layer_imports_result.webp"
+  alt="forbidden-imports 규칙 실행 결과"
+  caption="forbidden-imports 규칙 실행 결과"
+/>
+
+- `forbidden-imports` 규칙이 정상적으로 동작하는 것을 확인할 수 있다.
+
+</TabItem>
+
+</Tabs>
+
+<br />
+
+#### `ordered-imports` 규칙 구현
+
+<Tabs>
+
+<TabItem value="1. 규칙 파일 생성" label="1. 규칙 파일 생성">
+
+```bash
+touch src/rules/ordered-imports.js
+```
+
+</TabItem>
+
+<TabItem value="2. 규칙 구현" label="2. 규칙 구현">
+
+```javascript title="src/rules/ordered-imports.js"
+export default {
+  meta: {
+    type: 'suggestion',
+    docs: {
+      description: 'FSD import 구문을 레이어별로 정렬하여 가독성을 높입니다.',
+      recommended: true,
+    },
+    messages: {
+      incorrectGrouping:
+        "🚨 '{{ currentImport }}' import가 올바른 그룹에 정렬되지 않았습니다. 같은 레이어별로 정렬하세요.",
+    },
+    fixable: 'code',
+  },
+
+  create(context) {
+    return {
+      Program(node) {
+        const importNodes = node.body.filter((statement) => statement.type === 'ImportDeclaration');
+
+        if (importNodes.length === 0) {
+          return;
+        }
+
+        const sourceCode = context.getSourceCode();
+
+        // ✅ FSD 레이어 목록 (위에서 아래로)
+        const layers = ['app', 'processes', 'pages', 'widgets', 'features', 'entities', 'shared'];
+
+        // import 경로를 기반으로 그룹화
+        const groupedImports = layers.reduce((acc, layer) => {
+          acc[layer] = [];
+          return acc;
+        }, {});
+
+        importNodes.forEach((importNode) => {
+          const importPath = importNode.source.value;
+          const layer = layers.find((l) => importPath.includes(`/${l}/`));
+
+          if (layer) {
+            groupedImports[layer].push(importNode);
+          }
+        });
+
+        // 올바른 순서대로 import가 정렬되었는지 확인
+        const sortedImports = layers.flatMap((layer) => groupedImports[layer]);
+
+        // 🚀 AST 노드를 문자열로 변환 후 비교
+        const importText = importNodes.map((node) => sourceCode.getText(node)).join('\n');
+        const sortedImportText = sortedImports.map((node) => sourceCode.getText(node)).join('\n');
+
+        if (importText !== sortedImportText) {
+          context.report({
+            node: importNodes[0],
+            messageId: 'incorrectGrouping',
+            data: {
+              currentImport: importNodes[0].source.value,
+            },
+            fix(fixer) {
+              return fixer.replaceTextRange(
+                [importNodes[0].range[0], importNodes[importNodes.length - 1].range[1]],
+                sortedImportText
+              );
+            },
+          });
+        }
+      },
+    };
+  },
+};
+```
+
+- `layers` 배열을 기반으로 `import` 경로를 분석하여 레이어별로 그룹화한다.
+- FSD 구조에서 지정된 레이어 순서(`app` → `processes` → `pages` → `widgets` → `features` → `entities` → `shared`)를 따르도록 강제한다.
+- 만약 import가 올바른 순서로 정리되지 않으면 자동 수정 기능(`fixable: "code"`)을 제공한다.
+
+</TabItem>
+
+<TabItem value="3. 플러그인에 규칙 추가" label="3. 플러그인에 규칙 추가">
+
+```javascript title="src/index.js"
+import noConsoleLog from './rules/no-console-log.js';
+import noRelativeImports from './rules/no-relative-imports.js';
+import noPublicApiSidestep from './rules/no-public-api-sidestep.js';
+import noCrossSliceDependency from './rules/no-cross-slice-dependency.js';
+import noUiInBusinessLogic from './rules/no-ui-in-business-logic.js';
+import noGlobalStoreImports from './rules/no-global-store-imports.js';
+import fsdLayerImports from './rules/forbidden-imports.js';
+// highlight-next-line
+import orderedImports from './rules/ordered-imports.js'; // ✅ 새 규칙 추가
+
+export default {
+  rules: {
+    'no-console-log': noConsoleLog,
+    'no-relative-imports': noRelativeImports,
+    'no-public-api-sidestep': noPublicApiSidestep,
+    'no-cross-slice-dependency': noCrossSliceDependency,
+    'no-ui-in-business-logic': noUiInBusinessLogic,
+    'no-global-store-imports': noGlobalStoreImports,
+    'forbidden-imports': fsdLayerImports,
+    // highlight-next-line
+    'ordered-imports': orderedImports, // ✅ 새 규칙 추가
+  },
+};
+```
+
+- `ordered-imports` 규칙을 플러그인에 추가한다.
+
+</TabItem>
+
+<TabItem value="4. Flat Config에 규칙 추가" label="4. Flat Config에 규칙 추가">
+
+```javascript title="eslint.config.mjs"
+import eslintFsdPlugin from './src/index.js';
+
+export default [
+  {
+    plugins: {
+      fsd: eslintFsdPlugin,
+    },
+    rules: {
+      'fsd/no-console-log': 'error',
+      'fsd/no-relative-imports': 'error',
+      'fsd/no-public-api-sidestep': 'error',
+      'fsd/no-cross-slice-dependency': 'error',
+      'fsd/no-ui-in-business-logic': 'error',
+      'fsd/no-global-store-imports': 'error',
+      'fsd/forbidden-imports': 'error',
+      // highlight-next-line
+      'fsd/ordered-imports': 'warn', // ✅ 추가 (자동 정렬 가능하므로 "warn")
+    },
+  },
+];
+```
+
+- `ordered-imports` 규칙을 Flat Config에 추가한다.
+
+</TabItem>
+
+<TabItem value="5. 테스트 코드 작성" label="5. 테스트 코드 작성">
+
+```javascript title="src/test.js"
+// ❌ 잘못된 코드 (import 순서가 뒤죽박죽임)
+import { processPayment } from '../features/payment';
+import { getUser } from '../entities/user';
+import { formatCurrency } from '../shared/utils';
+import { loginUser } from '../features/auth';
+import { Header } from '../widgets/Header';
+import { useStore } from '../app/store';
+```
+
+```bash
+npx eslint src/test.js
+```
+
+</TabItem>
+
+<TabItem value="6. 실행 결과 확인" label="6. 실행 결과 확인">
+
+```javascript
+// ✅ app (최상위)
+import { useStore } from '../app/store';
+
+// ✅ widgets
+import { Header } from '../widgets/Header';
+
+// ✅ features
+import { loginUser } from '../features/auth';
+import { processPayment } from '../features/payment';
+
+// ✅ entities
+import { getUser } from '../entities/user';
+
+// ✅ shared
+import { formatCurrency } from '../shared/utils';
+```
+
+<Figure
+  fileName="fsd_group_imports_result.webp"
+  alt="ordered-imports 규칙 실행 결과"
+  caption="ordered-imports 규칙 실행 결과"
+/>
+
+- `ordered-imports` 규칙이 정상적으로 동작하는 것을 확인할 수 있다.
+
+</TabItem>
+
+</Tabs>
+
+## 4단계: ESLint 플러그인 개발 및 패키징
+
+이제 ESLint 플러그인을 개발하고 패키징하는 방법을 알아보자.
+
+### 목표
+
+- 개별 규칙을 하나의 ESLint 플러그인 패키지로 묶는다.
+- NPM에서 배포 가능한 eslint-plugin-fsd 형태로 정리한다.
+- 테스트 및 디버깅을 통해 정상적으로 작동하는지 확인한다.
+
+### ESLint 플러그인 구조 정리
+
+지금까지 우리는 `rules/` 폴더에 개별 규칙을 구현했다.
+
+플러그인 패키지로 정리하기 위해 아래와 같은 디렉토리 구조를 만들어주자.
+
+> 테스트를 위해서 포함시켰던 `no-console-log.js`는 지우자.
+
+```plaintext
+eslint-fsd-plugin/
+├── src/
+│   ├── rules/
+│   │   ├── forbidden-imports.js
+│   │   ├── no-relative-imports.js
+│   │   ├── no-public-api-sidestep.js
+│   │   ├── no-cross-slice-dependency.js
+│   │   ├── no-ui-in-business-logic.js
+│   │   ├── no-global-store-imports.js
+│   │   ├── ordered-imports.js
+│   ├── index.js   <-- 플러그인 엔트리 포인트
+├── tests/         <-- ESLint 규칙 테스트 코드
+├── package.json
+├── eslint.config.mjs (테스트용 Flat Config)
+├── README.md      <-- 문서화
+```
+
+위와 같은 디렉토리가 되는 것을 확인할 수 있다.
+
+### ESLint 플러그인 패키지화
+
+지금부터는 내가 만들어둔 ESLint 규칙을 패키지화하고 NPM에 배포하기 위한 준비 과정이다.
+
+#### 1. `package.json` 설정
+
+ESLint 플러그인을 하나의 패키지로 만들기 위해서 `package.json`을 설정해야 한다.
+
+아래와 같은 내용을 `package.json`에 추가하자.
+
+```json
+{
+  "name": "eslint-plugin-fsd-lint",
+  "version": "1.0.0",
+  "description": "ESLint plugin for enforcing Feature-Sliced Design architecture",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "lint": "eslint .",
+    "test": "node tests/fsd-rules.test.js"
+  },
+  "keywords": ["eslint", "plugin", "feature-sliced-design", "fsd", "lint"],
+  "author": "effozen",
+  "license": "MIT",
+  "dependencies": {
+    "eslint": "^9.19.0"
+  },
+  "peerDependencies": {
+    "eslint": ">=9.0.0"
+  }
+}
+```
+
+- `name`: eslint-plugin-fsd-lint로 설정한다. (eslint-plugin-xxx 형태)
+- `main`: `src/index.js`를 플러그인 엔트리 포인트로 지정한다.
+- `type`: `module`로 설정한다.
+- `scripts`: `lint`와 `test` 스크립트를 추가한다.
+  - `lint`: ESLint 실행.
+  - `test`: 테스트 실행.
+- `keywords`: ESLint, plugin, feature-sliced-design, fsd, lint 키워드를 추가한다.
+- `author`: 작성자를 추가한다. (내 깃허브 아이디를 적었다.)
+- `license`: MIT 라이선스를 적용한다.
+- `dependencies`: ESLint가 필수적으로 있어야 하므로 추가한다.
+- `peerDependencies`: ESLint가 필수적으로 있어야 하므로 추가한다.
+
+<br />
+
+#### 2. `index.js` 플러그인 엔트리 포인트 작성
+
+```javascript title="src/index.js"
+import noRelativeImports from './rules/no-relative-imports.js';
+import noPublicApiSidestep from './rules/no-public-api-sidestep.js';
+import noCrossSliceDependency from './rules/no-cross-slice-dependency.js';
+import noUiInBusinessLogic from './rules/no-ui-in-business-logic.js';
+import noGlobalStoreImports from './rules/no-global-store-imports.js';
+import fsdLayerImports from './rules/forbidden-imports.js';
+import orderedImports from './rules/ordered-imports.js';
+
+export default {
+  rules: {
+    'no-relative-imports': noRelativeImports,
+    'no-public-api-sidestep': noPublicApiSidestep,
+    'no-cross-slice-dependency': noCrossSliceDependency,
+    'no-ui-in-business-logic': noUiInBusinessLogic,
+    'no-global-store-imports': noGlobalStoreImports,
+    'forbidden-imports': fsdLayerImports,
+    'ordered-imports': orderedImports,
+  },
+};
+```
+
+- 모든 규칙을 `rules` 객체에 등록하여 플러그인에서 사용할 수 있도록 한다.
+
+### 플러그인 테스트
+
+#### 1. ESLint 설정 파일 수정
+
+테스트를 위해 `eslint.config.mjs`를 수정한다.
+
+```javascript title="eslint.config.mjs"
+import fsdPlugin from './src/index.js';
+
+export default [
+  {
+    plugins: {
+      fsd: fsdPlugin,
+    },
+    rules: {
+      'fsd/no-relative-imports': 'error',
+      'fsd/no-public-api-sidestep': 'error',
+      'fsd/no-cross-slice-dependency': 'error',
+      'fsd/no-ui-in-business-logic': 'error',
+      'fsd/no-global-store-imports': 'error',
+      'fsd/forbidden-imports': 'error',
+      'fsd/ordered-imports': 'warn',
+    },
+  },
+];
+```
+
+- ESLint 플러그인을 테스트할 수 있도록 `eslint.config.mjs`에서 `fsdPlugin`을 등록한다.
+
+<br />
+
+#### 2. 테스트 파일 추가
+
+`tests/` 디렉토리에 `fsd-rules.test.js` 파일을 추가한다.
+
+```javascript title="tests/fsd-rules.test.js"
+import { ESLint } from 'eslint';
+
+const eslint = new ESLint({ overrideConfigFile: './eslint.config.mjs' });
+
+async function runTests() {
+  const results = await eslint.lintFiles(['tests/test-files/']);
+
+  results.forEach((result) => {
+    console.log(`\n${result.filePath}`);
+    result.messages.forEach((msg) => {
+      console.log(`❌ ${msg.ruleId}: ${msg.message} (line ${msg.line})`);
+    });
+  });
+
+  console.log('\n✅ 모든 테스트가 완료되었습니다.');
+}
+
+runTests();
+```
+
+- ESLint 실행 후, 규칙 위반 메세지를 출력하여 테스트를 진행한다.
+
+<br />
+
+#### 3. 테스트 실행
+
+<Tabs>
+
+<TabItem value="1. 테스트 폴더 생성" label="1. 테스트 폴더 생성">
+
+```bash
+mkdir -p tests/test-files
+touch tests/test-files/sample.js
+```
+
+</TabItem>
+
+<TabItem value="2. 테스트 코드 작성" label="2. 테스트 코드 작성">
+
+```javascript title="tests/test-files/sample.js"
+// ❌ 테스트용 위반 코드
+import { config } from '../../app/config'; // fsd-layer-imports 위반
+import { Button } from '../../shared/ui/Button'; // fsd-path-alias 위반
+import { authSlice } from '../../features/auth/slice.ts'; // fsd-public-api 위반
+import { processPayment } from '../../features/payment'; // fsd-slices-dependency 위반
+import { ProfileCard } from '../../widgets/ProfileCard'; // fsd-no-cross-ui 위반
+import { store } from '../../app/store'; // fsd-no-global-store 위반
+```
+
+</TabItem>
+
+<TabItem value="3. 테스트 실행" label="3. 테스트 실행">
+
+```bash
+npm run test
+```
+
+</TabItem>
+
+<TabItem value="4. 실행 결과 확인" label="4. 실행 결과 확인">
+
+```plaintext
+tests/test-files/sample.js
+❌ fsd-layer-imports: 'features' 레이어에서는 'app' 레이어를 import할 수 없습니다. (line 1)
+❌ fsd-path-alias: '../../shared/ui/Button' 상대 경로 import를 사용할 수 없습니다. (line 2)
+❌ fsd-public-api: '../../features/auth/slice.ts' 파일을 직접 import할 수 없습니다. (line 3)
+❌ fsd-slices-dependency: 'features/auth'에서 'features/payment'을(를) 직접 import할 수 없습니다. (line 4)
+❌ fsd-no-cross-ui: 'entities'에서 'widgets'을(를) import할 수 없습니다. (line 5)
+❌ fsd-no-global-store: '../../app/store' 전역 store를 직접 import할 수 없습니다. (line 6)
+
+✅ 모든 테스트가 완료되었습니다.
+```
+
+<Figure
+  fileName="fsd_plugin_test_result.webp"
+  alt="ESLint 플러그인 테스트 결과"
+  caption="ESLint 플러그인 테스트 결과"
+/>
+
+- ESLint 플러그인이 정상적으로 동작하는 것을 확인할 수 있다.
+
+</TabItem>
+
+</Tabs>
+
+### 패키지 NPM 배포 준비
+
+<Tabs>
+
+<TabItem value="1. `.npmignore` 파일 추가" label="1. `.npmignore` 파일 추가">
+
+NPM에 배포하려면 `.npmignore` 파일을 추가하자.
+
+```plaintext title=".npmignore"
+tests/
+node_modules/
+.eslintrc.js
+eslint.config.mjs
+.idea/
+.vscode/
+.DS_Store/
+```
+
+</TabItem>
+
+<TabItem value="2. .gitignore 파일 추가" label="2. .gitignore 파일 추가">
+
+동시에 `.gitignore` 파일도 작성하자.
+
+```plaintext title=".gitignore"
+tests/
+node_modules/
+.eslintrc.js
+eslint.config.mjs
+.idea/
+.vscode/
+.DS_Store/
+```
+
+이때, 작업했던 작업물을 깃허브에 올리자.
+
+</TabItem>
+
+<TabItem value="3. NPM 로그인" label="3. NPM 로그인">
+
+```bash
+npm login
+```
+
+이를 치게 되면 다음과 같은 텍스트가 뜨면서 브라우저에 리다이렉션이 된다.
+
+로그인을 해주자.
+
+<Figure fileName="npm_login.webp" alt="NPM 로그인" caption="NPM 로그인" />
+
+</TabItem>
+
+<TabItem value="4. NPM 배포" label="4. NPM 배포">
+
+```bash
+npm publish --access public
+```
+
+`--access public` 옵션을 주어야만 모든 사람이 사용할 수 있는 공개 패키지로 배포된다.
+
+위 방식을 통해 배포하면 다음과 같은 텍스트가 뜨고 배포가 완료된다.
+
+<Figure fileName="npm_publish.webp" alt="NPM 배포" caption="NPM 배포" />
+
+</TabItem>
+
+</Tabs>
+
+## 5단계: 플러그인 문서화 및 NPM 배포
+
+사실 이미 배포는 다 진행되었다.
+
+이제는 배포된 요소를 다듬는 작업을 진행할 차례이다.
+
+### 목표
+
+- `README.md` 파일을 작성하여 플러그인의 사용 방법 및 규칙 설명을 정리한다.
+- GitHub 및 NPM 페이지에서 사용자가 쉽게 설정할 수 있도록 가이드를 제공한다.
+- 패키지 배포 완료 후, 버전 관리 및 업데이트 전략을 수립한다.
+
+### 코드 로컬라이징
+
+공식적으로 코드를 다루기 위해서 문서화 및 로컬라이징 작업을 해야한다.
+
+우리는 지금까지 모국어인 한글을 기반으로 주석 및 에러메세지 등을 작업했었다.
+
+지금부터는 한글을 걷어내고 영어로 바꾸어야 하며, 모두 영어로 다뤄질 예정이다.
+
+<Tabs>
+
+<TabItem value="src/index.js" label="src/index.js">
+
+```javascript title="src/index.js"
+import forbiddenImports from './rules/forbidden-imports.js';
+import noRelativeImports from './rules/no-relative-imports.js';
+import noPublicApiSidestep from './rules/no-public-api-sidestep.js';
+import noCrossSliceDependency from './rules/no-cross-slice-dependency.js';
+import noUiInBusinessLogic from './rules/no-ui-in-business-logic.js';
+import noGlobalStoreImports from './rules/no-global-store-imports.js';
+import orderedImports from './rules/ordered-imports.js';
+
+export default {
+  rules: {
+    'forbidden-imports': forbiddenImports, // Prevents forbidden imports between layers
+    'no-relative-imports': noRelativeImports, // Enforces alias usage instead of relative imports
+    'no-public-api-sidestep': noPublicApiSidestep, // Prevents direct imports bypassing the public API
+    'no-cross-slice-dependency': noCrossSliceDependency, // Disallows direct dependencies between feature slices
+    'no-ui-in-business-logic': noUiInBusinessLogic, // Ensures business logic does not import UI components
+    'no-global-store-imports': noGlobalStoreImports, // Restricts direct imports of global store
+    'ordered-imports': orderedImports, // Enforces structured import grouping by FSD layers
+  },
+};
+```
+
+</TabItem>
+
+<TabItem value="src/rules/forbidden-imports.js" label="src/rules/forbidden-imports.js">
+
+```javascript title="src/rules/forbidden-imports.js"
+export default {
+  meta: {
+    type: 'problem',
+    docs: {
+      description: 'Prevents imports from higher layers and cross-imports between slices.',
+      recommended: true,
+    },
+    messages: {
+      invalidImport: "🚨 '{{ fromLayer }}' layer cannot import from '{{ toLayer }}' layer.",
+    },
+  },
+
+  create(context) {
+    const layers = ['shared', 'entities', 'features', 'widgets', 'pages', 'processes', 'app'];
+
+    return {
+      ImportDeclaration(node) {
+        const filePath = context.filename;
+        const importPath = node.source.value;
+
+        const fromLayer = layers.find((layer) => filePath.includes(`/${layer}/`));
+        const toLayer = layers.find((layer) => importPath.includes(`/${layer}/`));
+
+        if (!fromLayer || !toLayer) {
+          return;
+        }
+
+        if (layers.indexOf(fromLayer) > layers.indexOf(toLayer)) {
+          context.report({
+            node,
+            messageId: 'invalidImport',
+            data: {
+              fromLayer,
+              toLayer,
+            },
+          });
+        }
+      },
+    };
+  },
+};
+```
+
+</TabItem>
+
+<TabItem value="src/rules/no-relative-imports.js" label="src/rules/no-relative-imports.js">
+
+```javascript title="src/rules/no-relative-imports.js"
+export default {
+  meta: {
+    type: 'problem',
+    docs: {
+      description: 'Disallows relative imports and enforces the use of project-defined aliases.',
+      recommended: true,
+    },
+    messages: {
+      noRelativePath: "🚨 Relative import '{{ importPath }}' is not allowed. Use an alias instead.",
+    },
+  },
+
+  create(context) {
+    return {
+      ImportDeclaration(node) {
+        const importPath = node.source.value;
+
+        // Detects relative imports (starting with ../ or ./)
+        if (importPath.startsWith('../') || importPath.startsWith('./')) {
+          context.report({
+            node,
+            messageId: 'noRelativePath',
+            data: {
+              importPath,
+            },
+          });
+        }
+      },
+    };
+  },
+};
+```
+
+</TabItem>
+
+<TabItem value="src/rules/no-public-api-sidestep.js" label="src/rules/no-public-api-sidestep.js">
+
+```javascript title="src/rules/no-public-api-sidestep.js"
+export default {
+  meta: {
+    type: 'problem',
+    docs: {
+      description:
+        'Prevents direct imports from internal files of features, widgets, or entities. All imports must go through index.ts (public API).',
+      recommended: true,
+    },
+    messages: {
+      noDirectImport: "🚨 Direct import from '{{ importPath }}' is not allowed. Use the public API (index.ts) instead.",
+    },
+  },
+
+  create(context) {
+    return {
+      ImportDeclaration(node) {
+        const importPath = node.source.value;
+
+        // Restricted layers that must use a public API
+        const restrictedLayers = ['features', 'entities', 'widgets'];
+
+        const isRestrictedImport = restrictedLayers.some(
+          (layer) => importPath.includes(`/${layer}/`) && !importPath.endsWith('index.ts')
+        );
+
+        if (isRestrictedImport) {
+          context.report({
+            node,
+            messageId: 'noDirectImport',
+            data: {
+              importPath,
+            },
+          });
+        }
+      },
+    };
+  },
+};
+```
+
+</TabItem>
+
+<TabItem value="src/rules/no-cross-slice-dependency.js" label="src/rules/no-cross-slice-dependency.js">
+
+```javascript title="src/rules/no-cross-slice-dependency.js"
+export default {
+  meta: {
+    type: 'problem',
+    docs: {
+      description: 'Prevents direct imports between feature slices. Use entities or shared modules instead.',
+      recommended: true,
+    },
+    messages: {
+      noFeatureDependency:
+        "🚨 '{{ fromFeature }}' cannot directly import from '{{ toFeature }}'. Use entities or shared modules instead.",
+    },
+  },
+
+  create(context) {
+    return {
+      ImportDeclaration(node) {
+        const filePath = context.filename;
+        const importPath = node.source.value;
+
+        // Detect direct imports between feature slices
+        if (filePath.includes('/features/') && importPath.includes('/features/')) {
+          const fromFeature = filePath.split('/features/')[1].split('/')[0];
+          const toFeature = importPath.split('/features/')[1].split('/')[0];
+
+          if (fromFeature !== toFeature) {
+            context.report({
+              node,
+              messageId: 'noFeatureDependency',
+              data: {
+                fromFeature,
+                toFeature,
+              },
+            });
+          }
+        }
+      },
+    };
+  },
+};
+```
+
+</TabItem>
+
+<TabItem value="src/rules/no-ui-in-business-logic.js" label="src/rules/no-ui-in-business-logic.js">
+
+```javascript title="src/rules/no-ui-in-business-logic.js"
+export default {
+  meta: {
+    type: 'problem',
+    docs: {
+      description: 'Prevents business logic layers (entities) from importing UI components (widgets).',
+      recommended: true,
+    },
+    messages: {
+      noCrossUI:
+        "🚨 '{{ fromLayer }}' cannot import from '{{ toLayer }}'. UI components must not be imported in business logic layers.",
+    },
+  },
+
+  create(context) {
+    return {
+      ImportDeclaration(node) {
+        const filePath = context.filename;
+        const importPath = node.source.value;
+
+        // Detect imports from entities to widgets
+        if (filePath.includes('/entities/') && importPath.includes('/widgets/')) {
+          context.report({
+            node,
+            messageId: 'noCrossUI',
+            data: {
+              fromLayer: 'entities',
+              toLayer: 'widgets',
+            },
+          });
+        }
+      },
+    };
+  },
+};
+```
+
+</TabItem>
+
+<TabItem value="src/rules/no-global-store-imports.js" label="src/rules/no-global-store-imports.js">
+
+```javascript title="src/rules/no-global-store-imports.js"
+export default {
+  meta: {
+    type: 'problem',
+    docs: {
+      description: 'Disallows direct imports of global state (store). Use hooks like useStore or useSelector instead.',
+      recommended: true,
+    },
+    messages: {
+      noGlobalStore:
+        "🚨 '{{ storeName }}' cannot be directly imported. Use hooks such as useStore or useSelector instead.",
+    },
+  },
+
+  create(context) {
+    return {
+      ImportDeclaration(node) {
+        const importPath = node.source.value;
+
+        // Forbidden global store paths (Redux, Zustand, etc.)
+        const forbiddenPatterns = ['/app/store', '/shared/store'];
+
+        if (forbiddenPatterns.some((pattern) => importPath.includes(pattern))) {
+          context.report({
+            node,
+            messageId: 'noGlobalStore',
+            data: {
+              storeName: importPath,
+            },
+          });
+        }
+      },
+    };
+  },
+};
+```
+
+</TabItem>
+
+<TabItem value="src/rules/ordered-imports.js" label="src/rules/ordered-imports.js">
+
+```javascript title="src/rules/ordered-imports.js"
+export default {
+  meta: {
+    type: 'suggestion',
+    docs: {
+      description: 'Enforces ordered imports by Feature-Sliced Design (FSD) layers.',
+      recommended: true,
+    },
+    messages: {
+      incorrectGrouping: "🚨 '{{ currentImport }}' import is not correctly grouped. Keep imports ordered by layer.",
+    },
+    fixable: 'code',
+  },
+
+  create(context) {
+    return {
+      Program(node) {
+        const importNodes = node.body.filter((statement) => statement.type === 'ImportDeclaration');
+
+        if (importNodes.length === 0) {
+          return;
+        }
+
+        const sourceCode = context.getSourceCode();
+
+        // ✅ FSD Layer order (top to bottom)
+        const layers = ['app', 'processes', 'pages', 'widgets', 'features', 'entities', 'shared'];
+
+        // Group imports by FSD layer
+        const groupedImports = layers.reduce((acc, layer) => {
+          acc[layer] = [];
+          return acc;
+        }, {});
+
+        importNodes.forEach((importNode) => {
+          const importPath = importNode.source.value;
+          const layer = layers.find((l) => importPath.includes(`/${l}/`));
+
+          if (layer) {
+            groupedImports[layer].push(importNode);
+          }
+        });
+
+        // Flatten to get ordered import statements
+        const sortedImports = layers.flatMap((layer) => groupedImports[layer]);
+
+        // 🚀 Convert AST nodes to text before comparison
+        const importText = importNodes.map((node) => sourceCode.getText(node)).join('\n');
+        const sortedImportText = sortedImports.map((node) => sourceCode.getText(node)).join('\n');
+
+        if (importText !== sortedImportText) {
+          context.report({
+            node: importNodes[0],
+            messageId: 'incorrectGrouping',
+            data: {
+              currentImport: importNodes[0].source.value,
+            },
+            fix(fixer) {
+              return fixer.replaceTextRange(
+                [importNodes[0].range[0], importNodes[importNodes.length - 1].range[1]],
+                sortedImportText
+              );
+            },
+          });
+        }
+      },
+    };
+  },
+};
+```
+
+</TabItem>
+
+</Tabs>
+
+### README.md를 비롯한 문서 작성
+
+플러그인의 사용 방법 및 규칙 설명을 `README.md`에 작성하자.
+
+영어만 지원하는 것이 아니라, 한국어도 지원할 것이기 때문에 둘 모두 작성하는 방향으로 진행하고자 한다.
+
+이에 대한 요소는 사진으로 첨부한다.
+
+<Tabs>
+
+<TabItem value="1. README.md 작성" label="1. README.md 작성">
+
+<Figure fileName="fsd_plugin_readme.webp" alt="README.md 작성" caption="README.md 작성" />
+
+</TabItem>
+
+<TabItem value="2. README.ko.md 작성" label="2. README.ko.md 작성">
+
+<Figure fileName="fsd_plugin_readme_ko.webp" alt="README.ko.md 작성" caption="README.ko.md 작성" />
+
+</TabItem>
+
+<TabItem value="3. CONTRIBUTING.md 작성" label="3. CONTRIBUTING.md 작성">
+
+<Figure fileName="fsd_plugin_contributing.webp" alt="CONTRIBUTING.md 작성" caption="CONTRIBUTING.md 작성" />
+
+</TabItem>
+
+<TabItem value="4. LICENSE 작성" label="4. LICENSE 작성">
+
+<Figure fileName="fsd_plugin_license.webp" alt="LICENSE 작성" caption="LICENSE 작성" />
+
+</TabItem>
+
+<TabItem value="5. CODE_OF_CONDUCT.md 작성" label="5. CODE_OF_CONDUCT.md 작성">
+
+<Figure fileName="fsd_plugin_code_of_conduct.webp" alt="CODE_OF_CONDUCT.md 작성" caption="CODE_OF_CONDUCT.md 작성" />
+
+</TabItem>
+
+</Tabs>
+
+### NPM 배포
+
+작성된 문서를 바탕으로 다시금 NPM에 배포하자.
+
+<Tabs>
+
+<TabItem value="1. Package.json 수정" label="1. Package.json 수정">
+
+```json
+{
+  "name": "eslint-plugin-fsd-lint",
+  // highlight-next-line
+  "version": "1.0.1",
+  "description": "ESLint plugin for enforcing Feature-Sliced Design architecture",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "lint": "eslint .",
+    "test": "node tests/fsd-rules.test.js"
+  },
+  "keywords": ["eslint", "plugin", "feature-sliced-design", "fsd", "lint"],
+  "author": "effozen",
+  "license": "MIT",
+  "dependencies": {
+    "eslint": "^9.19.0"
+  },
+  "peerDependencies": {
+    "eslint": ">=9.0.0"
+  }
+}
+```
+
+버전 `1.0.0`에서 `1.0.1`로 올려준다.
+
+</TabItem>
+
+<TabItem value="2. NPM 로그인" label="2. NPM 로그인">
+
+```bash
+npm login
+```
+
+</TabItem>
+
+<TabItem value="3. NPM 배포" label="3. NPM 배포">
+
+```bash
+npm publish --access public
+```
+
+<Figure fileName="npm_publish2.webp" alt="NPM 배포" caption="NPM 배포" />
+
+배포를 하고 나면 위와 같이 확인할 수 있다.
+
+</TabItem>
+
+<TabItem value="4. Tag 추가" label="4. Tag 추가">
+
+```bash
+git tag -a v1.0.1 -m "Release v1.0.1 - Initial public release with ESLint rules for Feature-Sliced Design"
+git push origin v1.0.1
+```
+
+태그는 특정 시점에 대해서 찾아보기 쉽게 하기 위한 주석같은 요소이다.
+
+태그를 추가하고 푸시하면 GitHub에도 태그가 추가된다.
+
+그리고 이를 활용하여, `Github Release`에서 릴리즈를 작성할 수 있다.
+
+</TabItem>
+
+<TabItem value="5. Github Release 작성" label="5. Github Release 작성">
+
+<Figure fileName="github_release.webp" alt="Github Release 작성" caption="Github Release 작성" />
+
+위와 같이 릴리즈를 작성하면, 사용자들이 쉽게 버전을 확인할 수 있다.
+
+</TabItem>
+
+</Tabs>
+
+### NPM과 Github 연동
+
+NPM과 Github를 연동하면, Github에 코드를 푸시하면 자동으로 NPM에 배포되는 기능을 사용할 수 있다.
+
+<br />
+
+#### `package.json`에 Github 저장소 정보를 추가
+
+GitHub과 NPM을 연결하려면 `package.json`에 repository 및 bugs 정보를 추가해야 해야 한다.
+
+```json
+{
+  "name": "eslint-plugin-fsd-lint",
+  // highlight-next-line
+  "version": "1.0.2",
+  "description": "ESLint plugin for enforcing Feature-Sliced Design (FSD) architecture",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "lint": "eslint .",
+    "test": "node tests/fsd-rules.test.js"
+  },
+  "keywords": ["eslint", "plugin", "feature-sliced-design", "fsd", "lint"],
+  "author": "effozen",
+  "license": "MIT",
+  "dependencies": {
+    "eslint": "^9.0.0"
+  },
+  "peerDependencies": {
+    "eslint": ">=9.0.0"
+  },
+  // highlight-start
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/effozen/eslint-plugin-fsd-lint.git"
+  },
+  "bugs": {
+    "url": "https://github.com/effozen/eslint-plugin-fsd-lint/issues"
+  },
+  "homepage": "https://github.com/effozen/eslint-plugin-fsd-lint#readme"
+  // highlight-end
+}
+```
+
+버전을 `1.0.1`에서 `1.0.2`로 올려준다.
+
+- `"repository"` → GitHub 저장소 주소 연결
+- `"bugs"` → 이슈 트래킹 URL 추가
+- `"homepage"` → GitHub의 README.md 링크 추가
+
+#### `pakcage.json` 업데이트 후 커밋 & 푸쉬
+
+수정된 `package.json`을 Github에 반영한다.
+
+```bash
+git add package.json
+git commit -m "chore: link GitHub repository to NPM package"
+git push origin main
+```
+
+### NPM 패키지 업데이트
+
+업데이트된 정보를 포함한 패키지를 다시 배포한다.
+
+```bash
+npm version 1.0.2
+npm publish --access public
+```
+
+이제 마지막으로 릴리즈 노트를 업데이트하면 관련 작업은 마무리가 된다.
+
+### CI/CD 설정
+
+GitHub에서 새로운 태그를 푸시하고 Release를 생성하면 자동으로 NPM에 배포되도록 만들어보자.
+
+이를 위해 GitHub Actions를 설정하여 CI/CD(Continuous Integration/Continuous Deployment)를 구성할 것이다.
+
+<Tabs>
+
+<TabItem value="`1. NPM 배포를 위한 NPM Token 발급`" label="1. NPM 배포를 위한 NPM Token 발급">
+
+GitHub Actions에서 NPM에 배포하려면 NPM Access Token이 필요하다.
+
+아래 단계를 따라 NPM에서 Token을 발급받으면 된다.
+
+1️⃣ [NPM 공식 홈페이지](https://www.npmjs.com/)로 이동
+2️⃣ 오른쪽 상단 프로필 클릭 → "Access Tokens" 선택
+3️⃣ "Generate New Token" 클릭
+4️⃣ "Automation" 타입의 Token 생성 (자동화 배포에 필요하다)
+5️⃣ 발급된 Token을 복사해둠 (나중에 GitHub에 추가할 예정이다)
+
+✅ 이제 NPM Access Token이 준비된다.
+(Token은 노출되지 않도록 잘 보관해야 해야 한다.)
+
+</TabItem>
+
+<TabItem value="2. GitHub에 NPM Token 추가" label="2. GitHub에 NPM Token 추가">
+
+GitHub Actions에서 NPM에 배포하려면 GitHub Secrets에 NPM Token을 추가해야 해야 한다.
+
+1️⃣ GitHub 저장소로 이동 → [eslint-plugin-fsd-lint](https://github.com/effozen/eslint-plugin-fsd-lint)
+2️⃣ Settings → Secrets and variables → Actions 클릭
+3️⃣ "New repository secret" 버튼 클릭
+4️⃣ Name: NPM_TOKEN
+5️⃣ Value: (아까 NPM에서 발급한 토큰 붙여넣기)
+6️⃣ "Add secret" 클릭하여 저장
+
+✅ 이제 GitHub Actions에서 NPM_TOKEN을 사용할 수 있다.
+
+</TabItem>
+
+<TabItem value="3. GitHub Actions 설정" label="3. GitHub Actions 설정">
+
+GitHub에서 태그를 푸시하면 자동으로 NPM에 배포하는 GitHub Actions Workflow를 구성한다.
+
+```YAML title='.github/workflows/npm-publish.yml'
+name: Publish to NPM
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  publish:
+    name: Publish NPM Package
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          registry-url: "https://registry.npmjs.org/"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+        continue-on-error: true  # 테스트 스크립트가 없는 경우 무시 가능
+
+      - name: Build package (if needed)
+        run: npm run build
+        continue-on-error: true  # 빌드 스크립트가 없는 경우 무시 가능
+
+      - name: Publish to NPM
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+```
+
+</TabItem>
+
+<TabItem value="4. GitHub에 Worflow 추가 및 푸시" label="4. GitHub에 Worflow 추가 및 푸시">
+
+```bash
+git add .github/workflows/npm-publish.yml
+git commit -m "ci: add GitHub Actions for automatic NPM publishing"
+git push origin main
+```
+
+</TabItem>
+
+<TabItem value="5. GitHub Actions 동작 확인" label="5. GitHub Actions 동작 확인">
+
+```bash
+git tag -a v1.0.4 -m "Release v1.0.4 - Automated NPM Publishing"
+git push origin v1.0.4
+```
+
+태그를 추가하고 푸시하면 GitHub Actions가 동작한다.
+
+<Figure
+  fileName="auto_push_result.webp"
+  alt="정상적으로 자동 update된 것을 확인"
+  caption="정상적으로 자동 update된 것을 확인"
+/>
+
+</TabItem>
+
+</Tabs>
+
+## 6단계 : 실제 프로젝트에 적용해보기
+
+이제 만들어진 `Lint`를 실제 프로젝트에 적용해보자.
+
+다행히도, 항해플러스를 진행하면서 `FSD`를 적극적으로 활용한 프로젝트가 있었다.
+
+- [항해 챕터2-3 과제 링크](https://github.com/effozen/front_4th_chapter2-3)
+
+여기에는 별 다른 `FSD` 관련 `Lint`가 존재하지 않았기 때문에 딱 알맞는 요소였다.
+
+`FSD`는 사용했지만.. 린트는 없는... 아주 최적의 조건이었다.
+
+### 프로젝트에 ESLint 설치
+
+```bash
+pnpm add -D eslint-plugin-fsd-lint
+```
+
+이미 배포해둔 요소기 때문에 다운받아서 사용만 하면 되었다.
+
+해당 프로젝트는 `pnpm`을 사용하고 있었기 때문에 이를 바탕으로 설치해주었다.
+
+<Figure fileName="setup_on_project.webp" alt="프로젝트에 ESLint 설치" caption="프로젝트에 ESLint 설치" />
+
+정상적으로 잘 설치된 것을 볼 수 있다.
+
+### 프로젝트에 ESLint 설정
+
+```javascript title=".eslintrc.js"
+import js from '@eslint/js';
+import globals from 'globals';
+import reactHooks from 'eslint-plugin-react-hooks';
+import reactRefresh from 'eslint-plugin-react-refresh';
+import tseslint from 'typescript-eslint';
+// highlight-next-line
+import fsd from 'eslint-plugin-fsd-lint';
+
+export default tseslint.config(
+  { ignores: ['dist'] },
+  {
+    extends: [js.configs.recommended, ...tseslint.configs.recommended],
+    files: ['**/*.{ts,tsx}'],
+    languageOptions: {
+      ecmaVersion: 2020,
+      globals: globals.browser,
+    },
+    plugins: {
+      'react-hooks': reactHooks,
+      'react-refresh': reactRefresh,
+      fsd: fsd,
+    },
+    rules: {
+      ...reactHooks.configs.recommended.rules,
+      'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
+      // highlight-start
+      'fsd/forbidden-imports': 'error',
+      'fsd/no-relative-imports': 'error',
+      'fsd/no-public-api-sidestep': 'error',
+      'fsd/no-cross-slice-dependency': 'error',
+      'fsd/no-ui-in-business-logic': 'error',
+      'fsd/no-global-store-imports': 'error',
+      'fsd/ordered-imports': 'warn',
+      // highlight-end
+    },
+  }
+);
+```
+
+위와 같이 설정을 추가해주었다.
+
+### 프로젝트에 ESLint 실행
+
+```bash
+pnpm run lint
+```
+
+위와 같이 설정을 해두어서 린트를 실행시켰다.
+
+그 결과는 다음과 같다.
+
+<Figure fileName="project_lint_result.webp" alt="린트 실행 결과" caption="린트 실행 결과" />
+
+정상적으로 잘 동작하는 것을 확인할 수 있었다.
+
+<Figure fileName="project_lint_fix_result.webp" alt="린트 fix 실행 결과" caption="린트 fix 실행 결과" />
+
+fix 역시도 잘 동작하는 것을 확인할 수 있었다.
+
+## 정리
+
+지금까지 `ESLint` 플러그인을 만들어보았다.
+
+처음에 불편함에서 시작된 일이 생각보다 재미있는 일이 되었다.
+
+스케일이 많이 커지기도 했고.
+
+이를 통해 `ESLint`가 어떻게 동작하는지, `Flat Config`가 무엇인지를 보다 자세하면서 명료하게 이해할 수 있었다.
+
+또한, 처음으로 `NPM` 패키지를 배포하고, `Open Source`를 만들어보았는데, 이것 또한 새로운 경험이었다.
+
+단순히 배포하고 장땡이 아니라, 관련해서 설정할 것도 있었고, 실제로 배포가 이루어지다보니 버그에 민감해질 수 밖에 없었다.
+
+현재는 규모가 작지만, 규모가 커진다면 테스트도 좀 더 엄격해져야 할 것 같고, 린트 규칙도 좀 더 엄격하게 해야할 것 같다.
+
+설 연휴 동안 기존 항해에 대한 내용 복습 겸, 인턴으로 있는 실무에 필요해질 수 있겠다는 생각이 들어서 만들었는데 잘한 것 같다.
+
+부스트캠프가 끝나고 최근들어서 뭔가 개발 실력이 많이 늘어난 것 같다. 정확히는 도전 정신이랄까?
+
+불편함을 마다하지 않고 해결하려는 노력이 많아진 것 같다.
+
+당분간 이런 상태를 유지하면서 더 많은 것을 배워나가야겠다.
+
+## 앞으로의 계획
+
+- `Steiger`에서 지원하는 내용들을 조금씩 `ESLint`에 포팅을 해볼까 한다.
+- 또한, `Prettier`도 설정을 커스텀할 수 있던데 이에 대해서도 만들까 싶긴 한데.. 다른 해야할 것도 많아서 조금 더 고민해보고 시도할까 한다.
