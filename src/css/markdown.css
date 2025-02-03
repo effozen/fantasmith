@@ -2,18 +2,25 @@
   margin-bottom: 0.4rem !important;
 }
 
+.markdown h4 {
+  font-weight: 700;
+  font-size: 1.05rem; /* 18px */
+  line-height: 1.4;
+  margin: 1.25rem 0;
+}
+
 .markdown h5 {
   font-weight: 700;
   font-size: 1.05rem; /* 18px */
   line-height: 1.4;
-  margin: 0.9em 0;
+  margin: 1.25rem 0;
 }
 
 .markdown h6 {
   font-weight: 700;
   font-size: 1rem !important; /* 16px */
   line-height: 1.4;
-  margin: 0.9em 0 !important;
+  margin: 1.25rem 0 !important;
 }
 
 .markdown p {
