@@ -4,23 +4,23 @@
 
 .markdown h4 {
   font-weight: 700;
-  font-size: 1.05rem; /* 18px */
+  font-size: 1.15rem; /* 18px */
   line-height: 1.4;
-  margin: 1.25rem 0;
+  margin-top: 2.2rem;
 }
 
 .markdown h5 {
   font-weight: 700;
-  font-size: 1.05rem; /* 18px */
+  font-size: 1.125rem; /* 18px */
   line-height: 1.4;
-  margin: 1.25rem 0;
+  margin-top: 2.1rem;
 }
 
 .markdown h6 {
   font-weight: 700;
   font-size: 1rem !important; /* 16px */
   line-height: 1.4;
-  margin: 1.25rem 0 !important;
+  margin-top: 2rem;
 }
 
 .markdown p {
