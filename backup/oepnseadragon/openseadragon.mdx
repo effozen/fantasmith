@@ -1,0 +1,35 @@
+---
+title: '브라우저에서 대용량 이미지를 다루는 방법에 대한 탐구'
+image: '/media/reactLab/hooks/what_is_hook/img/index.webp'
+description: '브라우저에서 GB 단위의 이미지를 처리하려면 어떻게 해야하는가? 사용자가 이를 로딩하기 위해선 많은 시간과 비용이 필요해진다. 이를 최적화하고, 효과적으로 필요한 부분만 호출할 수 있는 방법에 대해서 연구해보고자 한다.'
+tags: [hooks, react]
+keywords: ['react', 'reactLab', 'overview', 'hooks']
+sidebar_position: 2
+sidebar_label: '리액트 훅이란?'
+sidebar_custom_props:
+  img: '/media/reactLab/hooks/what_is_hook/img/index.webp'
+last_update:
+  date: 2024-12-30
+  author: zen
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import { VideoPlayer, Figure } from '@site/src/components/utils';
+
+## 배경
+
+인턴 생활을 하면서, 대용량 이미지를 브라우저에 로딩하는 것을 고려해야하는 일이 생겼다.
+
+리서치를 하던 도중, 
+
+최근에 하나의 사이트를 발견했다.
+
+<Figure fileName="huble.webp" alt="나사의 허블 망원경 사진" caption="나사의 허블 망원경 사진" href="https://esahubble.org/images/heic1502a/">
+
+나사의 허블 망원경이 찍은 대용량 사진으로, 안드로메다 은하를 파노라마 형식으로 표현하고 있다.
+
+오리지널 이미지는 4.3GB이며, TIFF 형식으로 구현이 되어 있다.
+
+
+[나사의 허블 망원경 사진](https://esahubble.org/images/heic1502a/zoomable/)
