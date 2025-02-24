@@ -1,0 +1,69 @@
+---
+title: 'Observable 이란 무엇인가? - Promise, Observable, Objects와의 비교'
+image: '/media/frontEnd/fundamental/javascript/deep-copying-in-javascript/img/index.webp'
+description: '앵귤러의 핵심 개념 중 하나는 Observable입니다. 모나드와 펑터를 넘어서, 비동기를 아우르는 개념인 Observable은 Angular의 큰 진입장벽이 되곤 합니다. 이에 대해서 자세히 알아보고, 앵귤러의 철학을 깊게 이해해봅시다.'
+tags: [frontend, angular]
+keywords:
+  [
+    frontend, angular, angular19, observable, monad, functor, promise, objects, 앵귤러, 앵귤러19, 옵저버블
+  ]
+sidebar_position: 1
+sidebar_label: 'Observable이란 무엇인가'
+sidebar_custom_props:
+  img: '/media/frontEnd/fundamental/javascript/deep-copying-in-javascript/img/index.webp'
+last_update:
+  date: 2024-02-24
+  author: zen
+---
+
+## 서론
+
+정말 감사하게도, 회사에서 `Angular`에 대해서 배울 기회가 생겼다.
+
+처음에는 "React도 제대로 못다루는 데 배워도 괜찮은가?" 하는 걱정이 있었다.
+
+그러나, 팀장님께서 너무나 감사하게도 바쁘신 와중에 시간을 내주셔서 필수 이론이나 개념, 활용법을 교육해주셨다.
+
+그렇게 배우고나니 <strong>"프론트엔드에서 접할 수 있는 대부분의 문제에 대해 개념화를 한"</strong> 앵귤러라는 프레임워크에 빠져들게 되었다.
+
+앵귤러를 배워가면서, 이 속에 담긴 철학이나 개념을 조금씩 깊게 들여다보고자 하는데 이번 글이 바로 그 시작이다.
+
+## 코드도 재사용이 가능하다.
+
+프론트엔드 이전에, 개발의 관점에서 생각해볼 문제가 있다.
+
+> 내가 코드를 덜 짤 수록 좋다. 많은 개발자들 간의 합의가 이루어진 코드를 적절하게 사용하는 것이 좋다.
+
+이 말을 먼저 전달하고 싶다. 핵심은 <strong>"코드도 재사용이 가능하다."</strong> 라는 점이다.
+
+그리고, <strong>"아무리 내가 좋은 코드를 짜봤자, 6개월 뒤의 내가 보면 좋지 않은 코드일 가능성이 높다"</strong>는 점이다.
+
+그렇기에, 가급적이면 <strong>"잘 만들어진 코드"</strong>를 적재적소에 맞게 활요하는 것이 좋다고 생각한다.
+
+앵귤러의 기본 접근도 여기에서 시작한다.
+
+그렇기에, 앵귤러는 프론트엔드에서 접할 수 있는 대부분의 문제를 <strong>"개념화"</strong> 해두었다.
+
+그리고, 그 근간에는 컴퓨터 공학적인 원리를 이용해서 정말 아름답게 개념들을 구현해두었다.
+
+앵귤러를 다루면 항상 따라오는 `RxJS`의 사용도 여기에서 근간한다.
+
+## 옵저버블에 대한 간단한 이야기
+
+앵귤러를 처음 배울 때 제일 어려웠던 점은 `Observable`이라는 개념이었다.
+
+비동기를 다룬다고 하는데, `Promise`가 존재하며, 자바스크립트는 이미 그 자체로 비동기를 충분히 잘 다루게 설계되어 있는데, 이런 개념이 왜 필요한지에 대한 의문이 있었다.
+
+주변 동료들에게 `Angular`에 대해서 이야기를 할 때면, 자주 논쟁이 펼쳐지곤 한다.
+
+아마도 `Observable` 사용에 대한 공감이 되지 않는 게 가장 큰 요인이 아닐까 싶었다.
+
+앵귤러를 배우면서 느낀 핵심은 <strong>"프론트엔드 개발에서 접할 수 있는 대부분의 문제 상황을 개념화 했다."</strong>라는 점이다.
+
+그리고, 이를 <strong>"컴퓨터 공학적인 관점에서 잘 정리하였다."</strong>"라는 점이다.
+
+`Observable`의 핵심은 `단일 객체`, `복합 객체`, `비동기`를 하나의 형태로써 다루고자 하는 데에 있다.
+
+여러 요소들을 아름답게 추상화해서 일관된 형식으로 다루는 데에 있다.
+
+그러면, 이게 왜 아름다운지, 하나씩 살펴보자.
