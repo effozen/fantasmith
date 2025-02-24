@@ -1,0 +1,873 @@
+---
+title: '해보면서 익히는 클린 코드'
+image: '/media/frontEnd/cleanCode/first_clean_code/img/index.webp'
+description: '이야기만 들었던 클린코드. 어렴풋이, 대충, 추상적으로 알고 있던 개념이었습니다. 그리고, 직접 구현하고 분석하면서 감을 잡을 수 있었습니다. 그 과정에 대한 기록입니다.'
+tags: [frontEnd, cloneCoding]
+keywords: ['Frontend', 'cloneCoding']
+sidebar_position: 2
+sidebar_label: 해보면서 익히는 클린 코드
+sidebar_custom_props:
+  img: '/media/frontEnd/cleanCode/first_clean_code/img/index.webp'
+last_update:
+  date: 2025-01-06
+  author: zen
+---
+
+import { Figure } from '@site/src/components/utils';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+## 직접 해보는 것의 중요성
+
+이론과 실전은 다른 경우가 많다.
+
+코딩테스트가 대표적인 예시로 알고리즘과 자료구조의 원리를 익혔어도, 막상 문제가 풀리지 않는 경우가 있다.
+
+> 직접 코드로 옮기고, 적용하는게 중요하다.
+
+개발 분야에서는 이론과 실전에서 괴리가 생기는 경우가 많다.
+
+그렇기에 항상 이론을 배우면 반드시 코드에 적용해보려고 했다.
+
+## 항해 플러스에서 시작된 실천
+
+이번 클린 코드 역시 그런 관점에서 접근하게 되었다.
+
+특히, 현재 항해 플러스를 수강 중인데 이 과정에서 테오가 진행하는 클린코드 수업이 있다.
+
+마침, 적용해보기 굉장히 좋은 과제가 주어졌고, [클린 코드 고찰](/frontEnd/cleanCode/think_about_cleanCode/)에서의 이론적 배경을 적용해보게 되었다.
+
+## 개선해야하는 코드
+
+<Tabs>
+
+<TabItem value="개선해야 하는 코드" label="개선해야 하는 코드">
+
+<details>
+
+<summary>스압주의 : 253줄의 개선해야하는 코드</summary>
+
+```js
+var prodList, sel, addBtn, cartDisp, sum, stockInfo;
+var lastSel,
+  bonusPts = 0,
+  totalAmt = 0,
+  itemCnt = 0;
+function main() {
+  prodList = [
+    { id: 'p1', name: '상품1', val: 10000, q: 50 },
+    { id: 'p2', name: '상품2', val: 20000, q: 30 },
+    { id: 'p3', name: '상품3', val: 30000, q: 20 },
+    { id: 'p4', name: '상품4', val: 15000, q: 0 },
+    { id: 'p5', name: '상품5', val: 25000, q: 10 },
+  ];
+  var root = document.getElementById('app');
+  let cont = document.createElement('div');
+  var wrap = document.createElement('div');
+  let hTxt = document.createElement('h1');
+  cartDisp = document.createElement('div');
+  sum = document.createElement('div');
+  sel = document.createElement('select');
+  addBtn = document.createElement('button');
+  stockInfo = document.createElement('div');
+  cartDisp.id = 'cart-items';
+  sum.id = 'cart-total';
+  sel.id = 'product-select';
+  addBtn.id = 'add-to-cart';
+  stockInfo.id = 'stock-status';
+  cont.className = 'bg-gray-100 p-8';
+  wrap.className =
+    'max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8';
+  hTxt.className = 'text-2xl font-bold mb-4';
+  sum.className = 'text-xl font-bold my-4';
+  sel.className = 'border rounded p-2 mr-2';
+  addBtn.className = 'bg-blue-500 text-white px-4 py-2 rounded';
+  stockInfo.className = 'text-sm text-gray-500 mt-2';
+  hTxt.textContent = '장바구니';
+  addBtn.textContent = '추가';
+  updateSelOpts();
+  wrap.appendChild(hTxt);
+  wrap.appendChild(cartDisp);
+  wrap.appendChild(sum);
+  wrap.appendChild(sel);
+  wrap.appendChild(addBtn);
+  wrap.appendChild(stockInfo);
+  cont.appendChild(wrap);
+  root.appendChild(cont);
+  calcCart();
+  setTimeout(function () {
+    setInterval(function () {
+      var luckyItem = prodList[Math.floor(Math.random() * prodList.length)];
+      if (Math.random() < 0.3 && luckyItem.q > 0) {
+        luckyItem.val = Math.round(luckyItem.val * 0.8);
+        alert('번개세일! ' + luckyItem.name + '이(가) 20% 할인 중입니다!');
+        updateSelOpts();
+      }
+    }, 30000);
+  }, Math.random() * 10000);
+  setTimeout(function () {
+    setInterval(function () {
+      if (lastSel) {
+        var suggest = prodList.find(function (item) {
+          return item.id !== lastSel && item.q > 0;
+        });
+        if (suggest) {
+          alert(suggest.name + '은(는) 어떠세요? 지금 구매하시면 5% 추가 할인!');
+          suggest.val = Math.round(suggest.val * 0.95);
+          updateSelOpts();
+        }
+      }
+    }, 60000);
+  }, Math.random() * 20000);
+}
+function updateSelOpts() {
+  sel.innerHTML = '';
+  prodList.forEach(function (item) {
+    var opt = document.createElement('option');
+    opt.value = item.id;
+    opt.textContent = item.name + ' - ' + item.val + '원';
+    if (item.q === 0) opt.disabled = true;
+    sel.appendChild(opt);
+  });
+}
+function calcCart() {
+  totalAmt = 0;
+  itemCnt = 0;
+  var cartItems = cartDisp.children;
+  var subTot = 0;
+  for (var i = 0; i < cartItems.length; i++) {
+    (function () {
+      var curItem;
+      for (var j = 0; j < prodList.length; j++) {
+        if (prodList[j].id === cartItems[i].id) {
+          curItem = prodList[j];
+          break;
+        }
+      }
+      var q = parseInt(cartItems[i].querySelector('span').textContent.split('x ')[1]);
+      var itemTot = curItem.val * q;
+      var disc = 0;
+      itemCnt += q;
+      subTot += itemTot;
+      if (q >= 10) {
+        if (curItem.id === 'p1') disc = 0.1;
+        else if (curItem.id === 'p2') disc = 0.15;
+        else if (curItem.id === 'p3') disc = 0.2;
+        else if (curItem.id === 'p4') disc = 0.05;
+        else if (curItem.id === 'p5') disc = 0.25;
+      }
+      totalAmt += itemTot * (1 - disc);
+    })();
+  }
+  let discRate = 0;
+  if (itemCnt >= 30) {
+    var bulkDisc = totalAmt * 0.25;
+    var itemDisc = subTot - totalAmt;
+    if (bulkDisc > itemDisc) {
+      totalAmt = subTot * (1 - 0.25);
+      discRate = 0.25;
+    } else {
+      discRate = (subTot - totalAmt) / subTot;
+    }
+  } else {
+    discRate = (subTot - totalAmt) / subTot;
+  }
+  if (new Date().getDay() === 2) {
+    totalAmt *= 1 - 0.1;
+    discRate = Math.max(discRate, 0.1);
+  }
+  sum.textContent = '총액: ' + Math.round(totalAmt) + '원';
+  if (discRate > 0) {
+    var span = document.createElement('span');
+    span.className = 'text-green-500 ml-2';
+    span.textContent = '(' + (discRate * 100).toFixed(1) + '% 할인 적용)';
+    sum.appendChild(span);
+  }
+  updateStockInfo();
+  renderBonusPts();
+}
+const renderBonusPts = () => {
+  bonusPts = Math.floor(totalAmt / 1000);
+  var ptsTag = document.getElementById('loyalty-points');
+  if (!ptsTag) {
+    ptsTag = document.createElement('span');
+    ptsTag.id = 'loyalty-points';
+    ptsTag.className = 'text-blue-500 ml-2';
+    sum.appendChild(ptsTag);
+  }
+  ptsTag.textContent = '(포인트: ' + bonusPts + ')';
+};
+function updateStockInfo() {
+  var infoMsg = '';
+  prodList.forEach(function (item) {
+    if (item.q < 5) {
+      infoMsg +=
+        item.name + ': ' + (item.q > 0 ? '재고 부족 (' + item.q + '개 남음)' : '품절') + '\n';
+    }
+  });
+  stockInfo.textContent = infoMsg;
+}
+main();
+addBtn.addEventListener('click', function () {
+  var selItem = sel.value;
+  var itemToAdd = prodList.find(function (p) {
+    return p.id === selItem;
+  });
+  if (itemToAdd && itemToAdd.q > 0) {
+    var item = document.getElementById(itemToAdd.id);
+    if (item) {
+      var newQty = parseInt(item.querySelector('span').textContent.split('x ')[1]) + 1;
+      if (newQty <= itemToAdd.q) {
+        item.querySelector('span').textContent =
+          itemToAdd.name + ' - ' + itemToAdd.val + '원 x ' + newQty;
+        itemToAdd.q--;
+      } else {
+        alert('재고가 부족합니다.');
+      }
+    } else {
+      var newItem = document.createElement('div');
+      newItem.id = itemToAdd.id;
+      newItem.className = 'flex justify-between items-center mb-2';
+      newItem.innerHTML =
+        '<span>' +
+        itemToAdd.name +
+        ' - ' +
+        itemToAdd.val +
+        '원 x 1</span><div>' +
+        '<button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" data-product-id="' +
+        itemToAdd.id +
+        '" data-change="-1">-</button>' +
+        '<button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" data-product-id="' +
+        itemToAdd.id +
+        '" data-change="1">+</button>' +
+        '<button class="remove-item bg-red-500 text-white px-2 py-1 rounded" data-product-id="' +
+        itemToAdd.id +
+        '">삭제</button></div>';
+      cartDisp.appendChild(newItem);
+      itemToAdd.q--;
+    }
+    calcCart();
+    lastSel = selItem;
+  }
+});
+cartDisp.addEventListener('click', function (event) {
+  var tgt = event.target;
+  if (tgt.classList.contains('quantity-change') || tgt.classList.contains('remove-item')) {
+    var prodId = tgt.dataset.productId;
+    var itemElem = document.getElementById(prodId);
+    var prod = prodList.find(function (p) {
+      return p.id === prodId;
+    });
+    if (tgt.classList.contains('quantity-change')) {
+      var qtyChange = parseInt(tgt.dataset.change);
+      var newQty = parseInt(itemElem.querySelector('span').textContent.split('x ')[1]) + qtyChange;
+      if (
+        newQty > 0 &&
+        newQty <= prod.q + parseInt(itemElem.querySelector('span').textContent.split('x ')[1])
+      ) {
+        itemElem.querySelector('span').textContent =
+          itemElem.querySelector('span').textContent.split('x ')[0] + 'x ' + newQty;
+        prod.q -= qtyChange;
+      } else if (newQty <= 0) {
+        itemElem.remove();
+        prod.q -= qtyChange;
+      } else {
+        alert('재고가 부족합니다.');
+      }
+    } else if (tgt.classList.contains('remove-item')) {
+      var remQty = parseInt(itemElem.querySelector('span').textContent.split('x ')[1]);
+      prod.q += remQty;
+      itemElem.remove();
+    }
+    calcCart();
+  }
+});
+```
+
+</details>
+
+</TabItem>
+
+<TabItem value="실행 화면" label="실행 화면">
+
+<Figure fileName="target.gif" caption="프로그램 화면" alt="프로그램 화면" />
+
+</TabItem>
+
+</Tabs>
+
+위와 같은 요소가 주어졌다.
+
+그리고, 이 코드를 [클린 코드 고찰](/frontEnd/cleanCode/think_about_cleanCode/)에서 언급한 요소를 바탕으로 개선을 이루어야 했다.
+
+## 수렴해야하는 목표
+
+목적이 없는 클린코드 작업은 자칫하면 많은 자원을 낭비하는 결과로 이어진다.
+
+<Figure
+  fileName="refactoring_graph.webp"
+  caption="기준이 없을 때의 리팩토링 그래프"
+  alt="기준이 없을 때의 리팩토링 그래프"
+/>
+
+그렇기에 어느정도의 기준을 잡는 게 중요했다.
+
+항해 플러스에서는 같이 학습할 팀이 꾸려진다.
+
+팀 내에서 코드 컨벤션을 정했고, 이를 기준삼아 개선을 진행하기로 했다.
+
+팀이 정한 규칙은 다음과 같다.
+
+| 항목                                                       | 규칙                                                                                                                                                                                                                                                                                                                           |
+| ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 함수명, 변수명, 인자명                                     | 1. 함수명은 함수의 역할이 드러나도록 상세하게 작성한다.<br/> &nbsp;&nbsp;&nbsp;&nbsp;- 의미를 전달하며, 줄여쓸 수 있다면 축약한다.(ex: calculate -> cal)<br/>2. 함수명은 동사로 시작한다.<br/>3. 인수로 표현할 수 있는 값은 함수명에서 생략한다.<br/> &nbsp;&nbsp;&nbsp;&nbsp;- ex) A에서 B로 길을 찾는 함수 -> findPath(A, B) |
+| 타입 컨벤션<br/>인터페이스명, 함수 시그니쳐, 넓은 타입처리 | 1. 중복을 줄이기 위해 구체적으로 작성한다.<br/> 2. 2 Depth까지 표현한다 (ex: UserDetail)<br/> 3. 유틸리티 타입을 활용한다. (ex : Pick, Omit)                                                                                                                                                                                   |
+| 함수 선언 컨벤션                                           | 1. 기본 규칙은 함수 표현식을 사용한다. (유틸함수 포함)<br/> &nbsp;&nbsp;&nbsp;&nbsp;- 단, 컴포넌트는 함수선언문(function)을 사용한다.<br/> 2. 내보내기 시 기본 규칙은 `export`로 한다. 단, 컴포넌트는 `export default`를 사용한다. <br/> 3. 인수객체 형태로 사용한다. (인수객체에 대한 근거는 아래 참고)                       |
+| 파일 디렉토리 규칙                                         | 1. 베럴파일을 사용한다. <br/> 2. FSD 아키텍쳐를 사용한다.                                                                                                                                                                                                                                                                      |
+
+<details>
+
+<summary>함수의 인자를, 인수 객체 형태와 개별 인자로 사용하는 방식 비교</summary>
+
+#### 개별 인자로 전달하는 방식
+
+```tsx
+// 개별 인자로 전달하는 방식
+
+function createUser(name, age, email, role) {
+  // ...
+}
+
+createUser('김철수', 25, 'kim@email.com', 'admin');
+```
+
+장점:
+
+1. 함수 시그니처가 명확해서 어떤 인자가 필요한지 바로 알 수 있다.
+2. TypeScript 사용 시 각 매개변수의 타입을 명확하게 지정할 수 있다.
+3. 필수 매개변수를 강제할 수 있어 실수로 빠뜨리는 것을 방지할 수 있다.
+
+단점:
+
+1. 매개변수가 많아지면 순서를 기억하기 어렵고 실수하기 쉽다.
+2. 선택적 매개변수가 많은 경우 undefined를 여러 번 전달해야 할 수 있다.
+3. 매개변수를 추가하면 모든 호출 부분을 수정해야 한다.
+
+#### 객체로 전달하는 방식
+
+```tsx
+// 객체로 전달하는 방식
+
+function createUser({ name, age, email, role }) {
+  // ...
+}
+
+createUser({
+  name: '김철수',
+  email: 'kim@email.com',
+  age: 25,
+  role: 'admin',
+});
+```
+
+장점:
+
+1. 매개변수의 순서를 신경 쓰지 않아도 된다.
+2. 선택적 매개변수를 쉽게 처리할 수 있다.
+3. 매개변수 추가/삭제가 용이하며, 기존 코드에 영향을 덜 준다.
+4. 코드가 더 자기 문서화되어 있어 가독성이 좋다.
+
+단점:
+
+1. 객체 생성에 따른 약간의 성능 오버헤드가 있다.
+2. TypeScript에서 타입 정의가 좀 더 복잡할 수 있다.
+3. 필수 매개변수 검증을 별도로 구현해야 할 수 있다.
+
+권장 사항:
+
+1. 매개변수가 2-3개 이하로 적고 모두 필수값인 경우 → 개별 인자 전달
+2. 매개변수가 많거나 선택적 매개변수가 있는 경우 → 객체로 전달
+3. 설정이나 옵션 관련 매개변수가 많은 경우 → 객체로 전달
+
+</details>
+
+<br />
+<br />
+
+이 외에 정해지지 않은 부분에 대해서는 평소 자주 사용했던 `airbnb style guide`를 참고하기로 했다.
+
+### 수정사항
+
+초기에 이렇게 정했지만, 진행 과정에서 수정해야하는 코드의 볼륨이 작아, 재합의를 거쳤고 다음과 같은 요소를 수정했다.
+
+- FSD의 사용 : 코드가 253줄의 작은 규모이므로, 과하다는 생각에 제외한다.
+- component에서의 export default의 사용 : 베럴파일에서 결국 as로 네임을 정의해주기에 불필요하다고 판단되어서 export만 사용한다.
+
+그래서 위 두가지 요소가 수정되었다.
+
+## Prettier, ESLint 설정
+
+코드를 좋은 글에 빗대서 이야기했었다.
+
+'잘 읽히는 글'의 요건 중 하나는 적절하게 문단을 나누는 것과, 여백이다.
+
+또한, 글의 어투나 어조 등이 일관되고 규칙적이어야 한다.
+
+~해요, ~합니다, ~했습니다. 등의 어조가 섞여서 나오면 글을 이해하기 어렵다.
+
+이와 같은 이유로 코드도 일관된 스타일로 작성하는 것이 중요하다.
+
+이를 도와주는 도구가 `Prettier`와 `ESLint`이다.
+
+[pretteir 공식 홈페이지](https://prettier.io/)
+
+[ESLint 공식 홈페이지](https://eslint.org/)
+
+| 기술     | 설명                                                                 |
+| -------- | -------------------------------------------------------------------- |
+| Prettier | 코드 포맷터로, 코드를 일관된 스타일로 자동으로 정리해준다.           |
+| ESLint   | 코드 품질을 검사하는 도구로, 코드의 오류나 잠재적인 문제를 찾아준다. |
+
+과거에는 `ESLint`가 포맷터의 역할도 수행했지만, 오늘날에는 이를 다 걷어내고, 코드의 품질을 검사하는 목적에 충실하고 있다.
+
+설치는 공식문서에 잘 나와있으니 생략하고, 설정한 옵션에 대해서만 이야기하고자 한다.
+
+### ESLint, Prettier 설정
+
+<Tabs>
+
+<TabItem value="Prettier 설정" label="Prettier 설정">
+
+```javascript title=".prettierrc"
+{
+  "semi": true,
+  "singleQuote": true,
+  "tabWidth": 2,
+  "printWidth": 80,
+  "trailingComma": "es5",
+  "arrowParens": "avoid"
+}
+
+```
+
+</TabItem>
+
+<TabItem value="ESLint 설정" label="ESLint 설정">
+
+```javascript title=".eslint.config.js"
+import eslintConfigAirbnbBase from 'eslint-config-airbnb-base';
+import eslintPluginImport from 'eslint-plugin-import';
+import eslintPluginPrettier from 'eslint-plugin-prettier';
+import eslintConfigPrettier from 'eslint-config-prettier';
+
+export default [
+  // Airbnb Base 설정 확장
+  {
+    files: ['**/*.js'],
+    languageOptions: {
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+      // 추가적인 파싱 옵션이 필요하면 여기에 추가
+    },
+    plugins: {
+      import: eslintPluginImport,
+      prettier: eslintPluginPrettier,
+    },
+    settings: {
+      'import/resolver': {
+        node: {
+          extensions: ['.js', '.jsx', '.json'],
+        },
+      },
+    },
+    rules: {
+      // Airbnb 규칙을 포함
+      ...eslintConfigAirbnbBase.rules,
+
+      // Prettier 규칙 적용
+      'prettier/prettier': ['error'],
+
+      // 팀 컨벤션 적용
+      // 함수명, 변수명, 인자명: camelCase enforced
+      camelcase: ['error', { properties: 'always' }],
+
+      // 함수명은 동사로 시작 (커스텀 룰 필요)
+      // ESLint 기본 규칙으로는 직접적인 제한이 어려우므로, 명명 규칙을 통한 우회
+      'id-match': [
+        'error',
+        '^(cal|find|get|set|update)[A-Z][A-Za-z0-9]+$',
+        {
+          name: '함수명은 특정 패턴을 따라야 합니다 (예: calCalculate, findPath)',
+        },
+      ],
+
+      // 인수 객체 형태 사용 권장
+      'prefer-destructuring': [
+        'error',
+        {
+          VariableDeclarator: { object: true },
+          AssignmentExpression: { object: true },
+        },
+        {
+          enforceForRenamedProperties: false,
+        },
+      ],
+
+      // 기타 팀 컨벤션에 맞는 규칙 추가
+      // 예: 타입 컨벤션, 함수 선언 컨벤션 등
+      // 필요 시 커스텀 룰을 추가하거나, 추가적인 플러그인을 사용
+    },
+  },
+
+  // Prettier 구성 확장 (eslint-config-prettier)
+  {
+    files: ['**/*.js'],
+    rules: {
+      ...eslintConfigPrettier.rules,
+    },
+  },
+];
+```
+
+</TabItem>
+
+<TabItem value="vscode 설정" label="vscode 설정">
+
+```json title=".vscode/settings.json"
+{
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "eslint.validate": ["javascript"],
+  "prettier.requireConfig": true
+}
+```
+
+</TabItem>
+
+</Tabs>
+
+## 기능의 파악
+
+팀과 합의되지 않은 상황에서의 리팩토링에서, 중요한 것 중 하나는 원래의 기능대로 동작하는 것을 보장해야 한다.
+
+팀에서 기능 자체를 수정하기로 했으면, 괜찮지만 그게 아니라면 사이드 이펙트가 어떻게 발생할 지 모르니, 기능은 유지한 채로 코드의 품질을 올려야 한다.
+
+리팩토링에 앞서서 제일 먼저 해야하는 것은 기능에 대한 파악이다.
+
+<Tabs>
+
+<TabItem value="기능 파악" label="기능 파악">
+
+<Figure fileName="program.gif" caption="프로그램 화면" alt="프로그램 화면" />
+
+</TabItem>
+
+<TabItem value="기능 파악 2" label="기능 파악 2">
+
+<Figure fileName="program2.webp" caption="알림창 화면" alt="알림창 화면" />
+
+</TabItem>
+
+</Tabs>
+
+위와 같이 상품이 입력되면 자동으로 장바구니에 추가되는 기능이다.
+
+### 분석 내용
+
+분석한 내용은 다음과 같다.
+
+<Tabs>
+
+<TabItem value="세부 분석" label="세부 분석">
+
+분석한 큰 범주는 다음과 같다.
+
+1. 상품 추가 항목
+2. 장바구니 항목
+3. 추가적인 기능
+
+</TabItem>
+
+<TabItem value="상품 추가 항목" label="상품 추가 항목">
+
+상품 추가 항목은 다음과 같은 기능을 가지고 있다.
+
+1. 상품을 선택하면 장바구니에 추가된다.
+2. 상품을 선택하면 재고가 감소한다.
+3. 상품을 선택하면 총액이 계산된다.
+4. 상품을 선택하면 포인트가 적립된다.
+5. 재고가 0인 상품은 선택할 수 없다.
+6. 재고에 대한 정보가 회색 글씨로 표시된다.
+
+</TabItem>
+
+<TabItem value="장바구니 항목" label="장바구니 항목">
+
+장바구니 항목은 다음과 같은 기능을 가지고 있다.
+
+1. 장바구니에 추가된 상품을 확인할 수 있다.
+2. 상품을 삭제할 수 있다.
+3. 상품의 수량을 변경할 수 있다.
+4. 상품의 수량을 변경하면 총액이 변경된다.
+5. 상품의 수량을 변경하면 포인트가 변경된다.
+6. 상품의 수량을 변경하면 재고가 변경된다.
+7. 상품의 수량이 0이 되면 자동으로 항목에서 삭제된다.
+
+</TabItem>
+
+<TabItem value="추가적인 기능" label="추가적인 기능">
+
+그외 파악한 기능은 다음과 같다.
+
+1. 번개 세일 : 30초마다 30% 확률로 상품의 가격이 20% 할인된다.
+2. 추천 상품 : 60초마다 50% 확률로 추천 상품이 나타난다. 추천 상품은 5% 할인된다.
+3. 화요일 할인 : 화요일에는 10% 할인된다.
+4. 30개 이상 구매 시 : 25% 할인된다.
+5. 10개 이상 구매 시 : 상품별로 할인율이 다르다.
+6. 일정 시간마다 알림이 표시된다.
+
+</TabItem>
+
+</Tabs>
+
+## 테스트 코드
+
+실제로 서비스를 사용해보면서 위와 같은 기능을 파악했다.
+
+그러면, 이제는 코드를 바탕으로 좀 더 세부적인 기능을 파악해야 한다.
+
+또한, 내가 수정했을 때 `부수 효과(Side Effect)`를 최소화 하기 위해서 테스트 코드를 작성하고자 했다.
+
+테스트코드가 있다면, 이게 깨지면 내가 수정한 코드가 잘못됐다는 것을 알 수 있다.
+
+테스트코드에 미숙해서, 우선은 한가지 원칙만을 기준으로 작성을 하기로 했다.
+
+> "각각의 테스트는 독립적으로 동작해야 한다."
+
+그리고, 코드 역시 테스트가 가능하도록 수정 방향성을 잡았다.
+
+### 테스트 코드 작성
+
+기존 코드에 대한 테스트 코드가 주어져 있었다.
+
+다만, 성장을 위한 과제인 만큼 테스트 코드도 리팩토링이 필요했다.
+
+또한, 내가 생각하기에 테스트가 필요한 코드의 추가도 필요했다.
+
+<Tabs>
+
+<TabItem value="기존에 작성된 테스트 코드" label="기존에 작성된 테스트 코드">
+
+<details>
+
+<summary>스압주의 : 165줄의 테스트 코드</summary>
+
+```js
+import { beforeAll, beforeEach, afterEach, describe, expect, it, vi } from 'vitest';
+
+describe('basic test', () => {
+  describe.each([
+    { type: 'origin', loadFile: () => import('../../main.original.js') },
+    { type: 'basic', loadFile: () => import('../main.basic.js') },
+  ])('$type 장바구니 시나리오 테스트', ({ loadFile }) => {
+    let sel, addBtn, cartDisp, sum, stockInfo;
+
+    beforeAll(async () => {
+      // DOM 초기화
+      document.body.innerHTML = '<div id="app"></div>';
+      await loadFile();
+
+      // 전역 변수 참조
+      sel = document.getElementById('product-select');
+      addBtn = document.getElementById('add-to-cart');
+      cartDisp = document.getElementById('cart-items');
+      sum = document.getElementById('cart-total');
+      stockInfo = document.getElementById('stock-status');
+    });
+
+    beforeEach(() => {
+      vi.useRealTimers();
+      vi.spyOn(window, 'alert').mockImplementation(() => {});
+    });
+
+    afterEach(() => {
+      vi.restoreAllMocks();
+    });
+
+    it('초기 상태: 상품 목록이 올바르게 그려졌는지 확인', () => {
+      expect(sel).toBeDefined();
+      expect(sel.tagName.toLowerCase()).toBe('select');
+      expect(sel.children.length).toBe(5);
+
+      // 첫 번째 상품 확인
+      expect(sel.children[0].value).toBe('p1');
+      expect(sel.children[0].textContent).toBe('상품1 - 10000원');
+      expect(sel.children[0].disabled).toBe(false);
+
+      // 마지막 상품 확인
+      expect(sel.children[4].value).toBe('p5');
+      expect(sel.children[4].textContent).toBe('상품5 - 25000원');
+      expect(sel.children[4].disabled).toBe(false);
+
+      // 재고 없는 상품 확인 (상품4)
+      expect(sel.children[3].value).toBe('p4');
+      expect(sel.children[3].textContent).toBe('상품4 - 15000원');
+      expect(sel.children[3].disabled).toBe(true);
+    });
+
+    it('초기 상태: DOM 요소가 올바르게 생성되었는지 확인', () => {
+      expect(document.querySelector('h1').textContent).toBe('장바구니');
+      expect(sel).toBeDefined();
+      expect(addBtn).toBeDefined();
+      expect(cartDisp).toBeDefined();
+      expect(sum.textContent).toContain('총액: 0원(포인트: 0)');
+      expect(stockInfo).toBeDefined();
+    });
+
+    it('상품을 장바구니에 추가할 수 있는지 확인', () => {
+      sel.value = 'p1';
+      addBtn.click();
+      expect(cartDisp.children.length).toBe(1);
+      expect(cartDisp.children[0].querySelector('span').textContent).toContain(
+        '상품1 - 10000원 x 1'
+      );
+    });
+
+    it('장바구니에서 상품 수량을 변경할 수 있는지 확인', () => {
+      const increaseBtn = cartDisp.querySelector('.quantity-change[data-change="1"]');
+      increaseBtn.click();
+      expect(cartDisp.children[0].querySelector('span').textContent).toContain(
+        '상품1 - 10000원 x 2'
+      );
+    });
+
+    it('장바구니에서 상품을 삭제할 수 있는지 확인', () => {
+      sel.value = 'p1';
+      addBtn.click();
+      const removeBtn = cartDisp.querySelector('.remove-item');
+      removeBtn.click();
+      expect(cartDisp.children.length).toBe(0);
+      expect(sum.textContent).toContain('총액: 0원(포인트: 0)');
+    });
+
+    it('총액이 올바르게 계산되는지 확인', () => {
+      sel.value = 'p1';
+      addBtn.click();
+      addBtn.click();
+      expect(sum.textContent).toContain('총액: 20000원(포인트: 20)');
+    });
+
+    it('할인이 올바르게 적용되는지 확인', () => {
+      sel.value = 'p1';
+      for (let i = 0; i < 10; i++) {
+        addBtn.click();
+      }
+      expect(sum.textContent).toContain('(10.0% 할인 적용)');
+    });
+
+    it('포인트가 올바르게 계산되는지 확인', () => {
+      sel.value = 'p2';
+      addBtn.click();
+      expect(document.getElementById('loyalty-points').textContent).toContain('(포인트: 128)');
+    });
+
+    it('번개세일 기능이 정상적으로 동작하는지 확인', () => {
+      // 일부러 랜덤이 가득한 기능을 넣어서 테스트 하기를 어렵게 만들었습니다. 이런 코드는 어떻게 하면 좋을지 한번 고민해보세요!
+    });
+
+    it('추천 상품 알림이 표시되는지 확인', () => {
+      // 일부러 랜덤이 가득한 기능을 넣어서 테스트 하기를 어렵게 만들었습니다. 이런 코드는 어떻게 하면 좋을지 한번 고민해보세요!
+    });
+
+    it('화요일 할인이 적용되는지 확인', () => {
+      const mockDate = new Date('2024-10-15'); // 화요일
+      vi.useFakeTimers();
+      vi.setSystemTime(mockDate);
+      sel.value = 'p1';
+      addBtn.click();
+      expect(document.getElementById('cart-total').textContent).toContain('(10.0% 할인 적용)');
+    });
+
+    it('재고가 부족한 경우 추가되지 않는지 확인', () => {
+      // p4 상품 선택 (재고 없음)
+      sel.value = 'p4';
+      addBtn.click();
+
+      // p4 상품이 장바구니에 없는지 확인
+      const p4InCart = Array.from(cartDisp.children).some((item) => item.id === 'p4');
+      expect(p4InCart).toBe(false);
+      expect(stockInfo.textContent).toContain('상품4: 품절');
+    });
+
+    it('재고가 부족한 경우 추가되지 않고 알림이 표시되는지 확인', () => {
+      sel.value = 'p5';
+      addBtn.click();
+
+      // p5 상품이 장바구니에 추가되었는지 확인
+      const p5InCart = Array.from(cartDisp.children).some((item) => item.id === 'p5');
+      expect(p5InCart).toBe(true);
+
+      // 수량 증가 버튼 찾기
+      const increaseBtn = cartDisp.querySelector('#p5 .quantity-change[data-change="1"]');
+      expect(increaseBtn).not.toBeNull();
+
+      // 수량을 10번 증가시키기
+      for (let i = 0; i < 10; i++) {
+        increaseBtn.click();
+      }
+
+      // 11번째 클릭 시 재고 부족 알림이 표시되어야 함
+      increaseBtn.click();
+
+      // 재고 부족 알림이 표시되었는지 확인
+      expect(window.alert).toHaveBeenCalledWith(expect.stringContaining('재고가 부족합니다'));
+
+      // 장바구니의 상품 수량이 10개인지 확인
+      const itemQuantity = cartDisp.querySelector('#p5 span').textContent;
+      expect(itemQuantity).toContain('x 10');
+
+      // 재고 상태 정보에 해당 상품이 재고 부족으로 표시되는지 확인
+      expect(stockInfo.textContent).toContain('상품5: 품절');
+    });
+  });
+});
+```
+
+</details>
+
+</TabItem>
+
+<TabItem value="수정한 테스트 코드" label="수정한 테스트 코드">
+
+<details>
+
+<summary>스압주의 : 165줄의 테스트 코드</summary>
+
+</details>
+
+</TabItem>
+
+</Tabs>
+
+위의 코드 내용은 길기 때문에, 다음과 같이 핵심적으로 수정한 내용을 보여주고자 한다.
+
+## 디렉토리 구조 설정 : FSD
+
+처음에 디렉토리를 분리할 필요가 있다.
+
+`FSD`를 사용하지 않고 기존에 사용하던 방식으로 구성하기로 했으므로, 다음과 같이 구성했다.
+
+```bash
+src
+├── components
+│   ├── Cart.js
+│   ├── Product.js
+│   └── index.js
+├── index.js
+└── utils
+    ├── calcCart.js
+    ├── updateSelOpts.js
+    └── updateStockInfo.js
+```

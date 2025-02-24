@@ -1,0 +1,393 @@
+---
+title: 'CSS의 기본적인 룰'
+image: '/media/frontEnd/fundamental/css/joshwcomeau/basic_rules/img/index.webp'
+description: 'CSS의 뜻, 우선 순위, 기본 구조, 사용 방법, 박스 모델에 대해서 알아보자.'
+tags: ['frontend', 'css']
+keywords: ['Frontend', 'css', 'introduction', 'css rule']
+sidebar_position: 2
+sidebar_label: CSS의 기본적인 룰
+sidebar_custom_props:
+  img: '/media/frontEnd/fundamental/css/joshwcomeau/basic_rules/img/index.webp'
+last_update:
+  date: 2025-02-24
+  author: zen
+---
+
+import { Figure, Series } from '@site/src/components/utils';
+import { seriesList } from '@site/docs/frontEnd/fundamental/css/joshwcomeau/_utils_/';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Series title={seriesList.title}>{seriesList.children}</Series>
+
+## 서론
+
+본격적으로 `CSS`를 다루기에 앞서서 `CSS`의 기본적인 룰에 대해서 알아보자.
+
+`CSS`의 기초가 되는 원리이며, 이후 다룰 모든 내용의 근간이 되는 요소이다.
+
+## CSS란?
+
+먼저, `CSS`라는 말의 의미를 되돌아보자.
+
+`CSS`는 `Cascading Style Sheet`의 약자로, 한국어로 번역하면, <em>"계단식 스타일 시트"</em> 또는 <em>"종속형 스타일 시트"</em>이라고 한다.
+
+참고로, 나는 위의 번역들 보다 좀 더 직관적인 <em>"폭포처럼 흐르는 스타일 시트"</em>라는 표현을 좀 더 좋아한다.
+
+단어를 하나씩 뜯어서 살펴보자.
+
+| 단어      | 의미                                      |
+| --------- | ----------------------------------------- |
+| Cascading | "계단식의", "폭포처럼 흐르는", "계층적인" |
+| Style     | "스타일", "디자인"                        |
+| Sheet     | "시트", "문서"                            |
+
+이와 같은 의미로 인해, 나는 그냥 <em>"폭포처럼 흐르는 스타일 시트"</em>라고 번역하고 있다.
+
+## 폭포처럼 흐른다는 의미
+
+<Figure
+  fileName="cascading.webp"
+  alt="폭포수 처럼 흐르는 CSS (출처:GCF Global)"
+  caption="폭포수 처럼 흐르는 CSS (출처:GCF Global)"
+  href="https://edu.gcfglobal.org/en/basic-css/cascading-specificity-and-inheritance-in-css/1/"
+/>
+
+`Cascading`이라는 말이 붙은 이유는 `CSS`의 스타일이 <em>상속</em>되는 특성 때문이다.
+
+부모 요소로부터 자식 요소로.. 그 손자에 손자까지.. `Tree` 계층 구조를 따라 쭉 흐르는 것처럼 보이기 때문에 이런 이름이 붙게 되었다.
+
+<details>
+
+<summary>CSS 스타일 적용 원리(Cascading)</summary>
+
+## CSS 스타일의 적용 원리(Cascading)
+
+`Cascading`에 대한 흐름 파악에서 주의할 점이 있다.
+
+이 흐름은 어디까지나 우선순위를 따른 다는 것이다.
+
+일반적으로, CSS는 다음 3가지 원칙을 따라 스타일을 결정한다.
+
+1. 우선순위(Specificity)
+2. 소스 코드 순서(Order of Appearance)
+3. 스타일 적용 방식(Origin of Style)
+
+### 1. 우선순위(Specificity)
+
+일반적으로 👉 id > class > 태그 순으로 우선순위가 결정된다.
+
+<Tabs>
+
+<TabItem value="css" label="css">
+
+```css
+p {
+  color: blue; /* (1) 기본 스타일 */
+}
+
+.text {
+  color: green; /* (2) 클래스 선택자 */
+}
+
+#main {
+  color: red; /* (3) ID 선택자 */
+}
+```
+
+</TabItem>
+
+<TabItem value="html" label="html">
+
+```html
+<p id="main" class="text">이 문장은 어떤 색일까요?</p>
+```
+
+</TabItem>
+
+<TabItem value="결과" label="결과">
+
+`color: red;`가 적용된다.
+
+이유는 ID가 가장 큰 우선순위를 갖기 때문이다.
+
+</TabItem>
+
+</Tabs>
+
+### 2. 소스 코드 순서(Order of Appearance)
+
+CSS는 코드가 나중에 나오는 것이 더 우선순위가 높다.
+
+<Tabs>
+
+<TabItem value="css" label="css">
+
+```css
+p {
+  color: blue;
+}
+
+p {
+  color: red;
+}
+```
+
+</TabItem>
+
+<TabItem value="결과" label="결과">
+
+`color: red;`가 적용된다.
+
+이유는 나중에 나온 코드가 더 우선순위가 높기 때문이다.
+
+</TabItem>
+
+</Tabs>
+
+### 3. 스타일 적용 방식(Origin of Style)
+
+`CSS`는 적용된 위치에 따라 우선순위가 다르게 적용된다.
+
+| 스타일 적용 방식              | 우선순위  |
+| ----------------------------- | --------- |
+| 브라우저 기본 스타일          | 가장 낮음 |
+| 외부 스타일시트(External CSS) | 낮음      |
+| 내부 스타일(Internal CSS)     | 중간      |
+| 인라인 스타일(Inline CSS)     | 높음      |
+| !important                    | 최우선    |
+
+<br />
+
+```css
+p {
+  color: blue !important; /* (1) 최우선 */
+}
+
+p {
+  color: green; /* (2) 무시됨 */
+}
+```
+
+### CSS 우선순위 계산법
+
+CSS의 우선순위를 계산하는 방법이 존재한다.
+
+각 선택자가 가진 "가중치"를 숫자로 환산해 비교하는 방식이다.
+
+보통 아래와 같이 네 단계(또는 세 범주)로 나누어서 계산한다.
+
+| 우선 순위 | 선택자 종류                                    | 예시                           | 가중치 |
+| --------- | ---------------------------------------------- | ------------------------------ | ------ |
+| A         | 인라인 스타일(Inline Styles)                   |                                | 1000   |
+| B         | ID 선택자                                      | #test, #container              | 100    |
+| C         | 클래스, 속성 선택자, 가상 클래스(Pseudo-class) | .active, [type="text"], :hover | 10     |
+| D         | 태그(요소) 선택자와 가상 요소(Pseudo-element)  | div, p, ::before               | 1      |
+
+보통 우선순위에 따라 존재하면 해당 자리수에 1을 넣고, 없으면 0을 대입한다.
+
+그리고, 각 자리수를 모두 더해서 우선순위를 계산한다.
+
+#### 예시
+
+| 선택자         | 우선순위 |
+| -------------- | -------- |
+| #header .box p | 101      |
+| .box           | 10       |
+| #header        | 100      |
+| #header .box   | 110      |
+| #header .box p | 111      |
+
+#### 인라인 선택자의 경우
+
+```html
+<p style="color: red;">Hello</p>
+```
+
+이 경우 인라인 스타일이 적용되므로, 우선순위는 (1,0,0,0) 으로 취급된다.
+
+어떤 선택자와 비교해도 인라인 스타일이 우선순위에서 가장 높게 평가된다.
+
+#### 추가 고려사항
+
+##### 동일한 우선순위인 경우:
+
+동일한 우선순위라면 소스 코드에 작성된 순서(나중에 선언된 스타일이 우선)를 따른다.
+
+##### !important 사용
+
+!important는 우선순위 계산과 별도로 해당 선언을 최우선으로 적용한다.
+→ 하지만, 여러 !important 규칙 간에도 우선순위 계산이 이루어지므로, 되도록 남용하지 않는 것이 좋다.
+
+</details>
+
+## CSS의 기본 구조에 관한 용어
+
+CSS의 의미에 대해서 살펴보았으니, 이번엔 CSS의 기본 구조와 용어에 대해서 살펴보자.
+
+```css
+p {
+  paddig: 24px;
+}
+```
+
+위 코드를 놓고 살펴보자. 이 코드는 'p'라는 요소에 `padding`이라는 속성을 `24px`로 적용하는 코드이다.
+
+`CSS`는 기본적으로 다음과 같은 구조를 가진다.
+
+```css
+선택자(selector) {
+  속성(property): 값(value);
+}
+```
+
+그리고 이를 좀 더 세분화해서 살펴보면 다음과 같다.
+
+<br />
+
+| 용어            | 의미                                                          |
+| --------------- | ------------------------------------------------------------- |
+| `p`             | 선택자(Selector)                                              |
+| `{}`            | 중괄호(블록)                                                  |
+| `padding`       | 속성(Property)                                                |
+| `24px`          | 값(Value)                                                     |
+| `;`             | 세미콜론(구분자)                                              |
+| `p { ... }`     | 규칙 세트(Rule Set) 또는 규칙 블록(Rule Block) 또는 규칙 집합 |
+| `px`            | 단위(Unit)                                                    |
+| `padding: 24px` | 선언(Declaration)                                             |
+
+## CSS를 적용하는 방법
+
+CSS를 HTML 문서에 적용하는 방법은 3가지가 있다.
+
+1. 인라인 스타일(Inline Style)
+2. 내부 스타일 시트(Internal Style Sheet)
+3. 외부 스타일 시트(External Style Sheet)
+
+이를 각각 살펴보자.
+
+### 1. 인라인 스타일(Inline Style)
+
+```html
+<p style="color: red;">이 문장은 빨간색입니다.</p>
+```
+
+위와 같이 `style` 속성을 사용하여 직접 스타일을 적용하는 방법이다.
+
+유지 보수가 어렵기 때문에 잘 사용되지는 않는다.
+
+### 2. 내부 스타일 시트(Internal Style Sheet)
+
+```html
+<head>
+  <style>
+    p {
+      color: red;
+    }
+  </style>
+</head>
+```
+
+위와 같이 `<style>` 태그를 사용하여 스타일을 적용하는 방법이다.
+
+특정 HTML 문서에만 스타일을 적용할 때 사용한다.
+
+이 역시 유지보수를 이유로 잘 사용되지는 않는다.
+
+### 3. 외부 스타일 시트(External Style Sheet)
+
+<Tabs>
+
+<TabItem value="HTML" label="HTML">
+
+```html
+<head>
+  <link rel="stylesheet" href="style.css" />
+</head>
+```
+
+</TabItem>
+
+<TabItem value="CSS" label="CSS">
+
+```css
+/* style.css */
+p {
+  color: red;
+}
+```
+
+</TabItem>
+
+</Tabs>
+
+위와 같이 `.css` 확장자를 가진 외부 스타일 시트를 사용하여 스타일을 적용하는 방법이다.
+
+이 방법이 가장 일반적이며, 유지보수에 용이하다.
+
+## 박스 모델(Box Model)
+
+`CSS`에서 가장 중요한 개념 중 하나인 `박스 모델(Box Model)`에 대해서 알아보자.
+
+`박스 모델`은 `HTML` 요소를 박스로 간주하고, 이 박스를 구성하는 요소들을 총칭하는 용어이다.
+
+`박스 모델`은 다음과 같이 구성된다.
+
+<Figure
+  fileName="box_model.webp"
+  alt="박스 모델(Box Model)"
+  caption="박스 모델(Box Model)"
+  href="https://velog.io/@hoonnn/CSS-%EA%B8%B0%EC%B4%88-%EB%B0%95%EC%8A%A4-%EB%AA%A8%EB%8D%B8"
+/>
+
+`CSS` 박스 모델은 웹 페이지의 모든 요소가 사각형 박스 형태로 렌더링된다는 개념이다.
+
+요소의 크기와 주변 여백, 테두리, 내부 간격 등이 어떻게 계산되는지를 결정하는 중요한 개념이다.
+
+박스모델은 다음과 같이 4가지 기본 영역으로 구성된다.
+
+| 영역                  | 설명                                                                                                                                                                                                                                             |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Content (콘텐츠 영역) | 요소의 내용(Content)을 감싸는 영역으로, 실제 내용이 표시되는 부분이다.<br/><br/>`width`와 `height` 속성으로 정의된 크기가 이 영역의 크기를 결정한다.                                                                                             |
+| Padding (패딩)        | 콘텐츠와 요소의 테두리(border) 사이의 내부 여백이다.<br/><br/>배경색이 콘텐츠 영역과 동일하게 적용되어 콘텐츠 주위에 여유 공간을 제공한다.<br/><br/>예를 들어, `padding: 10px;`이라고 지정하면 콘텐츠 영역의 모든 방향에 `10px`의 간격이 생긴다. |
+| Border (테두리)       | 패딩과 마진 사이에 위치하는 테두리 영역이다.<br/><br/>두께, 스타일, 색상 등을 지정할 수 있다.<br/><br/>예를 들어,` border: 2px solid black;`은 `2px` 두께의 검은색 실선 테두리를 만든다.                                                         |
+| Margin (마진)         | 요소의 테두리 바깥쪽에 존재하는 외부 여백이다.<br/><br/>다른 요소와의 간격을 조절하며, 배경색은 적용되지 않는다.<br/><br/>예를 들어, `margin: 20px;`은 요소 주변에 `20px`의 여백을 생성한다.                                                     |
+
+### 박스 모델의 동작 원리
+
+`HTML` 요소에 `width`와 `height`를 지정하면, 기본적으로 `content-box` 모델이 적용되어 콘텐츠 영역의 크기를 의미한다.
+
+그러나 실제로 화면에 렌더링되는 요소의 전체 크기는 패딩, 보더, 마진까지 모두 포함한 크기가 된다.
+
+```css
+div {
+  width: 200px; /* 콘텐츠 영역의 너비 */
+  padding: 10px; /* 좌우 10px씩 추가 → 총 20px 추가 */
+  border: 5px solid; /* 좌우 5px씩 추가 → 총 10px 추가 */
+  margin: 15px; /* 요소 외부에 15px의 여백 */
+}
+```
+
+- 콘텐츠 영역: `200px`
+- 패딩이 포함된 영역: `200px + (10px × 2) = 220px`
+- 보더까지 포함: `220px + (5px × 2) = 230px`
+- 마진은 요소 외부에 적용: 다른 요소와의 간격을 `15px`씩 유지
+
+여기서, `padding`과 `border`를 `width`와 `height`에 포함하고 싶다면 `box-sizing` 속성을 사용하면 된다.
+
+```css
+div {
+  box-sizing: border-box;
+  width: 200px; /* 패딩과 보더를 포함한 전체 너비 */
+  padding: 10px;
+  border: 5px solid;
+}
+```
+
+전체 너비 200px 안에서 콘텐츠 영역, 패딩, 보더가 모두 포함되므로, 콘텐츠 영역의 실제 너비는 내부적으로 자동 조정된다.
+
+## 정리
+
+지금까지 간단하게 `CSS`의 규칙에 대해서 알아보았다.
+
+이제 이를 바탕으로 `CSS`를 활용한 다양한 스타일링 방법과 기술들을 살펴보도록 하자.

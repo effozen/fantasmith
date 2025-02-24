@@ -1,0 +1,137 @@
+---
+title: '클린 코드 고찰'
+image: '/media/frontEnd/cleanCode/think_about_cleanCode/img/index.webp'
+description: '이야기만 들었던 클린코드. 어렴풋이, 대충, 추상적으로 알고 있던 개념이었습니다. 그리고, 직접 구현하고 분석하면서 감을 잡을 수 있었습니다. 그 과정에 대한 기록입니다.'
+tags: [frontEnd, cloneCoding]
+keywords: ['Frontend', 'cloneCoding']
+sidebar_position: 1
+sidebar_label: 클린 코드 고찰
+sidebar_custom_props:
+  img: '/media/frontEnd/cleanCode/think_about_cleanCode/img/index.webp'
+last_update:
+  date: 2025-01-06
+  author: zen
+---
+
+import { Figure } from '@site/src/components/utils';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+## 이 글을 통해 전하고 싶은 메세지
+
+## 항해플러스를 통해 접한 클린코드
+
+<Figure
+  fileName="voyage_intro.webp"
+  caption="항해 플러스 프론트앤드 과정"
+  alt="항해 플러스 프론트앤드 과정"
+  href="https://hanghae99.spartacodingclub.kr/plus/fe"
+/>
+
+부스트캠프가 끝나고, 실무적인 기본기를 다지기 위해서 항해플러스에 참여하게 되었다.
+
+이 과정에서, 정말 배우고 싶었던 프론트앤드 클린코드를 배우게 되었다.
+
+본 글은 그 첫 시작인 <strong>'클린코드와 리팩토링'</strong>을 겪으며 내 나름대로 시도해본 리팩토링에 대한 글이다.
+
+제대로 된 리팩토링과 클린코드를 경험한 적이 없기에 이번 기회에 제대로 경험을 정리하고, 부족한 부분을 추후 개선하는 생각에 글을 적게 되었다.
+
+## 리팩토링 === 퇴고
+
+> 코드는 글과 같다.
+
+글을 잘 쓰는 방법 중 하나는 <strong>'퇴고'</strong>이다.
+
+> 좋은 글을 쓰는 방법은 여러번 보면서 퇴고하는 것이다.
+
+무라카미 하루키 작가님의 [직업으로서의 소설가](https://product.kyobobook.co.kr/detail/S000001123668)라는 책을 읽은 적이 있는데, 그 속에 나온 말이다.
+
+코드도 마찬가지이다.
+
+처음에 작성할 때부터 잘 작성하면 좋겠지만.. 결국은 언어이다 보니, 글과 마찬가지로 쉽지 않다.
+
+그래서, 좋은 코드를 작성하기 위해서는 어느정도의 <storng>'퇴고'</storng>가 필요하다.
+
+그리고 그걸 우리는 <strong>'리팩토링'</strong>이라고 부른다.
+
+## 흔히 범하는 리팩토링 실수
+
+글을 써본 사람은 알겠지만, <storng>'퇴고'</storng>에는 끝이 없다.
+
+같은 문장이어도 때에 따라 좋게 보일때도, 나쁘게 보일떄도 있기 때문이다.
+
+코드도 마찬가지이다. 언제는 좋은 코드 같더라도, 나중에 다시보면 나쁜 코드 같을 때가 있다. 그 반대인 경우도 있고 말이다.
+
+그래서 결국 우리는 다음과 같은 느낌으로 리팩토링을 하게 된다.
+
+<Figure
+  fileName="refactoring_graph.webp"
+  alt="기준이 없을 때의 리팩토링 그래프"
+  caption="기준이 없을 때의 리팩토링 그래프"
+/>
+
+목표와 기준이 없으니, 시간이 지남에 따라 어느 하나로 수렴되지 못하고 계속 코드가 변하게 된다.
+
+이렇게 되면, 리팩토링의 목적이 불분명해져 쓸데없는 리소스 낭비가 생긴다.
+
+실제로 나도, 리팩토링을 하면서 `<Navbar>` 컴포넌트를 리팩토링 하는데, 본분을 잊고 계속 개선만 해서 쓸데없이 7일을 낭비한 경험이 있다.
+
+<Figure
+  fileName="side_effect_meme.gif"
+  caption="분명 하나를 고치려고 했는데..."
+  alt="분명 하나를 고치려고 했는데..."
+  href="https://www.reddit.com/r/ProgrammerHumor/comments/54dmni/when_fixing_one_bug_leads_to_another/"
+/>
+
+## 좋은 코드란 무엇일까?
+
+<strong>'클린 코드'</strong>라는 말이 있다.
+
+개발을 조금 해봤다 싶으면 지겹도록 듣는 말이다.
+
+<Figure
+  fileName="clean_code_book.webp"
+  caption="클린 코드 책"
+  alt="클린 코드 책"
+  href="https://product.kyobobook.co.kr/detail/S000001032980"
+/>
+
+개발자 필독서로 권장되는 책의 제목일 정도로.. 정말 많이 알려진 말이다.
+
+그러면 <strong>'좋은 코드'</strong>란 무엇일까?
+
+### '좋은 글'과 '나쁜 글'은 존재한다.
+
+흔히들 글은 주관적이라고 말을 한다.
+
+주관적인 영역임에도 우리가 읽었을 때 '좋다', '나쁘다'로 평가되는 글이 있다.
+
+<Figure
+  fileName="the_vegetarian.webp"
+  caption="한강 작가님의 채식주의자"
+  alt="한강 작가님의 채식주의자"
+  href="https://product.kyobobook.co.kr/detail/S000000610650"
+/>
+
+사람마다 기준이 다를지라도, 노벨상을 받아 이슈가 된 채식주의자와 같은 책처럼 분명히 좋다고 평가되는 글들이 존재한다.
+
+<Figure
+  fileName="dargon_book.webp"
+  caption="한때 나쁜 글로써 밈이 된 투명드래곤"
+  alt="한때 나쁜 글로써 밈이 된 투명드래곤"
+/>
+
+반대로, 투명드래곤처럼 나쁜 글로 평가되기도 했던 글이 있다.
+
+(투명드래곤은 시간이 지나면서 큰 의의를 가진 글로 평가받는다.)
+
+코드도 마찬가지이다.
+
+사람의 주관이 깊게 관여하는 영역임에도 분명히 좋은 느낌을 주는 코드와, 나쁜 느낌을 주는 코드가 존재한다.
+
+<Figure
+  fileName="wtf_code.webp"
+  caption="WTF 코드 밈"
+  alt="WTF 코드 밈"
+  href="https://commadot.com/wtf-per-minute/"
+/>
