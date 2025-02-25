@@ -9,5 +9,9 @@ export const seriesList = {
       name: 'CSS의 기본적인 룰',
       link: '/frontEnd/fundamental/css/joshwcomeau/basic_rules/',
     },
+    {
+      name: 'CSS 미디어 쿼리(Media Query) 딥다이브',
+      link: '/frontEnd/fundamental/css/joshwcomeau/media_query/',
+    },
   ],
 };

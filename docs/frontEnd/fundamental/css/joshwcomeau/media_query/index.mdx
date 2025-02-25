@@ -1,0 +1,443 @@
+---
+title: 'CSS 미디어 쿼리(Media Query) 딥다이브'
+image: '/media/frontEnd/fundamental/css/joshwcomeau/media_query/img/index.webp'
+description: 'Media query에 대해서 깊게 알아보자.'
+tags: ['frontend', 'css']
+keywords: ['Frontend', 'css', 'media query', 'css at rule']
+sidebar_position: 3
+sidebar_label: Media Query 딥다이브
+sidebar_custom_props:
+  img: '/media/frontEnd/fundamental/css/joshwcomeau/media_query/img/index.webp'
+last_update:
+  date: 2025-02-25
+  author: zen
+---
+
+import { Figure, Series } from '@site/src/components/utils';
+import { seriesList } from '@site/docs/frontEnd/fundamental/css/joshwcomeau/_utils_/';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Series title={seriesList.title}>{seriesList.children}</Series>
+
+## 서론
+
+`반응형 웹(Responseive Web Design, RWD)`을 구현하다 보면, 필연적으로 마주하게 되는게 `Media Query`이다.
+
+이번에 강의를 들으면서, `Media Query`에 대해 간단하게 학습해보게 되었다.
+
+강의 내용으로는 성에 차지 않아, 좀 더 깊게 탐구해보게 되었다.
+
+## Media Query란?
+
+> 미디어 쿼리를 사용하면 디바이스의 미디어 유형(예: 인쇄 vs. 화면) 또는 화면 해상도, 방향, 화면 비율, 브라우저 뷰포트의 너비 또는 높이, 사용자의 선호도(예: 감소된 모션 선호, 데이터 사용, 투명도)와 같은 기타 기능이나 특성에 따라 CSS 스타일을 적용할 수 있습니다.
+>
+> - 출처 : [MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/Media_Queries/Using_media_queries)
+
+우리가 보는 웹 화면은 모니터, 태블릿, 스마트폰 등 다양한 미디어 매체를 통해 보여지고 있다.
+
+그리고, 이런 미디어 기기들은 화면 사이즈, 비율과 같이 각각의 특성을 가지고 있다.
+
+이런 특성을 고려해서, 사용자의 미디어 매체를 기반으로 특정 유형과 특정 조건에 대해 원하는 스타일을 정의하는 방법이 곧 미디어 쿼리이다.
+
+## Media Query 문법
+
+> 미디어 쿼리는 선택적인 미디어 타입과 여러 개의 미디어 특징 표현식으로 구성되며, 논리 연산자를 사용하여 다양한 방식으로 조합할 수도 있습니다. 미디어 쿼리는 대소문자를 구분하지 않습니다.
+>
+> - 출처 : [MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/Media_Queries/Using_media_queries)
+
+기본적으로 미디어 쿼리는 `CSS`의 `at-rule` 문법을 따르며, 다음과 같이 표현된다.
+
+```css
+@media 조건문 {
+  적용할 css 스타일
+}
+```
+
+그리고 조건문은 다음과 같이 표현된다.
+
+```css
+미디어 유형 and (미디어 특성)
+```
+
+미디어 쿼리는 <strong>미디어 유형</strong>과 <strong>미디어 특성</strong>으로 구성되는 '참' 또는 '거짓'의 값을 갖는 <strong>논리식</strong>이다.
+
+미디어 유형이 `screen`이고, 미디어 특성이 `width:768px`일 경우 다으모가 같이 표현할 수 있다.
+
+```css
+screen and (width: 768px)
+```
+
+이 논리식은 미디어 유형이 `screen`이고, 너비가 `768px` 이상인 기기에서 <strong>'참'</strong>이 되며, 그렇지 않을 경우 <strong>'거짓'</strong>이 된다.
+
+미디어 쿼리를 작성할 경우, 미디어 특성은 괄호로 감싸 표현하며, 각 미디어 유형과 미디어 특성은 생략이 가능하다.
+
+```css
+screen // 미디어 특성이 생략된 경우
+```
+
+```css
+(min-width:768px) // 미디어 유형이 생략된 경우
+```
+
+미디어 유형과 미디어 특성을 모두 작성하고자 할 때는 `and` 키워드로 미디어 유형과 미디어 특성을 구분 짓는다.
+
+```css
+screen and (min-width:768px)
+```
+
+또한, <strong>연산자</strong>를 사용하여 여러 미디어 특성을 결합하여 좀 더 복잡하고 다양한 미디어 쿼리를 작성할 수 있다.
+
+```css
+screen and (min-width:768px) and (max-width:1024px)
+```
+
+## 미디어 유형(Media Types)
+
+> `<media-type>`는 장치의 일반적인 유형을 설명합니다. `only` 논리 연산자를 사용할 때를 제외하면, 미디어 타입은 선택 사항이며 기본적으로 `all` 타입이 적용됩니다.
+>
+> - 출처 : [MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/Media_Queries/Using_media_queries)
+
+<br />
+
+미디어 유형은 딱 3가지가 존재한다.
+
+<br />
+
+| 미디어 유형 | 설명                                            |
+| ----------- | ----------------------------------------------- |
+| all         | 모든 장치                                       |
+| print       | 인쇄된 문서 및 출력 미리보기 모드               |
+| screen      | 컴퓨터 화면, 태블릿, 스마트폰 등 화면 기반 장치 |
+
+미디어 유형은 선택 사항이며, 기본적으로 `all` 타입이 적용된다. (미디어 유형을 생략하면 `all` 타입이 적용된다.)
+
+## 미디어 특성(Media Features)
+
+미디어 특성(Media Features)은 사용자 에이전트(User Agent)나 디바이스(Device)의 특정 속성을 나타내며, 이를 기반으로 반응형 스타일을 적용할 수 있다.
+
+### 미디어 특성의 기본 구조
+
+미디어 특성은 <strong>항상 괄호 안</strong>에 위치하며, 다음과 같은 형식으로 작성된다.
+
+<Tabs>
+
+<TabItem value="미디어 특성 예시" label="미디어 특성 예시">
+
+```css
+(미디어 특성: 값)
+```
+
+</TabItem>
+
+<TabItem value="예제" label="예제">
+
+```css
+@media (min-width: 768px) {
+  body {
+    background-color: lightblue;
+  }
+}
+```
+
+</TabItem>
+
+</Tabs>
+
+### 미디어 특성의 유형
+
+미디어 특성은 두 가지 유형으로 나뉜다.
+
+1. Discrete 타입
+2. Range 타입
+
+#### Discrete 타입
+
+특정한 값들로 이루어진 집합을 갖는 타입이다. (예: `[true, false]`, 특정 키워드 집합 등)
+
+값 간의 크기 비교가 불가능하며, `min-` 또는 `max-` 접두사를 사용할 수 없다.
+
+```css
+@media (orientation: portrait) {
+  body {
+    background-color: lightgray;
+  }
+}
+```
+
+화면이 세로 모드일 때 스타일을 적용하는 예시이다.
+
+#### Range 타입
+
+특정한 범위를 갖는 타입이다. (예: `width`, `height`, `resolution` 등)
+
+값 간의 크기 비교가 가능하다.
+
+`min-`, `max-` 접두사를 붙일 수 있다.
+
+```css
+@media (min-width: 768px) and (max-width: 1024px) {
+  body {
+    background-color: yellow;
+  }
+}
+```
+
+화면 너비가 `768px` 이상이고, `1024px` 이하일 때 스타일을 적용하는 예시이다.
+
+## 미디어 쿼리의 표준화
+
+미디어 쿼리는 <strong>W3C(World Wide Web Consortium)</strong>에서 여러 단계(Level)을 거쳐 발전해 왔으며, 현재 레벨 5까지 표준화 과정이 진행되고 있다.
+
+이걸 설명하는 이유는, 발전사에 따라, 레벨에 따라 미디어 특성의 유형이 추가되어 왔기 때문이다.
+
+즉, 상황에 따라서는 구형 브라우저에서 지원이 안될 가능성이 있기에 알아두면 좋다.
+
+### 미디어 쿼리의 발전 과정
+
+미디어 쿼리는 처음 CSS2에서 미디어 유형(Media Type) 개념으로 등장했다.
+
+이후 CSS3에서 본격적인 <strong>미디어 특성(Media Features)</strong>이 도입되었으며, 이후 지속적인 업데이트를 거쳐 최신 레벨 5까지 발전했다.
+
+| 미디어 쿼리 버전                     | 출시 연도                | 주요 내용                                      |
+| ------------------------------------ | ------------------------ | ---------------------------------------------- |
+| CSS2 (1998)                          | 1998년                   | 미디어 타입(예: screen, print) 도입            |
+| Media Queries Level 3 (2012)         | 2012년                   | 미디어 특성(width, height, resolution 등) 도입 |
+| Media Queries Level 4 (2017~2022)    | 2017년 초안, 2022년 표준 | 논리 연산자 개선, 새로운 환경 관련 특성 추가   |
+| Media Queries Level 5 (현재 개발 중) | 2022년 이후              | 부등호(\<=, \>=) 지원, 접근성 관련 특성 추가   |
+
+<br />
+<br />
+
+<Tabs>
+
+<TabItem value="Level 3 (2012)" label="Level 3 (2012)">
+
+#### Media Queries Level 3 (2012)
+
+##### 🔹 미디어 쿼리의 시작
+
+- 2012년에 W3C에서 공식적으로 **미디어 쿼리 레벨 3 (Media Queries Level 3, MQ3)**를 발표.
+- 웹사이트가 디바이스에 따라 적응할 수 있도록 미디어 특성(Media Features) 개념을 도입.
+
+###### 🔹 주요 특징
+
+- ✅ 미디어 타입(Media Types) -기기의 종류에 따라 스타일을 적용할 수 있도록 screen, print, all 등의 미디어 타입이 등장.
+
+- ✅ 미디어 특성(Media Features) 도입 -기기의 크기, 해상도 등에 따라 스타일을 변경할 수 있도록 width, height, resolution, orientation 등의 미디어 특성이 추가됨.
+
+- ✅ 논리 연산자 지원
+  - 미디어 쿼리에서 and, not, , (or)를 사용할 수 있도록 규정.
+
+##### 🔹 Media Queries Level 3에서 추가된 주요 미디어 특성
+
+| 미디어 특성       | 유형     | 값                      | 설명                |
+| ----------------- | -------- | ----------------------- | ------------------- |
+| width, height     | Range    | `<length>`              | 화면의 너비와 높이  |
+| min-width         | Range    | `<length>`              | 최소 너비           |
+| max-width         | Range    | `<length>`              | 최대 너비           |
+| aspect-ratio      | Range    | `<ratio>`               | 화면 가로/세로 비율 |
+| orientation       | Discrete | `portrait`, `landscape` | 화면 방향           |
+| resolution        | Range    | `<resolution>`          | 화면 해상도         |
+| color, monochrome | Range    | `<integer>`             | 색상 깊이           |
+
+##### 예제: MQ3에서 지원하는 미디어 쿼리
+
+```css
+@media (max-width: 600px) {
+  body {
+    background-color: lightgray;
+  }
+}
+```
+
+➡️ 화면 너비가 600px 이하일 때 배경색 변경.
+
+</TabItem>
+
+<TabItem value="Level 4 (2017~2022)" label="Level 4 (2017~2022)">
+
+#### Media Queries Level 4 (2017~2022)
+
+##### 2017년 초안, 2022년 W3C 표준화
+
+- 반응형 디자인을 더욱 세밀하게 제어할 수 있도록 여러 기능이 추가됨.
+- 접근성 & 사용자 선호도를 반영한 미디어 특성 등장.
+- 논리 연산자 개선.
+
+##### 주요 변경 사항
+
+###### ✅ 논리 연산자 개선
+
+- `and`, `or`, `not`을 더 직관적으로 사용할 수 있도록 개선됨.
+
+```css
+@media (min-width: 600px) and (max-width: 1200px) {
+  body {
+    background-color: blue;
+  }
+}
+```
+
+➡️ 화면 너비가 600px 이상 1200px 이하일 때 스타일 적용.
+
+###### ✅ 새로운 미디어 특성 추가
+
+| 속성                   | 타입     | 값                        | 설명                                  |
+| ---------------------- | -------- | ------------------------- | ------------------------------------- |
+| prefers-color-scheme   | Discrete | `light`, `dark`           | 다크 모드 감지                        |
+| prefers-reduced-motion | Discrete | `no-preference`, `reduce` | 애니메이션 최소화 여부                |
+| pointer                | Discrete | `none`, `coarse`, `fine`  | 입력 장치의 정밀도                    |
+| hover                  | Discrete | `none`, `hover`           | 사용자가 마우스를 올릴 수 있는지 여부 |
+
+##### 🛠 예제: 다크 모드 감지
+
+```css
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: black;
+    color: white;
+  }
+}
+```
+
+➡️ 사용자가 다크 모드를 활성화하면 다크 스타일 적용.
+
+</TabItem>
+
+<TabItem value="Level 5 (현재 진행 중)" label="Level 5 (현재 진행 중)">
+
+#### Media Queries Level 5 (현재 진행 중)
+
+##### 2022년부터 개발 중, 아직 표준 확정 전
+
+- 미디어 쿼리 문법을 더 직관적으로 변경.
+- 접근성 관련 미디어 특성 강화.
+- 부등호(\>=, \<=) 지원.
+
+##### 주요 변경 사항
+
+###### ✅ 부등호(\>=, \<=) 지원
+
+- 기존 `min-width` 및 `max-width` 대신 더 직관적인 비교 연산자 사용 가능.
+
+###### ✅ 새로운 미디어 특성 추가
+
+| 속성                         | 타입     | 값                                        | 설명                          |
+| ---------------------------- | -------- | ----------------------------------------- | ----------------------------- |
+| prefers-reduced-transparency | Discrete | `no-preference`, `reduce`                 | 투명도 최소화 여부            |
+| prefers-contrast             | Discrete | `no-preference`, `less`, `more`, `custom` | 사용자가 대비를 높였는지 여부 |
+| forced-colors                | Discrete | `none`, `active`                          | 시스템 강제 색상 모드 감지    |
+| prefers-reduced-data         | Discrete | `no-preference`, `reduce`                 | 데이터 절약 모드 감지         |
+
+##### 🛠 예제: MQ5에서의 새로운 문법
+
+```css
+@media (768px <= width <= 1024px) {
+  body {
+    background-color: green;
+  }
+}
+```
+
+➡️ 가독성이 더 좋은 문법으로 미디어 쿼리 적용 가능.
+
+</TabItem>
+
+<TabItem value="비교 및 정리" label="비교 및 정리">
+
+| 레벨            | 출시 연도                | 주요 특징                                                                                |
+| --------------- | ------------------------ | ---------------------------------------------------------------------------------------- |
+| MQ3 (2012)      | 2012년                   | `width`, `height`, `resolution`, `orientation` 등 기본적인 미디어 특성 도입              |
+| MQ4 (2017~2022) | 2017년 초안, 2022년 표준 | `prefers-color-scheme`, `pointer`, `hover`, `prefers-reduced-motion` 등 사용자 환경 반영 |
+| MQ5 (진행 중)   | 2022년 이후              | 부등호(\<=, \>=) 지원, `prefers-reduced-transparency`, `forced-colors` 등 접근성 강화    |
+
+</TabItem>
+
+</Tabs>
+
+<br />
+
+## 미디어 쿼리 특성 정리
+
+발전사에 따른 내용을 살펴보았으니, 현재까지 나온 미디어 쿼리에 대해서 정리해보자.
+
+### 1. 너비 & 높이 관련 (Width & Height)
+
+| 속성          | 타입  | 값         | 미디어 쿼리 레벨 | 설명                    |
+| ------------- | ----- | ---------- | ---------------- | ----------------------- |
+| width, height | Range | `<length>` | 레벨 3           | 뷰포트의 너비와 높이    |
+| min-width     | Range | `<length>` | 레벨 3           | 최소 너비               |
+| max-width     | Range | `<length>` | 레벨 3           | 최대 너비               |
+| min-height    | Range | `<length>` | 레벨 3           | 최소 높이               |
+| max-height    | Range | `<length>` | 레벨 3           | 최대 높이               |
+| aspect-ratio  | Range | `<ratio>`  | 레벨 3           | 뷰포트의 가로:세로 비율 |
+
+### 2. 화면 방향 관련 (Orientation)
+
+| 속성        | 타입     | 값                      | 미디어 쿼리 레벨 | 설명          |
+| ----------- | -------- | ----------------------- | ---------------- | ------------- |
+| orientation | Discrete | `portrait`, `landscape` | 레벨 3           | 뷰포트의 방향 |
+
+### 3. 해상도 및 색상 관련 (Resolution & Color)
+
+| 속성                | 타입     | 값                      | 미디어 쿼리 레벨 | 설명                                  |
+| ------------------- | -------- | ----------------------- | ---------------- | ------------------------------------- |
+| resolution          | Range    | `<resolution>`          | 레벨 3           | 장치의 해상도 (DPI, DPPX)             |
+| min-resolution      | Range    | `<resolution>`          | 레벨 3           | 최소 해상도                           |
+| max-resolution      | Range    | `<resolution>`          | 레벨 3           | 최대 해상도                           |
+| color               | Range    | `<integer>`             | 레벨 3           | 색상 비트(bit) 수                     |
+| color-gamut         | Discrete | `srgb`, `p3`, `rec2020` | 레벨 4           | 색상 영역                             |
+| color-index         | Range    | `<integer>`             | 레벨 3           | 색상 테이블의 색상 개수               |
+| monochrome          | Range    | `<integer>`             | 레벨 3           | 모노크롬 장치에서의 색상 비트 수      |
+| dynamic-range       | Discrete | `standard`, `high`      | 레벨 5           | 밝기, 대비, 색상의 범위               |
+| video-dynamic-range | Discrete | `standard`, `high`      | 레벨 5           | 비디오 콘텐츠의 밝기, 대비, 색상 범위 |
+
+### 4. 입력 장치 관련 (Input Devices)
+
+| 속성        | 타입     | 값                       | 미디어 쿼리 레벨 | 설명                                       |
+| ----------- | -------- | ------------------------ | ---------------- | ------------------------------------------ |
+| pointer     | Discrete | `none`, `coarse`, `fine` | 레벨 4           | 기본 입력 장치가 포인터 장치인지           |
+| any-pointer | Discrete | `none`, `coarse`, `fine` | 레벨 4           | 추가 입력 장치 중 포인터 장치가 있는지     |
+| hover       | Discrete | `none`, `hover`          | 레벨 4           | 기본 입력 장치가 hover(마우스) 가능한지    |
+| any-hover   | Discrete | `none`, `hover`          | 레벨 4           | 추가 입력 장치 중 hover 가능 장치가 있는지 |
+
+### 5. 사용자 환경 및 선호도 관련 (User Preferences & Accessibility)
+
+| 속성                         | 타입     | 값                                        | 미디어 쿼리 레벨 | 설명                                                  |
+| ---------------------------- | -------- | ----------------------------------------- | ---------------- | ----------------------------------------------------- |
+| prefers-color-scheme         | Discrete | `light`, `dark`                           | 레벨 4           | 사용자의 다크/라이트 모드 선호도 감지                 |
+| prefers-contrast             | Discrete | `no-preference`, `less`, `more`, `custom` | 레벨 5           | 사용자가 대비를 높이거나 낮춘 설정을 감지             |
+| prefers-reduced-motion       | Discrete | `no-preference`, `reduce`                 | 레벨 4           | 사용자가 애니메이션을 줄이는 옵션을 활성화했는지 감지 |
+| prefers-reduced-transparency | Discrete | `no-preference`, `reduce`                 | 레벨 5           | 사용자 설정에서 투명도 감소 모드를 감지               |
+| prefers-reduced-data         | Discrete | `no-preference`, `reduce`                 | 레벨 5           | 데이터 절약 모드가 활성화되었는지 감지                |
+| forced-colors                | Discrete | `none`, `active`                          | 레벨 5           | 시스템 강제 색상 모드 감지                            |
+| inverted-colors              | Discrete | `none`, `inverted`                        | 레벨 5           | 시스템 색상 반전 모드 감지                            |
+
+### 6. 환경 및 실행 모드 관련 (Environment & Execution Mode)
+
+| 속성           | 타입     | 값                                                  | 미디어 쿼리 레벨 | 설명                              |
+| -------------- | -------- | --------------------------------------------------- | ---------------- | --------------------------------- |
+| scripting      | Discrete | `none`, `initial-only`, `enabled`                   | 레벨 5           | 스크립트 실행 여부 감지           |
+| display-mode   | Discrete | `fullscreen`, `standalone`, `minimal-ui`, `browser` | 레벨 5           | 애플리케이션이 실행되는 모드 감지 |
+| device-posture | Discrete | `flat`, `folded`                                    | 레벨 5           | 폴더블 디바이스의 상태 감지       |
+| shape          | Discrete | `rectangular`, `round`                              | 레벨 5           | 디바이스 화면의 모양 감지         |
+
+### 7. 콘텐츠 흐름 및 업데이트 관련 (Content Overflow & Update Frequency)
+
+| 속성            | 타입     | 값                        | 미디어 쿼리 레벨 | 설명                                                             |
+| --------------- | -------- | ------------------------- | ---------------- | ---------------------------------------------------------------- |
+| overflow-block  | Discrete | `none`, `scroll`, `paged` | 레벨 4           | 블록 방향에서 콘텐츠가 넘칠 때의 동작 방식                       |
+| overflow-inline | Discrete | `none`, `scroll`          | 레벨 4           | 인라인 방향에서 콘텐츠가 넘칠 때의 동작 방식                     |
+| update          | Discrete | `none`, `slow`, `fast`    | 레벨 4           | 화면이 콘텐츠를 업데이트하는 속도 (예: 전자잉크 디스플레이 감지) |
+
+<br />
+
+복잡해 보일 수 있으나, 미디어 쿼리는 미디어 매체의 화면을 기준으로 `참`, `거짓`을 판별하는 요소임을 잊지말자.
+
+## 정리
+
+## 출처
+
+- [MDN Media query 문서](https://developer.mozilla.org/en-US/docs/Web/CSS/Media_Queries/Using_media_queries)
+- [임희제 - Media Queyr(미디어 쿼리)의 모든 것](https://wit.nts-corp.com/2023/03/29/6664)
