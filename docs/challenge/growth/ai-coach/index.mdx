@@ -367,3 +367,88 @@ Node.js는 [공식 웹사이트](https://nodejs.org/)에서 다운로드할 수 
 Claude와 Obsidian을 연동하기 위해서는 MCP 서버를 설치하고, 이를 Claude Desktop과 연결해야 합니다.
 
 하나씩 설명할까 고민을 했었는데, 그것보다는 직접 해보면서 설명하는 게 좋아보여서, 지금부터는 직접 같이 해보는 방향으로 설명하겠습니다.
+
+사용할 프로그램은 [obsidian-mcp](https://github.com/StevenStavrakis/obsidian-mcp) 입니다.
+
+다양한 MCP 서버가 있지만, 본 플러그인이 가장 다운로드 수가 많으며, 기능이 많은 듯 하여 선택했습니다.
+
+먼저 Claude Desktop을 실행하고 설정 화면으로 이동합니다.
+
+<Figure fileName="step1.webp" alt="Claude Desktop 설정 화면" caption="Claude Desktop 설정 화면" />
+
+Settings(설정) -> Developer(개발자) -> 설정 편집으로 가면 다음과 같은 화면을 확인할 수 있습니다.
+
+<Figure fileName="step2.webp" alt="Claude Desktop 설정 편집 화면" caption="Claude Desktop 설정 편집 화면" />
+
+`claude_desktop_config.json` 파일을 열어서 수정하면 MCP 서버와 쉽게 연결할 수 있습니다.
+
+이 파일을 코드나 문서 편집기로 열어보면 다음과 같은 화면이 뜹니다.
+
+<Figure fileName="step3.webp" alt="Claude Desktop 설정 파일" caption="Claude Desktop 설정 파일" />
+
+이 파일에 이제 MCP 서버의 정보를 추가해주면 됩니다.
+
+MCP 서버 정보를 추가한다...? 라고 하니까 굉장히 어렵게 느껴질 수 있습니다.
+
+하지만 걱정하지 마세요. 이미 만들어진 MCP 서버를 활용할 예정이기에, 설정 파일에 추가할 내용은 간단합니다.
+
+obsidian-mcp 깃허브에 접속해서 보면, 어떻게 사용해야하는 지 설명되어 있습니다.
+
+우리는 시키는대로 사용하면 됩니다. ㅎㅎ.
+
+<Figure
+  fileName="step4.webp"
+  alt="obsidian-mcp 깃허브"
+  caption="obsidian-mcp 깃허브"
+  href="https://github.com/StevenStavrakis/obsidian-mcp"
+/>
+
+그러면 한번 설정해볼까요? Vault가 있는 Path를 기억해서, 다음과 같이 설정해줍니다.
+
+```json
+{
+  "mcpServers": {
+    "obsidian": {
+      "command": "npx",
+      "args": ["-y", "obsidian-mcp", "/Vault 경로를 넣어주세요."]
+    }
+  }
+}
+```
+
+<Figure fileName="step5.webp" alt="obsidian-mcp 설정 예시" caption="obsidian-mcp 설정 예시" />
+
+그리고, 저장하고 Claude Desktop을 재시작합니다.
+
+재시작 후, 다시 설정 화면으로 가면 다음과 같은 화면을 확인할 수 있습니다.
+
+<Figure fileName="step6.webp" alt="Claude Desktop MCP 서버 설정 화면" caption="Claude Desktop MCP 서버 설정 화면" />
+
+<Figure fileName="step7.webp" alt="Claude Desktop MCP 서버 설정 화면" caption="Claude Desktop MCP 서버 설정 화면" />
+
+이제 MCP 서버가 정상적으로 연결된 것을 확인할 수 있습니다.
+
+많은 글들을 보면 MCP 설정을 하면 망치모양이 나온다고 했는데, 패치되어서, 망치모양이 아닌 드로워 아이콘을 클릭해야 보이는 것 같더라구요.
+
+관련해서 MCP 공식 문서에 있는 내용을 첨부하니 참고하시면 좋을 것 같습니다.
+
+<Figure
+  fileName="step8.webp"
+  alt="관련 설명"
+  caption="관련 설명"
+  href="https://modelcontextprotocol.io/quickstart/user"
+/>
+
+그러면 한번 테스트 해볼까요?
+
+<Figure fileName="step9.webp" alt="Claude Desktop MCP 서버 테스트" caption="Claude Desktop MCP 서버 테스트" />
+
+위와 같이 권한 요청이 뜨면 성공입니다.
+
+아주 잘 동작하는 것을 확인할 수 있습니다.
+
+<Figure
+  fileName="step10.webp"
+  alt="Claude Desktop MCP 서버 테스트 결과"
+  caption="Claude Desktop MCP 서버 테스트 결과"
+/>
