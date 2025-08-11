@@ -1,0 +1,8 @@
+{
+  "label": "ThorVG 탐구",
+  "position": 1,
+  "link": {
+    "type": "generated-index",
+    "description": "벡터 그래픽 라이브러리인 ThorVG에 대한 탐구 내용을 담습니다."
+  }
+}

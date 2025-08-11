@@ -1,0 +1,248 @@
+---
+title: '처음 만나는 ThorVG'
+image: '/img/zen-social-card.jpeg'
+description: 'ThorVG는 벡터 기반 그래픽라이브러리입니다. 오픈소스컨트리뷰팅 아카데미를 진행하면서, 기여하게 되어서 이에 대한 학습 내용을 정리하고자 합니다.'
+tags: [frontEnd, graphics, thorvg]
+keywords: ['Frontend', 'graphics', 'thorvg', 'vector graphics', 'open source', '오픈소스 컨트리뷰팅 아카데미']
+sidebar_position: 1
+sidebar_label: 처음 만나는 ThorVG
+sidebar_custom_props:
+  img: '/media/frontEnd/troubleShooting/img/index.webp'
+last_update:
+  date: 2025-08-11
+---
+
+import { Figure } from '@site/src/components/utils';
+
+## 들어가며
+
+2024년 오픈소스 컨트리뷰팅 아카데미를 통해 국산 오픈소스 벡터 그래픽 라이브러리인 `ThorVG`에 기여할 기회를 얻게 되었습니다. 아직은 작은 발걸음이지만, 이 과정에서 배운 점들과 경험을 공유하고자 합니다.
+
+## ThorVG란?
+
+<Figure
+  fileName="thorvg_logo.webp"
+  alt="ThorVG 로고 (출처: ThorVG 깃허브)"
+  caption="ThorVG 로고 (출처: ThorVG 깃허브)"
+  href="https://github.com/thorvg/thorvg"
+/>
+
+> ThorVG is an open-source graphics library designed for creating vector-based scenes and animations. It combines immense power with remarkable lightweight efficiency, as Thor embodies a dual meaning—symbolizing both thunderous strength and lightning-fast agility. Embracing the philosophy of simpler is better, the ThorVG project provides intuitive, user-friendly interfaces while maintaining a compact footprint and minimal overhead.
+>
+> - 출처 : [ThorVG 깃허브](https://github.com/thorvg/thorvg)
+
+[ThorVG](https://github.com/thorvg/thorvg)는 벡터 기반 그래픽 라이브러리입니다. 한국에서 시작된 이 프로젝트는 그래픽 분야의 선구자이신 춘언님이 파운더로 시작하셨습니다.
+
+시중의 다양한 벡터 그래픽 라이브러리들이 존재하지만, 대부분 너무 무겁거나, 느리거나, 복잡한 경우가 많습니다. 이에 반해 `ThorVG`는 "Simpler is Better"라는 철학 아래 가볍고 빠르면서도 사용하기 쉬운 라이브러리로 설계되었습니다.
+
+특히 추상화가 잘 되어 있으며, `Lottie` 애니메이션 지원에 있어서는 업계 최고 수준의 성능을 자랑합니다.
+
+### 지원 기능
+
+ThorVG는 공식적으로 다음과 같은 `Primitives`를 지원합니다:
+
+- **Lines & Shapes**: rectangles, circles, and paths with coordinate control
+- **Filling**: solid colors, linear & radial gradients, and path clipping
+- **Stroking**: stroke width, joins, caps, dash patterns, and trimming
+- **Scene Management**: retainable scene graph and object transformations
+- **Composition**: various blending and masking
+- **Text**: unicode characters with horizontal text layout using scalable fonts (TTF)
+- **Images**: SVG, JPG, PNG, WebP, and raw bitmaps
+- **Effects**: blur, drop shadow, fill, tint, tritone and color replacement
+- **Animations**: Lottie
+
+## 기여 동기
+
+AI 개발을 시작하면서 의외로 그래픽에 대한 깊은 관심을 갖게 되었습니다. AI와 그래픽 기술을 결합하면 얼마나 많은 가능성이 열릴까 하는 생각이 들었고, 팀 환경이 그래픽을 학습하기에 최적이었기 때문에 도전하게 되었습니다.
+
+정식 입사 후 프로젝트 일정이 타이트해지면서 다소 소홀해진 감이 있지만, 지금이라도 조금씩 기여를 이어가고자 다시 정리하게 되었습니다.
+
+## ThorVG 아키텍처
+
+ThorVG는 다음과 같은 7개의 핵심 클래스로 구성되어 있습니다:
+
+| 클래스       | 역할                                                                                                                         |
+| ------------ | ---------------------------------------------------------------------------------------------------------------------------- |
+| Canvas       | - 렌더 백엔드 추상화<br />-색상 공간, 시스템 통합, 출력 영역 설정                                                            |
+| Paint        | - ThorVG 드로잉 객체 모델 (공통 기능 구현)<br />- 위치/크기 변환, 회전 지원<br />- 마스킹, 클리핑, 블렌딩<br />- 참조 카운팅 |
+| Scene        | - 장면 그래프<br />- 이펙트 (색상 변환, 블러, 드롭쉐도우 등)                                                                 |
+| Shape & Fill | - 도형, 경로, 스트로크(선), 색상 칠하기<br />- 단색, 그라이던트 (선형, 원형)                                                 |
+| Picture      | - 외부 리소스 기반 이미지 출력<br />- 비트맵, JPG, PNG, WEBP, SVG, LOTTIE, (TVG)                                             |
+| Text         | - TTF 기반 문자열 출력                                                                                                       |
+| Animation    | - 애니메이션 프레임 조작<br />- Lottie Animation 고유 기능 활용                                                              |
+
+### 코드 구조 예시
+
+Canvas 클래스의 구현 예시를 살펴보면 다음과 같습니다:
+
+```cpp
+#ifndef _TVG_CANVAS_H_
+#define _TVG_CANVAS_H_
+
+#include "tvgPaint.h"
+
+enum Status : uint8_t {Synced = 0, Updating, Drawing, Damaged};
+
+struct Canvas::Impl
+{
+    Scene* scene;
+    RenderMethod* renderer;
+    RenderRegion vport = {{0, 0}, {INT32_MAX, INT32_MAX}};
+    Status status = Status::Synced;
+
+    Impl() : scene(Scene::gen())
+    {
+        scene->ref();
+    }
+
+    ~Impl()
+    {
+        //make it sure any deferred jobs
+        renderer->sync();
+
+        scene->unref();
+        if (renderer->unref() == 0) delete(renderer);
+    }
+
+    Result push(Paint* target, Paint* at)
+    {
+        //You cannot push paints during rendering.
+        if (status == Status::Drawing) return Result::InsufficientCondition;
+
+        auto ret = scene->push(target, at);
+        if (ret != Result::Success) return ret;
+
+        return update(target, true);
+    }
+
+    Result remove(Paint* paint)
+    {
+        if (status == Status::Drawing) return Result::InsufficientCondition;
+        return scene->remove(paint);
+    }
+
+    Result update(Paint* paint, bool force)
+    {
+        Array<RenderData> clips;
+        auto flag = RenderUpdateFlag::None;
+        if (status == Status::Damaged || force) flag = RenderUpdateFlag::All;
+
+        if (!renderer->preUpdate()) return Result::InsufficientCondition;
+
+        auto m = tvg::identity();
+        if (paint) PAINT(paint)->update(renderer, m, clips, 255, flag);
+        else PAINT(scene)->update(renderer, m, clips, 255, flag);
+
+        if (!renderer->postUpdate()) return Result::InsufficientCondition;
+
+        status = Status::Updating;
+        return Result::Success;
+    }
+
+    Result draw(bool clear)
+    {
+        if (status == Status::Drawing) return Result::InsufficientCondition;
+        if (clear && !renderer->clear()) return Result::InsufficientCondition;
+        if (scene->paints().empty()) return Result::InsufficientCondition;
+        if (status == Status::Damaged) update(nullptr, false);
+        if (!renderer->preRender()) return Result::InsufficientCondition;
+
+        if (!PAINT(scene)->render(renderer) || !renderer->postRender()) return Result::InsufficientCondition;
+
+        status = Status::Drawing;
+
+        return Result::Success;
+    }
+
+    Result sync()
+    {
+        if (status == Status::Synced || status == Status::Damaged) return Result::InsufficientCondition;
+
+        if (renderer->sync()) {
+            status = Status::Synced;
+            return Result::Success;
+        }
+
+        return Result::Unknown;
+    }
+
+    Result viewport(int32_t x, int32_t y, int32_t w, int32_t h)
+    {
+        if (status != Status::Damaged && status != Status::Synced) return Result::InsufficientCondition;
+
+        RenderRegion val = {{x, y}, {x + w, y + h}};
+        //intersect if the target buffer is already set.
+        auto surface = renderer->mainSurface();
+        if (surface && surface->w > 0 && surface->h > 0) {
+            val.intersect({{0, 0}, {(int32_t)surface->w, (int32_t)surface->h}});
+        }
+        if (vport == val) return Result::Success;
+        renderer->viewport(val);
+        vport = val;
+        status = Status::Damaged;
+        return Result::Success;
+    }
+};
+
+#endif /* _TVG_CANVAS_H_ */
+```
+
+위 코드에서 볼 수 있듯이, ThorVG는 깔끔한 추상화와 명확한 책임 분리를 통해 유지보수가 용이한 구조를 갖추고 있습니다.
+
+## 첫 번째 기여: SDL2 초기 화면 이슈 해결
+
+### 예제 프로그램 살펴보기
+
+ThorVG는 학습과 테스트를 위한 다양한 예제를 제공합니다:
+
+<Figure
+  fileName="thorvg_example.webp"
+  alt="ThorVG 예제 (출처: ThorVG 깃허브)"
+  caption="ThorVG 예제 (출처: ThorVG 깃허브)"
+  href="https://github.com/thorvg/thorvg/tree/master/examples"
+/>
+
+오픈소스 아카데미 온보딩 과정에서 이러한 예제들을 실행하고 분석하는 것이 첫 과제였습니다.
+
+### 발견한 이슈
+
+예제를 실행하던 중 흥미로운 이슈를 발견했습니다:
+
+<Figure
+  fileName="thorvg_issue.webp"
+  alt="ThorVG 이슈 (출처: ThorVG 깃허브)"
+  caption="ThorVG 이슈 (출처: ThorVG 깃허브)"
+  href="https://github.com/thorvg/thorvg/issues/3314"
+/>
+
+SDL2를 사용하는 예제에서 프로그램을 실행하면 첫 로딩 화면이 검은색으로 표시되는 문제였습니다. 이는 사용자 경험 측면에서 개선이 필요한 부분이었습니다.
+
+### 문제 분석 및 해결 과정
+
+코드를 분석한 결과, 백버퍼 초기화 과정에서 프론트 버퍼가 제대로 초기화되지 않아 발생하는 문제로 판단했습니다. 이 문제는 GL 렌더러와 SW 렌더러 모두에서 발생하고 있었습니다.
+
+해결 방안으로 다음과 같은 수정을 진행했습니다:
+
+<Figure
+  fileName="thorvg_example_code.webp"
+  alt="ThorVG 예제 코드 기여 (출처: ThorVG 깃허브)"
+  caption="ThorVG 예제 코드 기여 (출처: ThorVG 깃허브)"
+  href="https://github.com/thorvg/thorvg/blob/master/examples/sdl2/main.cpp"
+/>
+
+<Figure
+  fileName="thorvg_example_code2.webp"
+  alt="ThorVG 예제 코드 기여 (출처: ThorVG 깃허브)"
+  caption="ThorVG 예제 코드 기여 (출처: ThorVG 깃허브)"
+  href="https://github.com/thorvg/thorvg/blob/master/examples/sdl2/main.cpp"
+/>
+
+### 피드백과 개선
+
+첫 PR([#3700](https://github.com/thorvg/thorvg/pull/3700))을 제출한 후, 표면적인 문제는 해결되었지만 근본적인 원인을 해결하지 못했다는 피드백을 받았습니다. 현재 이 피드백을 바탕으로 더 깊이 있는 분석과 수정 작업을 진행하고 있습니다.
+
+## 마치며
+
+오픈소스 기여는 단순히 코드를 수정하는 것 이상의 의미가 있습니다. 문제의 근본 원인을 파악하고, 프로젝트의 철학과 구조를 이해하며, 메인테이너들과 소통하는 과정 자체가 큰 배움이 되었습니다.
+
+ThorVG는 한국에서 시작된 프로젝트인 만큼 더욱 애정을 갖고 기여를 이어가고자 합니다. 앞으로도 코드 분석과 기여 경험을 지속적으로 공유하겠습니다.
